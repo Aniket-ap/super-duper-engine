@@ -1,0 +1,101 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body{
+  background-color: #F9FAFB;
+}
+
+.container {
+  max-width: 48rem;
+}
+
+#wrapper .form-select,
+#wrapper .form-control {
+  border: 1px solid #000000;
+  border-radius: 0;
+  color: #64748b;
+  line-height: 1.25em;
+  background-color: #F9FAFB;
+}
+
+#wrapper .form-select:focus,
+#wrapper .form-control:focus {
+  border: 1px solid #4f46e8;
+  box-shadow: 0 0 1px 1.5px #4f46e8;
+  color: #64748b;
+  z-index: 1;
+}
+
+#wrapper .nav-tabs .nav-link {
+  border: 0;
+  color: #6b7a93;
+}
+
+#wrapper .nav-tabs .nav-link:hover {
+  background: none !important;
+  border-bottom: 2px solid #cacaca;
+}
+
+#wrapper .nav-tabs .nav-link.active {
+  color: #4f46e8;
+  border-bottom: 2px solid #4f46e8;
+}
+
+#wrapper .nav-link span {
+  height: 0.5rem;
+  width: 0.5rem;
+  background-color: #00ff00;
+}
+
+#wrapper .tab-content .form-control:first-of-type {
+  border-right: 0 !important;
+  border-top: 0 !important;
+}
+
+#wrapper .tab-content button {
+  border-top: 0 !important;
+}
+
+#wrapper #nav-queryparams button {
+  border-top: 0 !important;
+}
+
+#wrapper #nav-queryparams .d-flex:first-of-type button,
+#wrapper #nav-headers .d-flex:first-of-type button,
+#wrapper #request-body-wrapper .d-flex:first-of-type button {
+  border-top: 1px solid rgba(211, 211, 211, .5) !important; 
+  /* border-top-right-radius: 5px; */
+}
+
+#wrapper #nav-queryparams > .d-flex:first-of-type input,
+#wrapper #nav-headers > .d-flex:first-of-type input,
+#wrapper #request-body-wrapper > .d-flex:first-of-type input {
+  border-top: 1px solid rgba(211, 211, 211, .5) !important;
+  /* border-top-left-radius: 5px; */
+}
+
+.tab-content button {
+  background: #fff;
+  transition: 0.3s;
+}
+
+.tab-content button span {
+  opacity: 0.3;
+  transition: 0.3s;
+}
+
+.tab-content button:hover {
+  background-color: rgb(236, 236, 236);
+}
+
+.tab-content button span:hover {
+  opacity: 0.6;
+}
+
+#wrapper #nav-auth .form-control,
+#wrapper #nav-requetsbody textarea{
+    border: 1px solid #000000 !important;
+}
