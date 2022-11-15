@@ -4,6 +4,9 @@ let authTabContainer = document.getElementById("auth-wrapper");
 let reqBodyTabContainer = document.getElementById("request-body-wrapper");
 const authToggle = document.getElementById("auth-tab-toggle");
 const reqBodyToggle = document.getElementById("req-body-toggle");
+let queryParamsTabInner = document.querySelector(
+  "#nav-queryparams #inner-fields"
+);
 
 function onChangeHttpMethods(event) {
   console.log(event.target.value);
@@ -257,3 +260,44 @@ reqBodyTabSelect.addEventListener("change", (event) => {
     `;
   }
 });
+
+function addInput(event) {
+  if (true) {
+    let main = document.createElement("div");
+    main.classList.add("d-flex");
+
+    let firstChildDiv = document.createElement("div");
+    firstChildDiv.classList.add("d-flex", "w-100", "border=0");
+    let firstChildDivInput = document.createElement("input");
+    firstChildDivInput.classList.add("form-control", "border");
+    firstChildDivInput.setAttribute("placeholder", "Key");
+    firstChildDivInput.setAttribute("type", "text");
+    firstChildDiv.appendChild(firstChildDivInput);
+
+    let secondChildDiv = document.createElement("div");
+    secondChildDiv.classList.add("d-flex", "w-100", "border=0");
+    let secondChildDivInput = document.createElement("input");
+    secondChildDivInput.classList.add("form-control", "border");
+    secondChildDivInput.setAttribute("placeholder", "Value");
+    secondChildDivInput.setAttribute("type", "text");
+    secondChildDiv.appendChild(secondChildDivInput);
+
+    let btnAdd = document.createElement("button");
+    btnAdd.classList.add("px-1", "py-1", "border", "border-gray-300", "d-flex");
+    btnAdd.setAttribute("onclick", "onDeleteInputRow(event)");
+
+    let spanBtn = document.createElement("span");
+    spanBtn.classList.add("material-symbols-outlined");
+    spanBtn.textContent = "delete";
+    btnAdd.appendChild(spanBtn);
+
+    main.append(firstChildDiv, secondChildDiv, btnAdd);
+
+    queryParamsTabInner.append(main);
+  }
+}
+
+function onDeleteInputRow(event) {
+  let element = event.target.parentElement.parentElement.parentElement;
+  element.removeChild(event.target.parentElement.parentElement);
+}
