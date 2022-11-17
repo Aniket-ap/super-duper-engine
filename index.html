@@ -9,7 +9,7 @@
     <!-- Jquery google CDN -->
     <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
         <script src="./index.js" defer></script> -->
-        
+
     <!-- MATERIAL ICON CDN -->
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
@@ -23,8 +23,8 @@
     <div class="container mt-5" id="wrapper">
 
         <!-- Top Dropdown -->
-        <div class="d-flex flex-row justify-content-between mb-3">
-            <div>
+        <div class="row d-flex flex-row justify-content-between mb-3">
+            <div class="col-2">
                 <label class="form-label">Method</label>
                 <select class="form-select" onchange="onChangeHttpMethods(event)">
                     <option selected value="get">GET</option>
@@ -35,13 +35,13 @@
                 </select>
             </div>
 
-            <div>
+            <div class="col-10">
                 <label class="form-label">Request URL</label>
                 <input type="email" class="form-control" value="https://postman-echo.com/post"
                     onkeyup="onKeyUpURL(event)" />
             </div>
 
-            <div></div>
+            <!-- <div></div> -->
         </div>
 
         <!-- TAB -->
@@ -72,8 +72,8 @@
         <div class="tab-content mt-5" id="tab-container">
             <!-- Query Params Content -->
             <div class="tab-pane fade show active" id="nav-queryparams" role="tabpanel">
-                
-                <div class="d-flex">
+
+                <!-- <div class="d-flex input-group">
 
                     <div class="d-flex w-100 border-0">
                         <input type="text" class="form-control border" placeholder="key">
@@ -87,8 +87,16 @@
                             add
                         </span>
                     </button>
-                </div>
+                </div> -->
+
                 <div id="inner-fields">
+                </div>
+
+                <div class="input-group">
+                    <input type="text" aria-label="First name" placeholder="Key" class="form-control">
+                    <input type="text" aria-label="Last name" placeholder="Value" class="form-control">
+                    <span class="material-symbols-outlined input-group-text" onclick="addInput(event)">add</span>
+                    <span class="material-symbols-outlined input-group-text">delete</span>
                 </div>
 
             </div>
@@ -98,7 +106,7 @@
                 <div class="row">
                     <div class="col-6">
                         <label class="form-label">Type</label>
-                        <select class="form-select w-50" id="auth-tab-select">
+                        <select class="form-select" id="auth-tab-select">
                             <option selected value="noauth">No Auth</option>
                             <option value="apikey">API Key</option>
                             <option value="bearertoken">Bearer Token</option>
@@ -120,7 +128,7 @@
             </div>
             <!-- Headers Content -->
             <div class="tab-pane fade" id="nav-headers" role="tabpanel">
-                <div class="d-flex">
+                <!-- <div class="d-flex">
                     <div class="d-flex w-100 border-0">
                         <input type="text" class="form-control border" placeholder="key" value="x-api-key">
                     </div>
@@ -164,6 +172,24 @@
                             </span>
                         </button>
                     </div>
+                </div> -->
+                <div class="input-group">
+                    <input type="text" aria-label="First name" placeholder="Key" class="form-control">
+                    <input type="text" aria-label="Last name" placeholder="Value" class="form-control">
+                    <span class="material-symbols-outlined input-group-text" onclick="addInput(event)">add</span>
+                    <span class="material-symbols-outlined input-group-text">delete</span>
+                </div>
+                <div class="input-group">
+                    <input type="text" aria-label="First name" placeholder="Key" class="form-control">
+                    <input type="text" aria-label="Last name" placeholder="Value" class="form-control">
+                    <span class="material-symbols-outlined input-group-text" onclick="addInput(event)">add</span>
+                    <span class="material-symbols-outlined input-group-text">delete</span>
+                </div>
+                <div class="input-group">
+                    <input type="text" aria-label="First name" placeholder="Key" class="form-control">
+                    <input type="text" aria-label="Last name" placeholder="Value" class="form-control">
+                    <span class="material-symbols-outlined input-group-text" onclick="addInput(event)">add</span>
+                    <span class="material-symbols-outlined input-group-text">delete</span>
                 </div>
             </div>
             <!-- Requestbody Content -->
@@ -171,7 +197,7 @@
                 <!-- Request Body tab -->
 
                 <div class="row">
-                    <div class="col-5">
+                    <div class="col-6">
                         <label class="form-label">Content Type</label>
                         <select class="form-select" id="req-body-tab-select">
                             <option selected value="none">None</option>
@@ -183,7 +209,7 @@
                             <option value="appjavascript">application/javascript</option>
                         </select>
                     </div>
-                    <div class="col-7 d-flex justify-content-center align-items-end align-end">
+                    <div class="col-6 d-flex justify-content-center align-items-end align-end">
                         <div id="req-body-toggle">
 
                         </div>
