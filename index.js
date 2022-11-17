@@ -208,39 +208,40 @@ reqBodyTabSelect.addEventListener("change", (event) => {
 });
 
 function addInput(event) {
-  if (true) {
-    let main = document.createElement("div");
-    main.classList.add("d-flex");
+  alert("Implementing this feature in JQUERY")
+  // if (true) {
+  //   let main = document.createElement("div");
+  //   main.classList.add("d-flex");
 
-    let firstChildDiv = document.createElement("div");
-    firstChildDiv.classList.add("d-flex", "w-100", "border-0");
-    let firstChildDivInput = document.createElement("input");
-    firstChildDivInput.classList.add("form-control", "border");
-    firstChildDivInput.setAttribute("placeholder", "Key");
-    firstChildDivInput.setAttribute("type", "text");
-    firstChildDiv.appendChild(firstChildDivInput);
+  //   let firstChildDiv = document.createElement("div");
+  //   firstChildDiv.classList.add("d-flex", "w-100", "border-0");
+  //   let firstChildDivInput = document.createElement("input");
+  //   firstChildDivInput.classList.add("form-control", "border");
+  //   firstChildDivInput.setAttribute("placeholder", "Key");
+  //   firstChildDivInput.setAttribute("type", "text");
+  //   firstChildDiv.appendChild(firstChildDivInput);
 
-    let secondChildDiv = document.createElement("div");
-    secondChildDiv.classList.add("d-flex", "w-100", "border-0");
-    let secondChildDivInput = document.createElement("input");
-    secondChildDivInput.classList.add("form-control", "border");
-    secondChildDivInput.setAttribute("placeholder", "Value");
-    secondChildDivInput.setAttribute("type", "text");
-    secondChildDiv.appendChild(secondChildDivInput);
+  //   let secondChildDiv = document.createElement("div");
+  //   secondChildDiv.classList.add("d-flex", "w-100", "border-0");
+  //   let secondChildDivInput = document.createElement("input");
+  //   secondChildDivInput.classList.add("form-control", "border");
+  //   secondChildDivInput.setAttribute("placeholder", "Value");
+  //   secondChildDivInput.setAttribute("type", "text");
+  //   secondChildDiv.appendChild(secondChildDivInput);
 
-    let btnAdd = document.createElement("button");
-    btnAdd.classList.add("px-1", "py-1", "border", "border-gray-300", "d-flex");
+  //   let btnAdd = document.createElement("button");
+  //   btnAdd.classList.add("px-1", "py-1", "border", "border-gray-300", "d-flex");
     
-    let spanBtn = document.createElement("span");
-    spanBtn.classList.add("material-symbols-outlined");
-    spanBtn.textContent = "delete";
-    spanBtn.setAttribute("onclick", "onDeleteInputRow(event)");
-    btnAdd.appendChild(spanBtn);
+  //   let spanBtn = document.createElement("span");
+  //   spanBtn.classList.add("material-symbols-outlined");
+  //   spanBtn.textContent = "delete";
+  //   spanBtn.setAttribute("onclick", "onDeleteInputRow(event)");
+  //   btnAdd.appendChild(spanBtn);
 
-    main.append(firstChildDiv, secondChildDiv, btnAdd);
+  //   main.append(firstChildDiv, secondChildDiv, btnAdd);
 
-    queryParamsTabInner.append(main);
-  }
+  //   queryParamsTabInner.append(main);
+  // }
 }
 
 function onDeleteInputRow(event) {
