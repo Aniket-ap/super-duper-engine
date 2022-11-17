@@ -28,13 +28,13 @@ authTabSelect.addEventListener("change", (event) => {
             <div class="col-6">
             <div>
                 <label class="form-label">API Key</label>
-                <input type="email" class="form-control w-50" />
+                <input type="email" class="form-control " />
             </div>
             </div>
             <div class="col-6">
             <div>
                 <label class="form-label">API Value</label>
-                <input type="email" class="form-control w-50" />
+                <input type="email" class="form-control " />
             </div>
             </div>
       </div>
@@ -57,10 +57,10 @@ authTabSelect.addEventListener("change", (event) => {
     authToggle.innerHTML = "";
     authTabContainer.innerHTML = `
     <div class="row mt-3">
-    <div class="col">
+    <div class="col-6">
       <div>
         <label class="form-label">Bearer Token</label>
-        <input type="email" class="form-control w-25" />
+        <input type="email" class="form-control" />
       </div>
     </div>
   </div>
@@ -73,13 +73,13 @@ authTabSelect.addEventListener("change", (event) => {
     <div class="col-6">
       <div>
         <label class="form-label">Username</label>
-        <input type="email" class="form-control w-50" />
+        <input type="email" class="form-control" />
       </div>
     </div>
     <div class="col-6">
       <div>
         <label class="form-label">Password</label>
-        <input type="email" class="form-control w-50" />
+        <input type="email" class="form-control" />
       </div>
     </div>
   </div>
@@ -89,10 +89,10 @@ authTabSelect.addEventListener("change", (event) => {
     authToggle.innerHTML = "";
     authTabContainer.innerHTML = `
     <div class="row mt-3">
-    <div class="col">
+    <div class="col-6">
       <div>
         <label class="form-label">Access Token</label>
-        <input type="email" class="form-control w-25" />
+        <input type="email" class="form-control" />
       </div>
     </div>
   </div>
@@ -109,51 +109,24 @@ reqBodyTabSelect.addEventListener("change", (event) => {
     reqBodyTabContainer.innerHTML = "";
     reqBodyToggle.innerHTML = "";
     reqBodyTabContainer.innerHTML = `
-        <div class="d-flex">
-        <div class="d-flex w-100 border-0">
-            <input type="text" class="form-control border" placeholder="key" value="source">
-        </div>
-        <div class="d-flex w-100 border-0">
-            <input type="text" class="form-control border" placeholder="Value" value="web">
-        </div>
-        <div>
-            <button type="button" class="px-1 py-1 border border-gray-300 d-flex">
-                <span class="material-symbols-outlined">
-                    delete
-                </span>
-            </button>
-        </div>
-    </div>
-    <div class="d-flex">
-        <div class="d-flex w-100 border-0">
-            <input type="text" class="form-control border" placeholder="key" value="foo">
-        </div>
-        <div class="d-flex w-100 border-0">
-            <input type="text" class="form-control border" placeholder="Value" value="bar">
-        </div>
-        <div>
-            <button type="button" class="px-1 py-1 border border-gray-300 d-flex">
-                <span class="material-symbols-outlined">
-                    delete
-                </span>
-            </button>
-        </div>
-    </div>
-    <div class="d-flex">
-        <div class="d-flex w-100 border-0">
-            <input type="text" class="form-control border" placeholder="key">
-        </div>
-        <div class="d-flex w-100 border-0">
-            <input type="text" class="form-control border" placeholder="Value">
-        </div>
-        <div>
-            <button type="button" class="px-1 py-1 border border-gray-300 d-flex">
-                <span class="material-symbols-outlined">
-                    delete
-                </span>
-            </button>
-        </div>
-    </div>
+    <div class="input-group">
+                    <input type="text" aria-label="First name" placeholder="Key" class="form-control">
+                    <input type="text" aria-label="Last name" placeholder="Value" class="form-control">
+                    <span class="material-symbols-outlined input-group-text" onclick="addInput(event)">add</span>
+                    <span class="material-symbols-outlined input-group-text">delete</span>
+                </div>
+                <div class="input-group">
+                    <input type="text" aria-label="First name" placeholder="Key" class="form-control">
+                    <input type="text" aria-label="Last name" placeholder="Value" class="form-control">
+                    <span class="material-symbols-outlined input-group-text" onclick="addInput(event)">add</span>
+                    <span class="material-symbols-outlined input-group-text">delete</span>
+                </div>
+                <div class="input-group">
+                    <input type="text" aria-label="First name" placeholder="Key" class="form-control">
+                    <input type="text" aria-label="Last name" placeholder="Value" class="form-control">
+                    <span class="material-symbols-outlined input-group-text" onclick="addInput(event)">add</span>
+                    <span class="material-symbols-outlined input-group-text">delete</span>
+                </div>
         `;
   } else if (selectedValue === "appjson") {
     reqBodyTabContainer.innerHTML = "";
@@ -164,51 +137,24 @@ reqBodyTabSelect.addEventListener("change", (event) => {
         </div>
         `;
     reqBodyTabContainer.innerHTML = `
-        <div class="d-flex">
-        <div class="d-flex w-100 border-0">
-            <input type="text" class="form-control border" placeholder="key" value="source">
-        </div>
-        <div class="d-flex w-100 border-0">
-            <input type="text" class="form-control border" placeholder="Value" value="web">
-        </div>
-        <div>
-            <button type="button" class="px-1 py-1 border border-gray-300 d-flex">
-                <span class="material-symbols-outlined">
-                    delete
-                </span>
-            </button>
-        </div>
-    </div>
-    <div class="d-flex">
-        <div class="d-flex w-100 border-0">
-            <input type="text" class="form-control border" placeholder="key" value="foo">
-        </div>
-        <div class="d-flex w-100 border-0">
-            <input type="text" class="form-control border" placeholder="Value" value="bar">
-        </div>
-        <div>
-            <button type="button" class="px-1 py-1 border border-gray-300 d-flex">
-                <span class="material-symbols-outlined">
-                    delete
-                </span>
-            </button>
-        </div>
-    </div>
-    <div class="d-flex">
-        <div class="d-flex w-100 border-0">
-            <input type="text" class="form-control border" placeholder="key">
-        </div>
-        <div class="d-flex w-100 border-0">
-            <input type="text" class="form-control border" placeholder="Value">
-        </div>
-        <div>
-            <button type="button" class="px-1 py-1 border border-gray-300 d-flex">
-                <span class="material-symbols-outlined">
-                    delete
-                </span>
-            </button>
-        </div>
-    </div>
+    <div class="input-group">
+    <input type="text" aria-label="First name" placeholder="Key" class="form-control">
+    <input type="text" aria-label="Last name" placeholder="Value" class="form-control">
+    <span class="material-symbols-outlined input-group-text" onclick="addInput(event)">add</span>
+    <span class="material-symbols-outlined input-group-text">delete</span>
+</div>
+<div class="input-group">
+    <input type="text" aria-label="First name" placeholder="Key" class="form-control">
+    <input type="text" aria-label="Last name" placeholder="Value" class="form-control">
+    <span class="material-symbols-outlined input-group-text" onclick="addInput(event)">add</span>
+    <span class="material-symbols-outlined input-group-text">delete</span>
+</div>
+<div class="input-group">
+    <input type="text" aria-label="First name" placeholder="Key" class="form-control">
+    <input type="text" aria-label="Last name" placeholder="Value" class="form-control">
+    <span class="material-symbols-outlined input-group-text" onclick="addInput(event)">add</span>
+    <span class="material-symbols-outlined input-group-text">delete</span>
+</div>
         `;
   } else if (selectedValue === "textplain") {
     reqBodyTabContainer.innerHTML = "";
@@ -217,7 +163,7 @@ reqBodyTabSelect.addEventListener("change", (event) => {
       <div class="col-sm-6 mt-5">
       <div class="mb-3">
         <label for="exampleFormControlTextarea1" class="form-label">Request Body</label>
-        <textarea class="form-control w-75" id="exampleFormControlTextarea1" rows="5"></textarea>
+        <textarea class="form-control " id="exampleFormControlTextarea1" rows="5"></textarea>
         <label for="exampleFormControlTextarea1" class="form-label">Write the raw request body</label>
       </div>
     </div>
@@ -229,7 +175,7 @@ reqBodyTabSelect.addEventListener("change", (event) => {
     <div class="col-sm-6 mt-5">
     <div class="mb-3">
       <label for="exampleFormControlTextarea1" class="form-label">Request Body</label>
-      <textarea class="form-control w-75" id="exampleFormControlTextarea1" rows="5"></textarea>
+      <textarea class="form-control " id="exampleFormControlTextarea1" rows="5"></textarea>
       <label for="exampleFormControlTextarea1" class="form-label">Write the raw request body</label>
     </div>
   </div>
@@ -241,7 +187,7 @@ reqBodyTabSelect.addEventListener("change", (event) => {
     <div class="col-sm-6 mt-5">
     <div class="mb-3">
       <label for="exampleFormControlTextarea1" class="form-label">Request Body</label>
-      <textarea class="form-control w-75" id="exampleFormControlTextarea1" rows="5"></textarea>
+      <textarea class="form-control " id="exampleFormControlTextarea1" rows="5"></textarea>
       <label for="exampleFormControlTextarea1" class="form-label">Write the raw request body</label>
     </div>
   </div>
@@ -253,7 +199,7 @@ reqBodyTabSelect.addEventListener("change", (event) => {
     <div class="col-sm-6 mt-5">
     <div class="mb-3">
       <label for="exampleFormControlTextarea1" class="form-label">Request Body</label>
-      <textarea class="form-control w-75" id="exampleFormControlTextarea1" rows="5"></textarea>
+      <textarea class="form-control " id="exampleFormControlTextarea1" rows="5"></textarea>
       <label for="exampleFormControlTextarea1" class="form-label">Write the raw request body</label>
     </div>
   </div>
