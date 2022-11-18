@@ -24,7 +24,7 @@
         <div class="row d-flex flex-row justify-content-between mb-3">
             <div class="col-2">
                 <label for="selectHttpDropdown" class="form-label">Method</label>
-                <select class="form-select" id="selectHttpDropdown" onchange="onChangeHttpMethods(event)">
+                <select class="form-select" id="selectHttpDropdown">
                     <option selected value="get">GET</option>
                     <option value="post">POST</option>
                     <option value="put">PUT</option>
@@ -35,7 +35,7 @@
 
             <div class="col-10">
                 <label for="InputUrl" class="form-label">Request URL</label>
-                <input type="url" id="InputUrl" class="form-control" onkeyup="onKeyUpURL(event)" />
+                <input type="url" id="InputUrl" class="form-control"/>
             </div>
         </div>
 
@@ -82,7 +82,7 @@
                 <!-- Authorization tab -->
                 <div class="row">
                     <div class="col-6">
-                        <label class="form-label">Type</label>
+                        <label for="auth-tab-select" class="form-label">Type</label>
                         <select class="form-select" id="auth-tab-select">
                             <option selected value="noauth">No Auth</option>
                             <option value="apikey">API Key</option>
@@ -113,14 +113,14 @@
                         <div class="row mt-3">
                             <div class="col-6">
                                 <div>
-                                    <label class="form-label">API Key</label>
-                                    <input type="email" class="form-control " />
+                                    <label for="apiKeyInput" class="form-label">API Key</label>
+                                    <input type="email" class="form-control" id="apiKeyInput"/>
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div>
-                                    <label class="form-label">API Value</label>
-                                    <input type="email" class="form-control " />
+                                    <label for="apiValueInput" class="form-label">API Value</label>
+                                    <input type="email" class="form-control " id="apiValueInput" />
                                 </div>
                             </div>
                         </div>
@@ -130,8 +130,8 @@
                         <div class="row mt-3">
                             <div class="col-6">
                                 <div>
-                                    <label class="form-label">Bearer Token</label>
-                                    <input type="email" class="form-control" />
+                                    <label for="bearerTokenInput" class="form-label">Bearer Token</label>
+                                    <input type="email" class="form-control" id="bearerTokenInput"/>
                                 </div>
                             </div>
                         </div>
@@ -141,14 +141,14 @@
                         <div class="row mt-3">
                             <div class="col-6">
                                 <div>
-                                    <label class="form-label">Username</label>
-                                    <input type="email" class="form-control" />
+                                    <label for="basicOathUname" class="form-label">Username</label>
+                                    <input type="email" class="form-control" id="basicOathUname"/>
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div>
-                                    <label class="form-label">Password</label>
-                                    <input type="email" class="form-control" />
+                                    <label for="basicOathPassword" class="form-label">Password</label>
+                                    <input type="email" class="form-control" id="basicOathPassword"/>
                                 </div>
                             </div>
                         </div>
@@ -158,8 +158,8 @@
                         <div class="row mt-3">
                             <div class="col-6">
                                 <div>
-                                    <label class="form-label">Access Token</label>
-                                    <input type="email" class="form-control" />
+                                    <label for="oAuthTokenInput" class="form-label">Access Token</label>
+                                    <input type="email" class="form-control" id="oAuthTokenInput" />
                                 </div>
                             </div>
                         </div>
@@ -170,51 +170,6 @@
             </div>
             <!-- Headers Content -->
             <div class="tab-pane fade" id="nav-headers" role="tabpanel">
-                <!-- <div class="d-flex">
-                    <div class="d-flex w-100 border-0">
-                        <input type="text" class="form-control border" placeholder="key" value="x-api-key">
-                    </div>
-                    <div class="d-flex w-100 border-0">
-                        <input type="text" class="form-control border" placeholder="Value" value="123xyz">
-                    </div>
-                    <div>
-                        <button type="button" class="px-1 py-1 border border-gray-300 d-flex">
-                            <span class="material-symbols-outlined">
-                                delete
-                            </span>
-                        </button>
-                    </div>
-                </div>
-                <div class="d-flex">
-                    <div class="d-flex w-100 border-0">
-                        <input type="text" class="form-control border" placeholder="key" value="cache-control">
-                    </div>
-                    <div class="d-flex w-100 border-0">
-                        <input type="text" class="form-control border" placeholder="Value" value="no-cache">
-                    </div>
-                    <div>
-                        <button type="button" class="px-1 py-1 border border-gray-300 d-flex">
-                            <span class="material-symbols-outlined">
-                                delete
-                            </span>
-                        </button>
-                    </div>
-                </div>
-                <div class="d-flex">
-                    <div class="d-flex w-100 border-0">
-                        <input type="text" class="form-control border" placeholder="key">
-                    </div>
-                    <div class="d-flex w-100 border-0">
-                        <input type="text" class="form-control border" placeholder="Value">
-                    </div>
-                    <div>
-                        <button type="button" class="px-1 py-1 border border-gray-300 d-flex">
-                            <span class="material-symbols-outlined">
-                                delete
-                            </span>
-                        </button>
-                    </div>
-                </div> -->
                 <div class="input-group">
                     <input type="text" aria-label="First name" placeholder="Key" class="form-control">
                     <input type="text" aria-label="Last name" placeholder="Value" class="form-control">
@@ -240,7 +195,7 @@
 
                 <div class="row">
                     <div class="col-6">
-                        <label class="form-label">Content Type</label>
+                        <label for="req-body-tab-select" class="form-label">Content Type</label>
                         <select class="form-select" id="req-body-tab-select">
                             <option selected value="none">None</option>
                             <option value="appurlencoded">application/x-www-form-urlencoded</option>
@@ -313,9 +268,9 @@
                     <div id="textPlainContainer">
                         <div class="col-sm-6 mt-5">
                             <div class="mb-3">
-                                <label for="exampleFormControlTextarea1" class="form-label">Request Body</label>
-                                <textarea class="form-control " id="exampleFormControlTextarea1" rows="5"></textarea>
-                                <label for="exampleFormControlTextarea1" class="form-label">Write the raw request
+                                <label for="textPlainTextArea" class="form-label">Request Body</label>
+                                <textarea class="form-control " id="textPlainTextArea" rows="5"></textarea>
+                                <label for="textPlainTextArea" class="form-label">Write the raw request
                                     body</label>
                             </div>
                         </div>
@@ -324,9 +279,9 @@
                     <div id="textHtmlContainer">
                         <div class="col-sm-6 mt-5">
                             <div class="mb-3">
-                                <label for="exampleFormControlTextarea1" class="form-label">Request Body</label>
-                                <textarea class="form-control " id="exampleFormControlTextarea1" rows="5"></textarea>
-                                <label for="exampleFormControlTextarea1" class="form-label">Write the raw request
+                                <label for="textHtmlTextArea" class="form-label">Request Body</label>
+                                <textarea class="form-control " id="textHtmlTextArea" rows="5"></textarea>
+                                <label for="textHtmlTextArea" class="form-label">Write the raw request
                                     body</label>
                             </div>
                         </div>
@@ -335,9 +290,9 @@
                     <div id="appXmlContainer">
                         <div class="col-sm-6 mt-5">
                             <div class="mb-3">
-                                <label for="exampleFormControlTextarea1" class="form-label">Request Body</label>
-                                <textarea class="form-control " id="exampleFormControlTextarea1" rows="5"></textarea>
-                                <label for="exampleFormControlTextarea1" class="form-label">Write the raw request
+                                <label for="appXmlTextArea" class="form-label">Request Body</label>
+                                <textarea class="form-control " id="appXmlTextArea" rows="5"></textarea>
+                                <label for="appXmlTextArea" class="form-label">Write the raw request
                                     body</label>
                             </div>
                         </div>
@@ -346,9 +301,9 @@
                     <div id="appJavascriptContainer">
                         <div class="col-sm-6 mt-5">
                             <div class="mb-3">
-                                <label for="exampleFormControlTextarea1" class="form-label">Request Body</label>
-                                <textarea class="form-control " id="exampleFormControlTextarea1" rows="5"></textarea>
-                                <label for="exampleFormControlTextarea1" class="form-label">Write the raw request
+                                <label for="appJsTextArea" class="form-label">Request Body</label>
+                                <textarea class="form-control " id="appJsTextArea" rows="5"></textarea>
+                                <label for="appJsTextArea" class="form-label">Write the raw request
                                     body</label>
                             </div>
                         </div>
