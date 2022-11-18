@@ -10,6 +10,7 @@ $(document).ready(function () {
   $("#req-body-toggle").hide();
   $("#appUrlEncodedContainer").hide();
   $("#appJsonContainer").hide();
+  $("#appJsonContainerChecked").hide();
   $("#textPlainContainer").hide();
   $("#textHtmlContainer").hide();
   $("#appXmlContainer").hide();
@@ -169,7 +170,14 @@ $(document).ready(function () {
     }
   });
 
-  $("#req-body-checkbox").change(function (e) {
-    console.log(e.target.value);
+  $('#req-body-checkbox').on('change', function() {
+    if ($('#req-body-checkbox').prop('checked')) {
+      $("#appJsonContainerChecked").show();
+      $("#appJsonContainer").hide();
+    } else {
+      $("#appJsonContainerChecked").hide();
+      $("#appJsonContainer").show();
+    };
   });
+
 });
