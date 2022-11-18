@@ -54,9 +54,24 @@ $(document).ready(function () {
   });
 
   $(document).on("click", ".delInputBoxesRow", function (e) {
+
+    let count = $("#nav-queryparams").find(".input-group").length;
+    if(count === 1){
+      return;
+    }
     let ele = e.target.parentElement.parentElement;
     ele.removeChild(e.target.parentElement);
   });
+
+  $(document).on("click",".addInputBoxesRow",function (e) {
+    let count = $("#nav-queryparams").find(".input-group").length;
+    console.log(count)
+  })
+
+  $(document).on("click",".delInputBoxesRow",function (e) {
+    let count = $("#nav-queryparams").find(".input-group").length;
+    console.log(count)
+  })
 
   $("#auth-tab-select").change(function (e) {
     let selectedValue = e.target.value;
