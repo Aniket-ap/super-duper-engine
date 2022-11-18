@@ -15,7 +15,7 @@ $(document).ready(function () {
   $("#appXmlContainer").hide();
   $("#appJavascriptContainer").hide();
 
-  $(".addInputBoxesRow").click(function (e) {
+  $(document).on("click", ".addInputBoxesRow", function (e) {
     let main = document.createElement("div");
     main.classList.add("input-group", "input-row");
 
@@ -43,14 +43,19 @@ $(document).ready(function () {
     let spanDel = document.createElement("span");
     spanDel.classList.add(
       "material-symbols-outlined",
-      "DelInputBoxesRow",
+      "delInputBoxesRow",
       "input-group-text"
     );
     spanDel.setAttribute("role", "button");
     spanDel.textContent = "delete";
 
     main.append(firstChildDivInput, secondChildDivInput, spanAdd, spanDel);
-    $("#inner-fields").append(main);
+    $("#nav-queryparams").append(main);
+  });
+
+  $(document).on("click", ".delInputBoxesRow", function (e) {
+    let ele = e.target.parentElement.parentElement;
+    ele.removeChild(e.target.parentElement);
   });
 
   $("#auth-tab-select").change(function (e) {
@@ -148,9 +153,9 @@ $(document).ready(function () {
       $("#appJavascriptContainer").show();
     }
   });
+
+  $("#req-body-checkbox").change(function (e) {
+    console.log(e.target.value);
+  });
 });
 
-function onDeleteInputRow(event) {
-  let element = event.target.parentElement.parentElement.parentElement;
-  element.removeChild(event.target.parentElement.parentElement);
-}
