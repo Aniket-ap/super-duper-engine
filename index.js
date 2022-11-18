@@ -16,6 +16,7 @@ $(document).ready(function () {
   $("#appJavascriptContainer").hide();
 
   $(document).on("click", ".addInputBoxesRow", function (e) {
+    let parent = e.target.parentElement;
     let main = document.createElement("div");
     main.classList.add("input-group", "input-row");
 
@@ -50,28 +51,27 @@ $(document).ready(function () {
     spanDel.textContent = "delete";
 
     main.append(firstChildDivInput, secondChildDivInput, spanAdd, spanDel);
-    $("#nav-queryparams").append(main);
+    $(parent).after(main);
   });
 
   $(document).on("click", ".delInputBoxesRow", function (e) {
-
     let count = $("#nav-queryparams").find(".input-group").length;
-    if(count === 1){
+    if (count === 1) {
       return;
     }
     let ele = e.target.parentElement.parentElement;
     ele.removeChild(e.target.parentElement);
   });
 
-  $(document).on("click",".addInputBoxesRow",function (e) {
+  $(document).on("click", ".addInputBoxesRow", function (e) {
     let count = $("#nav-queryparams").find(".input-group").length;
-    console.log(count)
-  })
+    console.log(count);
+  });
 
-  $(document).on("click",".delInputBoxesRow",function (e) {
+  $(document).on("click", ".delInputBoxesRow", function (e) {
     let count = $("#nav-queryparams").find(".input-group").length;
-    console.log(count)
-  })
+    console.log(count);
+  });
 
   $("#auth-tab-select").change(function (e) {
     let selectedValue = e.target.value;
@@ -173,4 +173,3 @@ $(document).ready(function () {
     console.log(e.target.value);
   });
 });
-
