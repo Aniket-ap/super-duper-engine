@@ -127,6 +127,8 @@ $(document).ready(function () {
       $("#textHtmlContainer").hide();
       $("#appXmlContainer").hide();
       $("#appJavascriptContainer").hide();
+      $("#appJsonContainerChecked").hide();
+
     } else if (selectedValue === "appjson") {
       $("#req-body-toggle").show();
       $("#appUrlEncodedContainer").hide();
@@ -143,6 +145,7 @@ $(document).ready(function () {
       $("#textHtmlContainer").hide();
       $("#appXmlContainer").hide();
       $("#appJavascriptContainer").hide();
+      $("#appJsonContainerChecked").hide();
     } else if (selectedValue === "texthtml") {
       $("#req-body-toggle").hide();
       $("#appUrlEncodedContainer").hide();
@@ -151,6 +154,8 @@ $(document).ready(function () {
       $("#textHtmlContainer").show();
       $("#appXmlContainer").hide();
       $("#appJavascriptContainer").hide();
+      $("#appJsonContainerChecked").hide();
+
     } else if (selectedValue === "appxml") {
       $("#req-body-toggle").hide();
       $("#appUrlEncodedContainer").hide();
@@ -159,6 +164,7 @@ $(document).ready(function () {
       $("#textHtmlContainer").hide();
       $("#appXmlContainer").show();
       $("#appJavascriptContainer").hide();
+      $("#appJsonContainerChecked").hide();
     } else if (selectedValue === "appjavascript") {
       $("#req-body-toggle").hide();
       $("#appUrlEncodedContainer").hide();
@@ -167,6 +173,8 @@ $(document).ready(function () {
       $("#textHtmlContainer").hide();
       $("#appXmlContainer").hide();
       $("#appJavascriptContainer").show();
+      $("#appJsonContainerChecked").hide();
+
     }
   });
 
