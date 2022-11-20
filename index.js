@@ -22,16 +22,14 @@ $(document).ready(function () {
     main.classList.add("input-group", "input-row");
 
     let firstChildDivInput = document.createElement("input");
-    firstChildDivInput.classList.add("form-control");
+    firstChildDivInput.classList.add("form-control", "text-truncate");
     firstChildDivInput.setAttribute("placeholder", "Key");
     firstChildDivInput.setAttribute("type", "text");
-    firstChildDivInput.setAttribute("aria-label", "First name");
 
     let secondChildDivInput = document.createElement("input");
-    secondChildDivInput.classList.add("form-control");
+    secondChildDivInput.classList.add("form-control", "text-truncate");
     secondChildDivInput.setAttribute("placeholder", "Value");
     secondChildDivInput.setAttribute("type", "text");
-    secondChildDivInput.setAttribute("aria-label", "Last name");
 
     let spanAdd = document.createElement("span");
     spanAdd.classList.add(
