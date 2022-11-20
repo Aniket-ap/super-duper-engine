@@ -51,17 +51,42 @@ $(document).ready(function () {
     spanDel.setAttribute("role", "button");
     spanDel.textContent = "delete";
 
-    main.append(firstChildDivInput, secondChildDivInput, spanAdd, spanDel);
+    main.append(spanDel, firstChildDivInput, secondChildDivInput, spanAdd);
     $(parent).after(main);
   });
 
   $(document).on("click", ".delInputBoxesRow", function (e) {
-    let count = $("#nav-queryparams").find(".input-group").length;
-    if (count === 1) {
-      return;
+    let clickedContainerId = e.target.parentElement.parentElement.id;
+
+    if (clickedContainerId === "nav-queryparams") {
+      let count = $("#nav-queryparams").find(".input-group").length;
+      if (count === 1) {
+        return;
+      }
+      let ele = e.target.parentElement.parentElement;
+      ele.removeChild(e.target.parentElement);
+    } else if (clickedContainerId === "nav-headers") {
+      let count = $("#nav-headers").find(".input-group").length;
+      if (count === 1) {
+        return;
+      }
+      let ele = e.target.parentElement.parentElement;
+      ele.removeChild(e.target.parentElement);
+    } else if (clickedContainerId === "appUrlEncodedContainer") {
+      let count = $("#appUrlEncodedContainer").find(".input-group").length;
+      if (count === 1) {
+        return;
+      }
+      let ele = e.target.parentElement.parentElement;
+      ele.removeChild(e.target.parentElement);
+    } else if (clickedContainerId === "appJsonContainer") {
+      let count = $("#appJsonContainer").find(".input-group").length;
+      if (count === 1) {
+        return;
+      }
+      let ele = e.target.parentElement.parentElement;
+      ele.removeChild(e.target.parentElement);
     }
-    let ele = e.target.parentElement.parentElement;
-    ele.removeChild(e.target.parentElement);
   });
 
   $(document).on("click", ".addInputBoxesRow", function (e) {
@@ -128,7 +153,6 @@ $(document).ready(function () {
       $("#appXmlContainer").hide();
       $("#appJavascriptContainer").hide();
       $("#appJsonContainerChecked").hide();
-
     } else if (selectedValue === "appjson") {
       $("#req-body-toggle").show();
       $("#appUrlEncodedContainer").hide();
@@ -155,7 +179,6 @@ $(document).ready(function () {
       $("#appXmlContainer").hide();
       $("#appJavascriptContainer").hide();
       $("#appJsonContainerChecked").hide();
-
     } else if (selectedValue === "appxml") {
       $("#req-body-toggle").hide();
       $("#appUrlEncodedContainer").hide();
@@ -174,18 +197,16 @@ $(document).ready(function () {
       $("#appXmlContainer").hide();
       $("#appJavascriptContainer").show();
       $("#appJsonContainerChecked").hide();
-
     }
   });
 
-  $('#req-body-checkbox').on('change', function() {
-    if ($('#req-body-checkbox').prop('checked')) {
+  $("#req-body-checkbox").on("change", function () {
+    if ($("#req-body-checkbox").prop("checked")) {
       $("#appJsonContainerChecked").show();
       $("#appJsonContainer").hide();
     } else {
       $("#appJsonContainerChecked").hide();
       $("#appJsonContainer").show();
-    };
+    }
   });
-
 });
