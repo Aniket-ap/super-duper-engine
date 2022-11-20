@@ -154,9 +154,15 @@ $(document).ready(function () {
       $("#appJavascriptContainer").hide();
       $("#appJsonContainerChecked").hide();
     } else if (selectedValue === "appjson") {
+      if ($("#req-body-checkbox").prop("checked")) {
+        $("#appJsonContainerChecked").show();
+        $("#appJsonContainer").hide();
+      } else {
+        $("#appJsonContainerChecked").hide();
+        $("#appJsonContainer").show();
+      }
       $("#req-body-toggle").show();
       $("#appUrlEncodedContainer").hide();
-      $("#appJsonContainer").show();
       $("#textPlainContainer").hide();
       $("#textHtmlContainer").hide();
       $("#appXmlContainer").hide();
