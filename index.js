@@ -38,6 +38,7 @@ $(document).ready(function () {
       "addInputBoxesRow"
     );
     spanAdd.setAttribute("role", "button");
+    spanAdd.setAttribute("title", "Add new");
     spanAdd.textContent = "add";
 
     let spanDel = document.createElement("span");
@@ -47,6 +48,7 @@ $(document).ready(function () {
       "input-group-text"
     );
     spanDel.setAttribute("role", "button");
+    spanDel.setAttribute("title", "Delete");
     spanDel.textContent = "delete";
 
     main.append(spanDel, firstChildDivInput, secondChildDivInput, spanAdd);
@@ -213,4 +215,11 @@ $(document).ready(function () {
       $("#appJsonContainer").show();
     }
   });
+
+  // $( "#nav-queryparams input" ).each(function( index ) {
+  //   $(this).addClass('item-' + index);
+  // });
+
 });
+
+// headers-key-1-1d
