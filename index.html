@@ -36,7 +36,10 @@
 
             <div class="col-7 col-sm-9">
                 <label for="InputUrl" class="form-label">Request URL</label>
-                <input type="url" id="InputUrl" class="form-control" />
+                <div class="d-flex">
+                    <input type="url" id="InputUrl" class="form-control" />
+                    <button class="btn btn-outline-primary" id="onClickUrlBtn">Send</button>
+                </div>
             </div>
         </div>
 
@@ -45,7 +48,7 @@
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
                 <button class="nav-link active" id="nav-queryparams-tab" data-bs-toggle="tab"
                     data-bs-target="#nav-queryparams" type="button" role="tab" aria-selected="true">
-                    Query Params
+                    Params
                     <span class="ms-1 d-inline-block rounded-circle"></span>
                 </button>
                 <button class="nav-link" id="nav-auth-tab" data-bs-toggle="tab" data-bs-target="#nav-auth"
@@ -58,7 +61,7 @@
                 </button>
                 <button class="nav-link " id="nav-requestbody-tab" data-bs-toggle="tab"
                     data-bs-target="#nav-requetsbody" type="button" role="tab" aria-selected="false">
-                    Request Body
+                    Body
                     <span class="ms-1 d-inline-block rounded-circle"></span>
                 </button>
             </div>
@@ -70,11 +73,11 @@
             <div class="tab-pane fade show active" id="nav-queryparams" role="tabpanel">
 
                 <div class="input-group">
-                    <span role="button" title="Delete"
+                    <span role="button" title="Delete" tabindex="0"
                         class="material-symbols-outlined input-group-text delInputBoxesRow">delete</span>
                     <input type="text" placeholder="Key" class="form-control text-truncate">
                     <input type="text" placeholder="Value" class="form-control text-truncate">
-                    <span role="button" title="Add new" class="material-symbols-outlined input-group-text addInputBoxesRow">add</span>
+                    <span role="button" title="Add new" tabindex="0" class="material-symbols-outlined input-group-text addInputBoxesRow">add</span>
                 </div>
 
             </div>
@@ -172,11 +175,11 @@
             <!-- Headers Content -->
             <div class="tab-pane fade" id="nav-headers" role="tabpanel">
                 <div class="input-group">
-                    <span role="button" title="Delete"
+                    <span role="button" title="Delete" tabindex="0"
                         class="material-symbols-outlined input-group-text delInputBoxesRow">delete</span>
                     <input type="text" placeholder="Key" class="form-control text-truncate">
                     <input type="text" placeholder="Value" class="form-control text-truncate">
-                    <span role="button" title="Add new" class="material-symbols-outlined input-group-text addInputBoxesRow">add</span>
+                    <span role="button" title="Add new" tabindex="0" class="material-symbols-outlined input-group-text addInputBoxesRow">add</span>
                 </div>
             </div>
             <!-- Requestbody Content -->
@@ -209,22 +212,22 @@
                 <div id="request-body-wrapper" class="mt-5">
                     <div id="appUrlEncodedContainer">
                         <div class="input-group">
-                            <span role="button" title="Delete"
+                            <span role="button" title="Delete" tabindex="0"
                                 class="material-symbols-outlined input-group-text delInputBoxesRow">delete</span>
                             <input type="text" placeholder="Key" class="form-control text-truncate">
                             <input type="text" placeholder="Value" class="form-control text-truncate">
-                            <span role="button" title="Add new"
+                            <span role="button" title="Add new" tabindex="0"
                                 class="material-symbols-outlined input-group-text addInputBoxesRow">add</span>
                         </div>
                     </div>
 
                     <div id="appJsonContainer">
                         <div class="input-group">
-                            <span role="button" title="Delete"
+                            <span role="button" title="Delete" tabindex="0"
                                 class="material-symbols-outlined input-group-text delInputBoxesRow">delete</span>
                             <input type="text" placeholder="Key" class="form-control text-truncate">
                             <input type="text" placeholder="Value" class="form-control text-truncate">
-                            <span role="button" title="Add new"
+                            <span role="button" title="Add new" tabindex="0"
                                 class="material-symbols-outlined input-group-text addInputBoxesRow">add</span>
                         </div>
                     </div>
@@ -290,3 +293,9 @@
 </body>
 
 </html>
+
+
+<!-- Works to be done -->
+<!-- headers-key-1-1d  headers-value-1-1d -->
+<!-- convert JS to Jquery -->
+
