@@ -23,7 +23,7 @@
 
         <!-- Top Dropdown -->
         <div class="row d-flex flex-row justify-content-between mb-3">
-            <div class="col-3">
+            <div class="col-5 col-sm-3">
                 <label for="selectHttpDropdown" class="form-label">Method</label>
                 <select class="form-select" id="selectHttpDropdown">
                     <option selected value="get">GET</option>
@@ -34,7 +34,7 @@
                 </select>
             </div>
 
-            <div class="col-9">
+            <div class="col-7 col-sm-9">
                 <label for="InputUrl" class="form-label">Request URL</label>
                 <input type="url" id="InputUrl" class="form-control" />
             </div>
@@ -43,20 +43,20 @@
         <!-- TAB -->
         <nav class="mt-5">
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                <button class="nav-link fw-semibold active" id="nav-queryparams-tab" data-bs-toggle="tab"
+                <button class="nav-link active" id="nav-queryparams-tab" data-bs-toggle="tab"
                     data-bs-target="#nav-queryparams" type="button" role="tab" aria-selected="true">
                     Query Params
                     <span class="ms-1 d-inline-block rounded-circle"></span>
                 </button>
-                <button class="nav-link fw-semibold" id="nav-auth-tab" data-bs-toggle="tab" data-bs-target="#nav-auth"
+                <button class="nav-link" id="nav-auth-tab" data-bs-toggle="tab" data-bs-target="#nav-auth"
                     type="button" role="tab" aria-selected="false">
                     Authorization
                 </button>
-                <button class="nav-link fw-semibold" id="nav-headers-tab" data-bs-toggle="tab"
+                <button class="nav-link " id="nav-headers-tab" data-bs-toggle="tab"
                     data-bs-target="#nav-headers" type="button" role="tab" aria-selected="false">
                     Headers <span class="ms-1 d-inline-block rounded-circle"></span>
                 </button>
-                <button class="nav-link fw-semibold" id="nav-requestbody-tab" data-bs-toggle="tab"
+                <button class="nav-link " id="nav-requestbody-tab" data-bs-toggle="tab"
                     data-bs-target="#nav-requetsbody" type="button" role="tab" aria-selected="false">
                     Request Body
                     <span class="ms-1 d-inline-block rounded-circle"></span>
@@ -70,11 +70,11 @@
             <div class="tab-pane fade show active" id="nav-queryparams" role="tabpanel">
 
                 <div class="input-group">
-                    <span role="button"
+                    <span role="button" title="Delete"
                         class="material-symbols-outlined input-group-text delInputBoxesRow">delete</span>
                     <input type="text" placeholder="Key" class="form-control text-truncate">
                     <input type="text" placeholder="Value" class="form-control text-truncate">
-                    <span role="button" class="material-symbols-outlined input-group-text addInputBoxesRow">add</span>
+                    <span role="button" title="Add new" class="material-symbols-outlined input-group-text addInputBoxesRow">add</span>
                 </div>
 
             </div>
@@ -172,11 +172,11 @@
             <!-- Headers Content -->
             <div class="tab-pane fade" id="nav-headers" role="tabpanel">
                 <div class="input-group">
-                    <span role="button"
+                    <span role="button" title="Delete"
                         class="material-symbols-outlined input-group-text delInputBoxesRow">delete</span>
                     <input type="text" placeholder="Key" class="form-control text-truncate">
                     <input type="text" placeholder="Value" class="form-control text-truncate">
-                    <span role="button" class="material-symbols-outlined input-group-text addInputBoxesRow">add</span>
+                    <span role="button" title="Add new" class="material-symbols-outlined input-group-text addInputBoxesRow">add</span>
                 </div>
             </div>
             <!-- Requestbody Content -->
@@ -209,22 +209,22 @@
                 <div id="request-body-wrapper" class="mt-5">
                     <div id="appUrlEncodedContainer">
                         <div class="input-group">
-                            <span role="button"
+                            <span role="button" title="Delete"
                                 class="material-symbols-outlined input-group-text delInputBoxesRow">delete</span>
                             <input type="text" placeholder="Key" class="form-control text-truncate">
                             <input type="text" placeholder="Value" class="form-control text-truncate">
-                            <span role="button"
+                            <span role="button" title="Add new"
                                 class="material-symbols-outlined input-group-text addInputBoxesRow">add</span>
                         </div>
                     </div>
 
                     <div id="appJsonContainer">
                         <div class="input-group">
-                            <span role="button"
+                            <span role="button" title="Delete"
                                 class="material-symbols-outlined input-group-text delInputBoxesRow">delete</span>
                             <input type="text" placeholder="Key" class="form-control text-truncate">
                             <input type="text" placeholder="Value" class="form-control text-truncate">
-                            <span role="button"
+                            <span role="button" title="Add new"
                                 class="material-symbols-outlined input-group-text addInputBoxesRow">add</span>
                         </div>
                     </div>
