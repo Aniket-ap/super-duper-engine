@@ -25,7 +25,7 @@ $(document).ready(function () {
     firstChildDivInput.classList.add("form-control", "text-truncate");
     firstChildDivInput.setAttribute("placeholder", "Key");
     firstChildDivInput.setAttribute("type", "text");
-
+    
     let secondChildDivInput = document.createElement("input");
     secondChildDivInput.classList.add("form-control", "text-truncate");
     secondChildDivInput.setAttribute("placeholder", "Value");
@@ -39,6 +39,7 @@ $(document).ready(function () {
     );
     spanAdd.setAttribute("role", "button");
     spanAdd.setAttribute("title", "Add new");
+    spanAdd.setAttribute('tabindex', '0');
     spanAdd.textContent = "add";
 
     let spanDel = document.createElement("span");
@@ -49,6 +50,7 @@ $(document).ready(function () {
     );
     spanDel.setAttribute("role", "button");
     spanDel.setAttribute("title", "Delete");
+    spanDel.setAttribute('tabindex', '0');
     spanDel.textContent = "delete";
 
     main.append(spanDel, firstChildDivInput, secondChildDivInput, spanAdd);
@@ -215,10 +217,6 @@ $(document).ready(function () {
       $("#appJsonContainer").show();
     }
   });
-
-  // $( "#nav-queryparams input" ).each(function( index ) {
-  //   $(this).addClass('item-' + index);
-  // });
 
 });
 
