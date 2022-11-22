@@ -1,15 +1,13 @@
-/* Need to add .webhook class */
-
-.input-group-text{
+.input-group-text {
   background-color: #fff;
 }
 
-#InputUrl{
+#InputUrl {
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
 }
 
-#onClickUrlBtn{
+#onClickUrlBtn {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
 }
