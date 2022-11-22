@@ -25,7 +25,7 @@
         <div class="row d-flex flex-row justify-content-between mb-3">
             <div class="col-5 col-sm-3">
                 <label for="selectHttpDropdown" class="form-label">Method</label>
-                <select class="form-select" id="selectHttpDropdown">
+                <select class="form-select method-1d" id="selectHttpDropdown">
                     <option selected value="get">GET</option>
                     <option value="post">POST</option>
                     <option value="put">PUT</option>
@@ -37,8 +37,8 @@
             <div class="col-7 col-sm-9">
                 <label for="InputUrl" class="form-label">Request URL</label>
                 <div class="d-flex">
-                    <input type="url" id="InputUrl" class="form-control" />
-                    <button class="btn btn-outline-primary" id="onClickUrlBtn">Send</button>
+                    <input type="url" id="InputUrl" class="form-control url-1d" />
+                    <button class="btn btn-outline-primary url-send-1d" id="onClickUrlBtn">Send</button>
                 </div>
             </div>
         </div>
@@ -74,11 +74,11 @@
 
                 <div class="input-group">
                     <button role="button" title="Delete"
-                        class="material-symbols-outlined input-group-text delInputBoxesRow">delete</button>
+                        class="material-symbols-outlined input-group-text delInputBoxesRow params-delete-1-1d">delete</button>
                     <input type="text" placeholder="Key" class="form-control  params-key-1-1d">
                     <input type="text" placeholder="Value" class="form-control  params-value-1-1d">
                     <button role="button" title="Add new"
-                        class="material-symbols-outlined input-group-text addInputBoxesRow">add</button>
+                        class="material-symbols-outlined input-group-text addInputBoxesRow params-add-1-1d">add</button>
                 </div>
 
             </div>
@@ -88,7 +88,7 @@
                 <div class="row">
                     <div class="col-6">
                         <label for="auth-tab-select" class="form-label">Type</label>
-                        <select class="form-select" id="auth-tab-select">
+                        <select class="form-select authorization-type-1-1d" id="auth-tab-select">
                             <option selected value="noauth">No Auth</option>
                             <option value="apikey">API Key</option>
                             <option value="bearertoken">Bearer Token</option>
@@ -100,13 +100,14 @@
                         <div id="auth-tab-toggle" class="mt-4">
                             <span class="mx-3">Add to:</span>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" id="authHeaderRadio"
-                                    name="inlineRadioOptions" checked value="header">
+                                <input class="form-check-input authorization-type-addto-headers-1d" type="radio"
+                                    id="authHeaderRadio" name="inlineRadioOptions" checked value="header">
                                 <label for="authHeaderRadio" class="form-check-label">Header</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" id="authQueryParamsRadio" type="radio"
-                                    name="inlineRadioOptions" value="queryparams">
+                                <input class="form-check-input authorization-type-addto-params-1d"
+                                    id="authQueryParamsRadio" type="radio" name="inlineRadioOptions"
+                                    value="queryparams">
                                 <label for="authQueryParamsRadio" class="form-check-label">Query Params</label>
                             </div>
                         </div>
@@ -119,13 +120,14 @@
                             <div class="col-6">
                                 <div>
                                     <label for="apiKeyInput" class="form-label">API Key</label>
-                                    <input type="email" class="form-control" id="apiKeyInput" />
+                                    <input type="email" class="form-control authorization-apikey-1d" id="apiKeyInput" />
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div>
                                     <label for="apiValueInput" class="form-label">API Value</label>
-                                    <input type="email" class="form-control " id="apiValueInput" />
+                                    <input type="email" class="form-control authorization-apivalue-1d"
+                                        id="apiValueInput" />
                                 </div>
                             </div>
                         </div>
@@ -136,7 +138,8 @@
                             <div class="col-6">
                                 <div>
                                     <label for="bearerTokenInput" class="form-label">Bearer Token</label>
-                                    <input type="email" class="form-control" id="bearerTokenInput" />
+                                    <input type="email" class="form-control  authorization-type-bearertoken-1d"
+                                        id="bearerTokenInput" />
                                 </div>
                             </div>
                         </div>
@@ -147,13 +150,15 @@
                             <div class="col-6">
                                 <div>
                                     <label for="basicOathUname" class="form-label">Username</label>
-                                    <input type="email" class="form-control" id="basicOathUname" />
+                                    <input type="email" class="form-control authorization-type-username-1d"
+                                        id="basicOathUname" />
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div>
                                     <label for="basicOathPassword" class="form-label">Password</label>
-                                    <input type="email" class="form-control" id="basicOathPassword" />
+                                    <input type="email" class="form-control authorization-type-password-1d"
+                                        id="basicOathPassword" />
                                 </div>
                             </div>
                         </div>
@@ -164,7 +169,8 @@
                             <div class="col-6">
                                 <div>
                                     <label for="oAuthTokenInput" class="form-label">Access Token</label>
-                                    <input type="email" class="form-control" id="oAuthTokenInput" />
+                                    <input type="email" class="form-control authorization-type-oauth2-1d"
+                                        id="oAuthTokenInput" />
                                 </div>
                             </div>
                         </div>
@@ -177,11 +183,11 @@
             <div class="tab-pane fade" id="nav-headers" role="tabpanel">
                 <div class="input-group">
                     <button role="button" title="Delete"
-                        class="material-symbols-outlined input-group-text delInputBoxesRow">delete</button>
+                        class="material-symbols-outlined input-group-text delInputBoxesRow headers-delete-1-1d">delete</button>
                     <input type="text" placeholder="Key" class="form-control  headers-key-1-1d">
                     <input type="text" placeholder="Value" class="form-control  headers-value-1-1d">
                     <button role="button" title="Add new"
-                        class="material-symbols-outlined input-group-text addInputBoxesRow">add</button>
+                        class="material-symbols-outlined input-group-text addInputBoxesRow headers-add-1-1d">add</button>
                 </div>
             </div>
             <!-- Requestbody Content -->
@@ -191,7 +197,7 @@
                 <div class="row">
                     <div class="col-6">
                         <label for="req-body-tab-select" class="form-label">Content Type</label>
-                        <select class="form-select" id="req-body-tab-select">
+                        <select class="form-select body-contenttype-1-1d" id="req-body-tab-select">
                             <option selected value="none">None</option>
                             <option value="appurlencoded">application/x-www-form-urlencoded</option>
                             <option value="appjson">application/json</option>
@@ -204,7 +210,8 @@
                     <div class="col-6 d-flex justify-content-center align-items-center align-end">
                         <div id="req-body-toggle" class="mt-4">
                             <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" role="switch" id="req-body-checkbox">
+                                <input class="form-check-input body-contenttype-applicationjson-userrawinput-1d"
+                                    type="checkbox" role="switch" id="req-body-checkbox">
                                 <label for="req-body-checkbox" class="form-check-label">Use Raw Input</label>
                             </div>
                         </div>
@@ -215,25 +222,25 @@
                     <div id="appUrlEncodedContainer">
                         <div class="input-group">
                             <button role="button" title="Delete"
-                                class="material-symbols-outlined input-group-text delInputBoxesRow">delete</button>
+                                class="material-symbols-outlined input-group-text delInputBoxesRow body-application-x-www-form-urlencoded-delete-1-1d">delete</button>
                             <input type="text" placeholder="Key"
                                 class="form-control  body-application-x-www-form-urlencoded-key-1-1d">
                             <input type="text" placeholder="Value"
                                 class="form-control  body-application-x-www-form-urlencoded-value-1-1d">
                             <button role="button" title="Add new"
-                                class="material-symbols-outlined input-group-text addInputBoxesRow">add</button>
+                                class="material-symbols-outlined input-group-text addInputBoxesRow body-application-x-www-form-urlencoded-add-1-1d">add</button>
                         </div>
                     </div>
 
                     <div id="appJsonContainer">
                         <div class="input-group">
                             <button role="button" title="Delete"
-                                class="material-symbols-outlined input-group-text delInputBoxesRow">delete</button>
-                            <input type="text" placeholder="Key" class="form-control  body-application-json-key-1-1d">
+                                class="material-symbols-outlined input-group-text delInputBoxesRow body-applicationjson-delete-1-1d">delete</button>
+                            <input type="text" placeholder="Key" class="form-control  body-applicationjson-key-1-1d">
                             <input type="text" placeholder="Value"
-                                class="form-control  body-application-json-value-1-1d">
+                                class="form-control  body-applicationjson-value-1-1d">
                             <button role="button" title="Add new"
-                                class="material-symbols-outlined input-group-text addInputBoxesRow">add</button>
+                                class="material-symbols-outlined input-group-text addInputBoxesRow body-applicationjson-add-1-1d">add</button>
                         </div>
                     </div>
 
@@ -241,8 +248,9 @@
                         <div class="col-sm-6 mt-5">
                             <div class="mb-3">
                                 <label for="appJsonTextAreaChecked" class="form-label">Request Body</label>
-                                <textarea class="form-control " placeholder="Write the raw request body"
-                                    id="appJsonTextAreaChecked" rows="5"></textarea>
+                                <textarea class="form-control body-applicationjson-requestbody-1d"
+                                    placeholder="Write the raw request body" id="appJsonTextAreaChecked"
+                                    rows="5"></textarea>
                             </div>
                         </div>
                     </div>
@@ -251,8 +259,8 @@
                         <div class="col-sm-6 mt-5">
                             <div class="mb-3">
                                 <label for="textPlainTextArea" class="form-label">Request Body</label>
-                                <textarea class="form-control " placeholder="Write the raw request body"
-                                    id="textPlainTextArea" rows="5"></textarea>
+                                <textarea class="form-control body-textplain-requestbody-1d"
+                                    placeholder="Write the raw request body" id="textPlainTextArea" rows="5"></textarea>
                             </div>
                         </div>
                     </div>
@@ -261,8 +269,8 @@
                         <div class="col-sm-6 mt-5">
                             <div class="mb-3">
                                 <label for="textHtmlTextArea" class="form-label">Request Body</label>
-                                <textarea class="form-control " placeholder="Write the raw request body"
-                                    id="textHtmlTextArea" rows="5"></textarea>
+                                <textarea class="form-control body-texthtml-requestbody-1d"
+                                    placeholder="Write the raw request body" id="textHtmlTextArea" rows="5"></textarea>
 
                             </div>
                         </div>
@@ -272,8 +280,8 @@
                         <div class="col-sm-6 mt-5">
                             <div class="mb-3">
                                 <label for="appXmlTextArea" class="form-label">Request Body</label>
-                                <textarea class="form-control " placeholder="Write the raw request body"
-                                    id="appXmlTextArea" rows="5"></textarea>
+                                <textarea class="form-control body-applicationxml-requestbody-1d"
+                                    placeholder="Write the raw request body" id="appXmlTextArea" rows="5"></textarea>
                             </div>
                         </div>
                     </div>
@@ -282,8 +290,8 @@
                         <div class="col-sm-6 mt-5">
                             <div class="mb-3">
                                 <label for="appJsTextArea" class="form-label">Request Body</label>
-                                <textarea class="form-control" placeholder="Write the raw request body"
-                                    id="appJsTextArea" rows="5"></textarea>
+                                <textarea class="form-control body-applicationjavascript-requestbody-1d"
+                                    placeholder="Write the raw request body" id="appJsTextArea" rows="5"></textarea>
                             </div>
                         </div>
                     </div>
