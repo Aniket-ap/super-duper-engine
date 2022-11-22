@@ -53,23 +53,21 @@ $(document).ready(function () {
       type: "text",
     });
 
-    let spanAdd = $("<span>add</span>");
-    spanAdd.attr({
+    let buttonAdd = $("<button>add</button>");
+    buttonAdd.attr({
       class: "material-symbols-outlined input-group-text addInputBoxesRow",
       role: "button",
-      title: "Add new",
-      tabindex: "0",
+      title: "Add new"
     });
 
-    let spanDel = $("<span>delete</span>");
-    spanDel.attr({
+    let buttonDel = $("<button>delete</button>");
+    buttonDel.attr({
       class: "material-symbols-outlined input-group-text delInputBoxesRow",
       role: "button",
-      title: "Delete",
-      tabindex: "0",
+      title: "Delete"
     });
 
-    main.append(spanDel, firstChildDivInput, secondChildDivInput, spanAdd);
+    main.append(buttonDel, firstChildDivInput, secondChildDivInput, buttonAdd);
     $(parent).after(main);
   });
 
