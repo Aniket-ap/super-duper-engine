@@ -18,40 +18,56 @@ $(document).ready(function () {
 
   $(document).on("click", ".addInputBoxesRow", function (e) {
     let parent = e.target.parentElement;
-    let main = document.createElement("div");
-    main.classList.add("input-group", "input-row");
+    let parentElementIdName = parent.parentElement.id;
+    let keyClassName = "";
+    let valueClassName = "";
 
-    let firstChildDivInput = document.createElement("input");
-    firstChildDivInput.classList.add("form-control", "text-truncate");
-    firstChildDivInput.setAttribute("placeholder", "Key");
-    firstChildDivInput.setAttribute("type", "text");
-    
-    let secondChildDivInput = document.createElement("input");
-    secondChildDivInput.classList.add("form-control", "text-truncate");
-    secondChildDivInput.setAttribute("placeholder", "Value");
-    secondChildDivInput.setAttribute("type", "text");
+    if (parentElementIdName === "nav-queryparams") {
+      keyClassName = "params-key-1-1d";
+      valueClassName = "params-value-1-1d";
+    } else if (parentElementIdName === "nav-headers") {
+      keyClassName = "headers-key-1-1d";
+      valueClassName = "headers-value-1-1d";
+    } else if (parentElementIdName === "appUrlEncodedContainer") {
+      keyClassName = "body-application-x-www-form-urlencoded-key-1-1d";
+      valueClassName = "body-application-x-www-form-urlencoded-value-1-1d";
+    } else if (parentElementIdName === "appJsonContainer") {
+      keyClassName = "body-application-json-key-1-1d";
+      valueClassName = "body-application-json-value-1-1d";
+    }
 
-    let spanAdd = document.createElement("span");
-    spanAdd.classList.add(
-      "material-symbols-outlined",
-      "input-group-text",
-      "addInputBoxesRow"
-    );
-    spanAdd.setAttribute("role", "button");
-    spanAdd.setAttribute("title", "Add new");
-    spanAdd.setAttribute('tabindex', '0');
-    spanAdd.textContent = "add";
+    let main = $("<div></div>");
+    main.attr("class", "input-group");
 
-    let spanDel = document.createElement("span");
-    spanDel.classList.add(
-      "material-symbols-outlined",
-      "delInputBoxesRow",
-      "input-group-text"
-    );
-    spanDel.setAttribute("role", "button");
-    spanDel.setAttribute("title", "Delete");
-    spanDel.setAttribute('tabindex', '0');
-    spanDel.textContent = "delete";
+    let firstChildDivInput = $("<input/>");
+    firstChildDivInput.attr({
+      class: `form-control text-truncate ${keyClassName}`,
+      placeholder: "Key",
+      type: "text",
+    });
+
+    let secondChildDivInput = $("<input/>");
+    secondChildDivInput.attr({
+      class: `form-control text-truncate ${valueClassName}`,
+      placeholder: "Value",
+      type: "text",
+    });
+
+    let spanAdd = $("<span>add</span>");
+    spanAdd.attr({
+      class: "material-symbols-outlined input-group-text addInputBoxesRow",
+      role: "button",
+      title: "Add new",
+      tabindex: "0",
+    });
+
+    let spanDel = $("<span>delete</span>");
+    spanDel.attr({
+      class: "material-symbols-outlined input-group-text delInputBoxesRow",
+      role: "button",
+      title: "Delete",
+      tabindex: "0",
+    });
 
     main.append(spanDel, firstChildDivInput, secondChildDivInput, spanAdd);
     $(parent).after(main);
@@ -89,16 +105,6 @@ $(document).ready(function () {
       let ele = e.target.parentElement.parentElement;
       ele.removeChild(e.target.parentElement);
     }
-  });
-
-  $(document).on("click", ".addInputBoxesRow", function (e) {
-    let count = $("#nav-queryparams").find(".input-group").length;
-    console.log(count);
-  });
-
-  $(document).on("click", ".delInputBoxesRow", function (e) {
-    let count = $("#nav-queryparams").find(".input-group").length;
-    console.log(count);
   });
 
   $("#auth-tab-select").change(function (e) {
@@ -217,7 +223,4 @@ $(document).ready(function () {
       $("#appJsonContainer").show();
     }
   });
-
 });
-
-// headers-key-1-1d
