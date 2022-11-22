@@ -41,14 +41,14 @@ $(document).ready(function () {
 
     let firstChildDivInput = $("<input/>");
     firstChildDivInput.attr({
-      class: `form-control text-truncate ${keyClassName}`,
+      class: `form-control ${keyClassName}`,
       placeholder: "Key",
       type: "text",
     });
 
     let secondChildDivInput = $("<input/>");
     secondChildDivInput.attr({
-      class: `form-control text-truncate ${valueClassName}`,
+      class: `form-control ${valueClassName}`,
       placeholder: "Value",
       type: "text",
     });
