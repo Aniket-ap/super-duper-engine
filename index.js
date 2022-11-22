@@ -21,19 +21,29 @@ $(document).ready(function () {
     let parentElementIdName = parent.parentElement.id;
     let keyClassName = "";
     let valueClassName = "";
+    let addClassName = "";
+    let deleteClassName = "";
 
     if (parentElementIdName === "nav-queryparams") {
       keyClassName = "params-key-1-1d";
       valueClassName = "params-value-1-1d";
+      addClassName = "params-add-1-1d";
+      deleteClassName = "params-delete-1-1d";
     } else if (parentElementIdName === "nav-headers") {
       keyClassName = "headers-key-1-1d";
       valueClassName = "headers-value-1-1d";
+      addClassName = "headers-add-1-1d";
+      deleteClassName = "headers-delete-1-1d";
     } else if (parentElementIdName === "appUrlEncodedContainer") {
       keyClassName = "body-application-x-www-form-urlencoded-key-1-1d";
       valueClassName = "body-application-x-www-form-urlencoded-value-1-1d";
+      addClassName = "body-application-x-www-form-urlencoded-add-1-1d";
+      deleteClassName = "body-application-x-www-form-urlencoded-delete-1-1d";
     } else if (parentElementIdName === "appJsonContainer") {
-      keyClassName = "body-application-json-key-1-1d";
-      valueClassName = "body-application-json-value-1-1d";
+      keyClassName = "body-applicationjson-key-1-1d";
+      valueClassName = "body-applicationjson-value-1-1d";
+      addClassName = "body-applicationjson-add-1-1d";
+      deleteClassName = "body-applicationjson-delete-1-1d";
     }
 
     let main = $("<div></div>");
@@ -55,16 +65,16 @@ $(document).ready(function () {
 
     let buttonAdd = $("<button>add</button>");
     buttonAdd.attr({
-      class: "material-symbols-outlined input-group-text addInputBoxesRow",
+      class: `material-symbols-outlined input-group-text addInputBoxesRow ${addClassName}`,
       role: "button",
-      title: "Add new"
+      title: "Add new",
     });
 
     let buttonDel = $("<button>delete</button>");
     buttonDel.attr({
-      class: "material-symbols-outlined input-group-text delInputBoxesRow",
+      class: `material-symbols-outlined input-group-text delInputBoxesRow ${deleteClassName}`,
       role: "button",
-      title: "Delete"
+      title: "Delete",
     });
 
     main.append(buttonDel, firstChildDivInput, secondChildDivInput, buttonAdd);
