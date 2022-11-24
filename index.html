@@ -1,307 +1,487 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
-    <title>upwork job-2</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/somethinggoodone/cdn/AniketPradhan_bootstrap.css" />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
         crossorigin="anonymous"></script>
-    <!-- Jquery google CDN -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-    <script src="./index.js" defer></script>
-
-    <!-- MATERIAL ICON CDN -->
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    <link rel="stylesheet" href="styles.css">
+
+
+    <style>
+        .input-group-text {
+            background-color: #fff;
+        }
+
+        input,
+        select {
+            text-overflow: ellipsis;
+        }
+
+        #InputUrl {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+
+        #onClickUrlBtn {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+    </style>
+
 </head>
 
 <body>
 
-    <div class="container mt-5" id="wrapper">
+    <button class="m-3 btn btn-primary" id="clickme">New Webhook</button>
+    <hr>
 
-        <!-- Top Dropdown -->
-        <div class="row d-flex flex-row justify-content-between mb-3">
-            <div class="col-5 col-sm-3">
-                <label for="selectHttpDropdown" class="form-label">Method</label>
-                <select class="form-select method-1d" id="selectHttpDropdown">
-                    <option selected value="get">GET</option>
-                    <option value="post">POST</option>
-                    <option value="put">PUT</option>
-                    <option value="patch">PATCH</option>
-                    <option value="delete">DELETE</option>
-                </select>
-            </div>
+    <ul class="list-group task-point"></ul>
+    <div id="modal"></div>
 
-            <div class="col-7 col-sm-9">
-                <label for="InputUrl" class="form-label">Request URL</label>
-                <div class="d-flex">
-                    <input type="url" id="InputUrl" class="form-control url-1d" />
-                    <button class="btn btn-outline-primary url-send-1d" id="onClickUrlBtn">Send</button>
-                </div>
-            </div>
-        </div>
+    <script>
+        $("#clickme")
+            .click(function (event) {
 
-        <!-- TAB -->
-        <nav class="mt-5">
-            <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                <button class="nav-link active" id="nav-queryparams-tab" data-bs-toggle="tab"
-                    data-bs-target="#nav-queryparams" type="button" role="tab" aria-selected="true">
-                    Params
-                    <span class="ms-1 d-inline-block rounded-circle"></span>
-                </button>
-                <button class="nav-link" id="nav-auth-tab" data-bs-toggle="tab" data-bs-target="#nav-auth" type="button"
-                    role="tab" aria-selected="false">
-                    Authorization
-                </button>
-                <button class="nav-link " id="nav-headers-tab" data-bs-toggle="tab" data-bs-target="#nav-headers"
-                    type="button" role="tab" aria-selected="false">
-                    Headers <span class="ms-1 d-inline-block rounded-circle"></span>
-                </button>
-                <button class="nav-link " id="nav-requestbody-tab" data-bs-toggle="tab"
-                    data-bs-target="#nav-requetsbody" type="button" role="tab" aria-selected="false">
-                    Body
-                    <span class="ms-1 d-inline-block rounded-circle"></span>
-                </button>
-            </div>
-        </nav>
+                task = {};
+                var wid = task?.id ? task.id : Math.random()
+                    .toString(36)
+                    .substr(2, 8);
+                var tid = task?.id ? task.id : Math.random()
+                    .toString(36)
+                    .substr(2, 8);
 
-        <!-- TAB CONTENT -->
-        <div class="tab-content mt-5" id="tab-container">
-            <!-- Query Params Content -->
-            <div class="tab-pane fade show active" id="nav-queryparams" role="tabpanel">
+                $(".task-point")
+                    .append(`
+	<li class="border-top-0 border-end-0 border-start-0 list-group-item list-group-item-${wid}-${tid}">
+		<img src="https://img.icons8.com/color/48/null/webhook.png" class="float-start">
 
-                <div class="input-group">
-                    <button role="button" title="Delete"
-                        class="material-symbols-outlined input-group-text delInputBoxesRow params-delete-1-1d">delete</button>
-                    <input type="text" placeholder="Key" class="form-control  params-key-1-1d">
-                    <input type="text" placeholder="Value" class="form-control  params-value-1-1d">
-                    <button role="button" title="Add new"
-                        class="material-symbols-outlined input-group-text addInputBoxesRow params-add-1-1d">add</button>
-                </div>
+		<div class="btn-group float-end">
+			<button type="button" class="btn dropdown-toggle btn-light" data-bs-toggle="dropdown" aria-expanded="false"> Actions </button>
+			<ul class="dropdown-menu dropdown-menu-lg-end" style="">
+				<li><a data-bs-toggle="modal" href="#task-modal-${wid}-${tid}" role="button" class="dropdown-item">Edit</a></li>
+				<li><a class="dropdown-item" href="#">Duplicate</a></li>
+				<li><a class="dropdown-item tdelete" href="#">Delete</a></li>
+			</ul>
+		</div>
 
-            </div>
-            <!-- Authorization Content -->
-            <div class="tab-pane fade" id="nav-auth" role="tabpanel">
-                <!-- Authorization tab -->
-                <div class="row">
-                    <div class="col-6">
-                        <label for="auth-tab-select" class="form-label">Type</label>
-                        <select class="form-select authorization-type-1-1d" id="auth-tab-select">
-                            <option selected value="noauth">No Auth</option>
-                            <option value="apikey">API Key</option>
-                            <option value="bearertoken">Bearer Token</option>
-                            <option value="basicoauth">Basic OAuth</option>
-                            <option value="oauth2">OAuth 2.0</option>
-                        </select>
-                    </div>
-                    <div class="col-6 d-flex justify-content-center align-items-center align-end">
-                        <div id="auth-tab-toggle" class="mt-4">
-                            <span class="mx-3">Add to:</span>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input authorization-type-addto-headers-1d" type="radio"
-                                    id="authHeaderRadio" name="inlineRadioOptions" checked value="header">
-                                <label for="authHeaderRadio" class="form-check-label">Header</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input authorization-type-addto-params-1d"
-                                    id="authQueryParamsRadio" type="radio" name="inlineRadioOptions"
-                                    value="queryparams">
-                                <label for="authQueryParamsRadio" class="form-check-label">Query Params</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <div id="auth-wrapper">
-                    <div id="apiKeyContainer">
-                        <div class="row mt-3">
-                            <div class="col-6">
-                                <div>
-                                    <label for="apiKeyInput" class="form-label">API Key</label>
-                                    <input type="email" class="form-control authorization-apikey-1d" id="apiKeyInput" />
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div>
-                                    <label for="apiValueInput" class="form-label">API Value</label>
-                                    <input type="email" class="form-control authorization-apivalue-1d"
-                                        id="apiValueInput" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+		<div class="ms-5 ps-3">
+			<span class="task-title">Webhook: ${wid}-${tid} </span><br>
+			<span class="text-secondary small">Last updated </span><span class="time text-secondary small" data-time="1667889127596">15 days ago</span>
+		</div>
 
-                    <div id="bearerTokenContainer">
-                        <div class="row mt-3">
-                            <div class="col-6">
-                                <div>
-                                    <label for="bearerTokenInput" class="form-label">Bearer Token</label>
-                                    <input type="email" class="form-control  authorization-type-bearertoken-1d"
-                                        id="bearerTokenInput" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+		<div class="modal fade" id="task-modal-${wid}-${tid}" aria-hidden="true" aria-labelledby="task-modal-label-${wid}-${tid}" tabindex="-1">
+			<div class="modal-dialog modal-fullscreen">
+				<div class="modal-content">
+					<div class="modal-header border border-bottom-0 bg-theme">
+						<img style="width:25px;" src="https://img.icons8.com/color/48/null/webhook.png" class="float-start">&nbsp;
+						<span class="modal-title fw-bolder ms-1 ps-0" id="task-modal-label-${wid}-${tid}">Create Webhook Instance</span>
+						<button type="button" class="me-1 btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body border">
+						<!--Modal body goes here.-->
 
-                    <div id="basicOathContainer">
-                        <div class="row mt-3">
-                            <div class="col-6">
-                                <div>
-                                    <label for="basicOathUname" class="form-label">Username</label>
-                                    <input type="email" class="form-control authorization-type-username-1d"
-                                        id="basicOathUname" />
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div>
-                                    <label for="basicOathPassword" class="form-label">Password</label>
-                                    <input type="email" class="form-control authorization-type-password-1d"
-                                        id="basicOathPassword" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+						<!--form class="form-${wid}-${tid}"-->
 
-                    <div id="oAuth2Container">
-                        <div class="row mt-3">
-                            <div class="col-6">
-                                <div>
-                                    <label for="oAuthTokenInput" class="form-label">Access Token</label>
-                                    <input type="email" class="form-control authorization-type-oauth2-1d"
-                                        id="oAuthTokenInput" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
-                </div>
 
-            </div>
-            <!-- Headers Content -->
-            <div class="tab-pane fade" id="nav-headers" role="tabpanel">
-                <div class="input-group">
-                    <button role="button" title="Delete"
-                        class="material-symbols-outlined input-group-text delInputBoxesRow headers-delete-1-1d">delete</button>
-                    <input type="text" placeholder="Key" class="form-control  headers-key-1-1d">
-                    <input type="text" placeholder="Value" class="form-control  headers-value-1-1d">
-                    <button role="button" title="Add new"
-                        class="material-symbols-outlined input-group-text addInputBoxesRow headers-add-1-1d">add</button>
-                </div>
-            </div>
-            <!-- Requestbody Content -->
-            <div class="tab-pane fade" id="nav-requetsbody" role="tabpanel">
-                <!-- Request Body tab -->
 
-                <div class="row">
-                    <div class="col-6">
-                        <label for="req-body-tab-select" class="form-label">Content Type</label>
-                        <select class="form-select body-contenttype-1-1d" id="req-body-tab-select">
-                            <option selected value="none">None</option>
-                            <option value="appurlencoded">application/x-www-form-urlencoded</option>
-                            <option value="appjson">application/json</option>
-                            <option value="textplain">text/plain</option>
-                            <option value="texthtml">text/html</option>
-                            <option value="appxml">application/xml</option>
-                            <option value="appjavascript">application/javascript</option>
-                        </select>
-                    </div>
-                    <div class="col-6 d-flex justify-content-center align-items-center align-end">
-                        <div id="req-body-toggle" class="mt-4">
-                            <div class="form-check form-switch">
-                                <input class="form-check-input body-contenttype-applicationjson-userrawinput-1d"
-                                    type="checkbox" role="switch" id="req-body-checkbox">
-                                <label for="req-body-checkbox" class="form-check-label">Use Raw Input</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <div id="request-body-wrapper" class="mt-5">
-                    <div id="appUrlEncodedContainer">
-                        <div class="input-group">
-                            <button role="button" title="Delete"
-                                class="material-symbols-outlined input-group-text delInputBoxesRow body-application-x-www-form-urlencoded-delete-1-1d">delete</button>
-                            <input type="text" placeholder="Key"
-                                class="form-control  body-application-x-www-form-urlencoded-key-1-1d">
-                            <input type="text" placeholder="Value"
-                                class="form-control  body-application-x-www-form-urlencoded-value-1-1d">
-                            <button role="button" title="Add new"
-                                class="material-symbols-outlined input-group-text addInputBoxesRow body-application-x-www-form-urlencoded-add-1-1d">add</button>
-                        </div>
-                    </div>
 
-                    <div id="appJsonContainer">
-                        <div class="input-group">
-                            <button role="button" title="Delete"
-                                class="material-symbols-outlined input-group-text delInputBoxesRow body-applicationjson-delete-1-1d">delete</button>
-                            <input type="text" placeholder="Key" class="form-control  body-applicationjson-key-1-1d">
-                            <input type="text" placeholder="Value"
-                                class="form-control  body-applicationjson-value-1-1d">
-                            <button role="button" title="Add new"
-                                class="material-symbols-outlined input-group-text addInputBoxesRow body-applicationjson-add-1-1d">add</button>
-                        </div>
-                    </div>
 
-                    <div id="appJsonContainerChecked">
-                        <div class="col-sm-6 mt-5">
-                            <div class="mb-3">
-                                <label for="appJsonTextAreaChecked" class="form-label">Request Body</label>
-                                <textarea class="form-control body-applicationjson-requestbody-1d"
-                                    placeholder="Write the raw request body" id="appJsonTextAreaChecked"
-                                    rows="5"></textarea>
-                            </div>
-                        </div>
-                    </div>
 
-                    <div id="textPlainContainer">
-                        <div class="col-sm-6 mt-5">
-                            <div class="mb-3">
-                                <label for="textPlainTextArea" class="form-label">Request Body</label>
-                                <textarea class="form-control body-textplain-requestbody-1d"
-                                    placeholder="Write the raw request body" id="textPlainTextArea" rows="5"></textarea>
-                            </div>
-                        </div>
-                    </div>
+ <div class="container mt-5">
+ <!-- Top Dropdown -->
+ <div class="row d-flex flex-row justify-content-between mb-3">
+ <div class="col-5 col-sm-3">
+ <label for="method-${wid}-${tid}" class="form-label">Method</label>
+ <select class="form-select method-${wid}-${tid}" id="method-${wid}-${tid}">
+ <option selected value="get">GET</option>
+ <option value="post">POST</option>
+ <option value="put">PUT</option>
+ <option value="patch">PATCH</option>
+ <option value="delete">DELETE</option>
+ </select>
+ </div>
 
-                    <div id="textHtmlContainer">
-                        <div class="col-sm-6 mt-5">
-                            <div class="mb-3">
-                                <label for="textHtmlTextArea" class="form-label">Request Body</label>
-                                <textarea class="form-control body-texthtml-requestbody-1d"
-                                    placeholder="Write the raw request body" id="textHtmlTextArea" rows="5"></textarea>
+ <div class="col-7 col-sm-9">
+ <label for="url-${wid}-${tid}" class="form-label">Request URL</label>
+ <div class="d-flex input-group">
+ <input type="url" id="url-${wid}-${tid}" class="form-control url-${wid}-${tid}" />
+ <button class="btn btn-outline-primary url-send-${wid}-${tid}" id="send-${wid}-${tid}">Send</button>
+ </div>
+ </div>
+ </div>
 
-                            </div>
-                        </div>
-                    </div>
+ <!-- TAB -->
+ <nav class="mt-5">
+ <div class="nav nav-tabs" role="tablist">
+ <button class="nav-link active" data-bs-toggle="tab"
+ data-bs-target="#nav-qp-${wid}-${tid}" type="button" role="tab" aria-selected="true">
+ Params
+ <span class="ms-1 d-inline-block rounded-circle"></span>
+ </button>
+ <button class="nav-link" data-bs-toggle="tab" data-bs-target="#nav-auth-${wid}-${tid}" type="button"
+ role="tab" aria-selected="false">
+ Authorization
+ </button>
+ <button class="nav-link " data-bs-toggle="tab" data-bs-target="#nav-headers-${wid}-${tid}"
+ type="button" role="tab" aria-selected="false">
+ Headers <span class="ms-1 d-inline-block rounded-circle"></span>
+ </button>
+ <button class="nav-link " data-bs-toggle="tab"
+ data-bs-target="#nav-requestbody-${wid}-${tid}" type="button" role="tab" aria-selected="false">
+ Body
+ <span class="ms-1 d-inline-block rounded-circle"></span>
+ </button>
+ </div>
+ </nav>
 
-                    <div id="appXmlContainer">
-                        <div class="col-sm-6 mt-5">
-                            <div class="mb-3">
-                                <label for="appXmlTextArea" class="form-label">Request Body</label>
-                                <textarea class="form-control body-applicationxml-requestbody-1d"
-                                    placeholder="Write the raw request body" id="appXmlTextArea" rows="5"></textarea>
-                            </div>
-                        </div>
-                    </div>
+ <!-- TAB CONTENT -->
+ <div class="tab-content mt-5">
+ <!-- Query Params Content -->
+ <div class="tab-pane fade show active" id="nav-qp-${wid}-${tid}" role="tabpanel">
 
-                    <div id="appJavascriptContainer">
-                        <div class="col-sm-6 mt-5">
-                            <div class="mb-3">
-                                <label for="appJsTextArea" class="form-label">Request Body</label>
-                                <textarea class="form-control body-applicationjavascript-requestbody-1d"
-                                    placeholder="Write the raw request body" id="appJsTextArea" rows="5"></textarea>
-                            </div>
-                        </div>
-                    </div>
+ <div class="input-group">
+ <button role="button" title="Delete" class="material-symbols-outlined text-secondary input-group-text delrow">delete</button>
+ <input type="text" placeholder="Key" class="form-control key">
+ <input type="text" placeholder="Value" class="form-control value">
+ <button role="button" title="Add new"
+ class="material-symbols-outlined input-group-text addrow">add</button>
+ </div>
 
-                </div>
+ </div>
+ <!-- Authorization Content -->
+ <div class="tab-pane fade" id="nav-auth-${wid}-${tid}" role="tabpanel">
+ <!-- Authorization tab -->
+ <div class="row">
+ <div class="col-6">
+ <label for="auth-tab-select-${wid}-${tid}" class="form-label">Type</label>
+ <select class="form-select authorization-type-1-${wid}-${tid}" id="auth-tab-select-${wid}-${tid}">
+ <option selected value="noauth">No Auth</option>
+ <option value="apikey">API Key</option>
+ <option value="bearertoken">Bearer Token</option>
+ <option value="basicoauth">Basic OAuth</option>
+ <option value="oauth2">OAuth 2.0</option>
+ </select>
+ </div>
+ <div class="col-6 d-flex justify-content-center align-items-center align-end">
+ <div id="auth-tab-toggle-${wid}-${tid}" class="mt-4">
+ <span class="mx-3">Add to:</span>
+ <div class="form-check form-check-inline">
+ <input class="form-check-input authorization-type-addto-headers-${wid}-${tid}" type="radio"
+ id="authRadio-${wid}-${tid}" name="inlineRadioOptions" checked value="header">
+ <label for="authRadio-${wid}-${tid}" class="form-check-label">Header</label>
+ </div>
+ <div class="form-check form-check-inline">
+ <input class="form-check-input authorization-type-addto-params-${wid}-${tid}"
+ id="authqpRadio-${wid}-${tid}" type="radio" name="inlineRadioOptions"
+ value="queryparams">
+ <label for="authqpRadio-${wid}-${tid}" class="form-check-label">Query Params</label>
+ </div>
+ </div>
+ </div>
+ </div>
 
-            </div>
-        </div>
+ <div>
+ <div id="apiKeyContainer-${wid}-${tid}">
+ <div class="row mt-3">
+ <div class="col-6">
+ <div>
+ <label for="apiKeyInput-${wid}-${tid}" class="form-label">API Key</label>
+ <input type="email" class="form-control authorization-apikey-${wid}-${tid}" id="apiKeyInput-${wid}-${tid}" />
+ </div>
+ </div>
+ <div class="col-6">
+ <div>
+ <label for="apiValueInput-${wid}-${tid}" class="form-label">API Value</label>
+ <input type="email" class="form-control authorization-apivalue-${wid}-${tid}"
+ id="apiValueInput-${wid}-${tid}" />
+ </div>
+ </div>
+ </div>
+ </div>
 
-    </div>
+ <div id="bearerTokenContainer-${wid}-${tid}">
+ <div class="row mt-3">
+ <div class="col-6">
+ <div>
+ <label for="bearerTokenInput-${wid}-${tid}" class="form-label">Bearer Token</label>
+ <input type="email" class="form-control authorization-type-bearertoken-${wid}-${tid}"
+ id="bearerTokenInput-${wid}-${tid}" />
+ </div>
+ </div>
+ </div>
+ </div>
+
+ <div id="basicOathContainer-${wid}-${tid}">
+ <div class="row mt-3">
+ <div class="col-6">
+ <div>
+ <label for="basicOAthUname-${wid}-${tid}" class="form-label">Username</label>
+ <input type="email" class="form-control authorization-type-username-${wid}-${tid}"
+ id="basicOAthUname-${wid}-${tid}" />
+ </div>
+ </div>
+ <div class="col-6">
+ <div>
+ <label for="basicOAthPassword-${wid}-${tid}" class="form-label">Password</label>
+ <input type="email" class="form-control authorization-type-password-${wid}-${tid}"
+ id="basicOAthPassword-${wid}-${tid}" />
+ </div>
+ </div>
+ </div>
+ </div>
+
+ <div id="oAuth2Container-${wid}-${tid}">
+ <div class="row mt-3">
+ <div class="col-6">
+ <div>
+ <label for="oAuthTokenInput-${wid}-${tid}" class="form-label">Access Token</label>
+ <input type="email" class="form-control authorization-type-oauth2-${wid}-${tid}"
+ id="oAuthTokenInput-${wid}-${tid}" />
+ </div>
+ </div>
+ </div>
+ </div>
+
+ </div>
+
+ </div>
+ <!-- Headers Content -->
+ <div class="tab-pane fade" id="nav-headers-${wid}-${tid}" role="tabpanel">
+ <div class="input-group">
+ <button role="button" title="Delete"
+ class="material-symbols-outlined text-secondary input-group-text delrow">delete</button>
+ <input type="text" placeholder="Key" class="form-control key">
+ <input type="text" placeholder="Value" class="form-control value">
+ <button role="button" title="Add new"
+ class="material-symbols-outlined input-group-text addrow">add</button>
+ </div>
+ </div>
+ <!-- Requestbody Content -->
+ <div class="tab-pane fade" id="nav-requestbody-${wid}-${tid}" role="tabpanel">
+ <!-- Request Body tab -->
+
+ <div class="row">
+ <div class="col-6">
+ <label for="req-body-tab-select-${wid}-${tid}" class="form-label">Content Type</label>
+ <select class="form-select body-contenttype-1-${wid}-${tid}" id="req-body-tab-select-${wid}-${tid}">
+ <option selected value="none">None</option>
+ <option value="appurlencoded">application/x-www-form-urlencoded</option>
+ <option value="appjson">application/json</option>
+ <option value="textplain">text/plain</option>
+ <option value="texthtml">text/html</option>
+ <option value="appxml">application/xml</option>
+ <option value="appjavascript">application/javascript</option>
+ </select>
+ </div>
+ <div class="col-6 d-flex justify-content-center align-items-center align-end">
+ <div id="req-body-toggle-${wid}-${tid}" class="mt-4">
+ <div class="form-check form-switch">
+ <input class="form-check-input body-contenttype-applicationjson-userrawinput-${wid}-${tid}"
+ type="checkbox" role="switch" id="req-body-checkbox-${wid}-${tid}">
+ <label for="req-body-checkbox-${wid}-${tid}" class="form-check-label">Use Raw Input</label>
+ </div>
+ </div>
+ </div>
+ </div>
+
+ <div class="mt-5">
+ <div id="appUrlEncodedContainer-${wid}-${tid}">
+		 <div class="input-group">
+		 <button role="button" title="Delete"
+		 class="material-symbols-outlined text-secondary input-group-text delrow">delete</button>
+		 <input type="text" placeholder="Key" class="form-control key">
+		 <input type="text" placeholder="Value" class="form-control value">
+		 <button role="button" title="Add new"
+		 class="material-symbols-outlined input-group-text addrow">add</button>
+		 </div>
+ </div>
+
+ <div id="appJsonContainer-${wid}-${tid}">
+		 <div class="input-group">
+		 <button role="button" title="Delete"
+		 class="material-symbols-outlined text-secondary input-group-text delrow">delete</button>
+		 <input type="text" placeholder="Key" class="form-control key">
+		 <input type="text" placeholder="Value" class="form-control value">
+		 <button role="button" title="Add new"
+		 class="material-symbols-outlined input-group-text addrow">add</button>
+		 </div>
+ </div>
+
+ <div id="appJsonCheckedContainer-${wid}-${tid}">
+ <div class="col-sm-6 mt-5">
+ <div class="mb-3">
+ <label for="appJsonTextAreaChecked-${wid}-${tid}" class="form-label">Request Body</label>
+ <textarea class="form-control body-applicationjson-requestbody-${wid}-${tid}"
+ placeholder="Write the raw request body" id="appJsonTextAreaChecked-${wid}-${tid}"
+ rows="5"></textarea>
+ </div>
+ </div>
+ </div>
+
+ <div id="textPlainContainer-${wid}-${tid}">
+ <div class="col-sm-6 mt-5">
+ <div class="mb-3">
+ <label for="textPlainTextArea-${wid}-${tid}" class="form-label">Request Body</label>
+ <textarea class="form-control body-textplain-requestbody-${wid}-${tid}"
+ placeholder="Write the raw request body" id="textPlainTextArea-${wid}-${tid}" rows="5"></textarea>
+ </div>
+ </div>
+ </div>
+
+ <div id="textHtmlContainer-${wid}-${tid}">
+ <div class="col-sm-6 mt-5">
+ <div class="mb-3">
+ <label for="textHtmlTextArea-${wid}-${tid}" class="form-label">Request Body</label>
+ <textarea class="form-control body-texthtml-requestbody-${wid}-${tid}"
+ placeholder="Write the raw request body" id="textHtmlTextArea-${wid}-${tid}" rows="5"></textarea>
+
+ </div>
+ </div>
+ </div>
+
+ <div id="appXmlContainer-${wid}-${tid}">
+ <div class="col-sm-6 mt-5">
+ <div class="mb-3">
+ <label for="appXmlTextArea-${wid}-${tid}" class="form-label">Request Body</label>
+ <textarea class="form-control body-applicationxml-requestbody-${wid}-${tid}"
+ placeholder="Write the raw request body" id="appXmlTextArea-${wid}-${tid}" rows="5"></textarea>
+ </div>
+ </div>
+ </div>
+
+ <div id="appJavascriptContainer-${wid}-${tid}">
+ <div class="col-sm-6 mt-5">
+ <div class="mb-3">
+ <label for="appJsTextArea-${wid}-${tid}" class="form-label">Request Body</label>
+ <textarea class="form-control body-applicationjavascript-requestbody-${wid}-${tid}"
+ placeholder="Write the raw request body" id="appJsTextArea-${wid}-${tid}" rows="5"></textarea>
+ </div>
+ </div>
+ </div>
+
+ </div>
+
+ </div>
+ </div>
+ </div>
+
+
+
+
+
+
+
+
+
+
+
+
+						<!--/form-->
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-light restore-${wid}-${tid}">Restore</button>
+						<button class="btn btn-primary done">Done</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</li>
+`);
+
+                $(`#task-modal-${wid}-${tid}`)
+                    .modal("show");
+                $(`.restore-${wid}-${tid}`)
+                    .on('click', function (e) {
+                        $(`.form-${wid}-${tid}`)
+                            .trigger("reset");
+                        //custom clean up
+                    });
+
+                $(`#auth-tab-toggle-${wid}-${tid}, #apiKeyContainer-${wid}-${tid}, #bearerTokenContainer-${wid}-${tid}, #basicOathContainer-${wid}-${tid}, #oAuth2Container-${wid}-${tid}, #req-body-toggle-${wid}-${tid}, #appUrlEncodedContainer-${wid}-${tid}, #appJsonContainer-${wid}-${tid}, #appJsonCheckedContainer-${wid}-${tid}, #textPlainContainer-${wid}-${tid}, #textHtmlContainer-${wid}-${tid}, #appXmlContainer-${wid}-${tid}, #appJavascriptContainer-${wid}-${tid}`).hide();
+
+                $('body').on("click", '.addrow,.addnewrow', function () {
+                    $(this).parent().after(`    <div class="input-group">
+				<button role="button" title="Delete" class="material-symbols-outlined input-group-text delnewrow">delete</button>
+				<input type="text" placeholder="Key" class="form-control  key">
+				<input type="text" placeholder="Value" class="form-control  value">
+				<button role="button" title="Add new" class="material-symbols-outlined input-group-text addnewrow">add</button>
+			    	</div>`)
+                });
+
+                $('body').on("click", '.delnewrow', function () {
+                    $(this).parent().remove();
+                });
+
+                $(`#auth-tab-select-${wid}-${tid}`).change(function (e) {
+                    let selectedValue = e.target.value;
+                    if (selectedValue === "noauth") {
+                        $(`#auth-tab-toggle-${wid}-${tid},#apiKeyContainer-${wid}-${tid},#bearerTokenContainer-${wid}-${tid},#basicOathContainer-${wid}-${tid},#oAuth2Container-${wid}-${tid}`).hide();
+                    } else if (selectedValue === "apikey") {
+                        $(`#auth-tab-toggle-${wid}-${tid}, #apiKeyContainer-${wid}-${tid}`).show();
+                        $(`#bearerTokenContainer-${wid}-${tid},#basicOathContainer-${wid}-${tid},#oAuth2Container-${wid}-${tid}`).hide();
+                    } else if (selectedValue === "bearertoken") {
+                        $(`#bearerTokenContainer-${wid}-${tid}`).show();
+                        $(`#auth-tab-toggle-${wid}-${tid},#apiKeyContainer-${wid}-${tid},#basicOathContainer-${wid}-${tid},#oAuth2Container-${wid}-${tid}`).hide();
+                    } else if (selectedValue === "basicoauth") {
+                        $(`#basicOathContainer-${wid}-${tid}`).show();
+                        $(`#auth-tab-toggle-${wid}-${tid},#apiKeyContainer-${wid}-${tid},#bearerTokenContainer-${wid}-${tid},#oAuth2Container-${wid}-${tid}`).hide();
+                    } else if (selectedValue === "oauth2") {
+                        $(`#oAuth2Container-${wid}-${tid}`).show();
+                        $(`#auth-tab-toggle-${wid}-${tid},#apiKeyContainer-${wid}-${tid},#bearerTokenContainer-${wid}-${tid},#basicOathContainer-${wid}-${tid}`).hide();
+                    }
+                });
+                $(`#req-body-tab-select-${wid}-${tid}`).change(function (e) {
+                    let selectedValue = e.target.value;
+                    if (selectedValue === "none") {
+                        $(`#req-body-toggle-${wid}-${tid}, #appUrlEncodedContainer-${wid}-${tid},#appJsonContainer-${wid}-${tid},#textPlainContainer-${wid}-${tid},#textHtmlContainer-${wid}-${tid},#appXmlContainer-${wid}-${tid},#appJavascriptContainer-${wid}-${tid},#appJsonCheckedContainer-${wid}-${tid}`).hide();
+                    } else if (selectedValue === "appurlencoded") {
+                        $(`#appUrlEncodedContainer-${wid}-${tid}`).show();
+                        $(`#req-body-toggle-${wid}-${tid},#appJsonContainer-${wid}-${tid},#textPlainContainer-${wid}-${tid},#textHtmlContainer-${wid}-${tid},#appXmlContainer-${wid}-${tid},#appJavascriptContainer-${wid}-${tid},#appJsonCheckedContainer-${wid}-${tid}`).hide();
+                    } else if (selectedValue === "appjson") {
+                        if ($(`#req-body-checkbox-${wid}-${tid}`).prop(`checked`)) {
+                            $(`#appJsonCheckedContainer-${wid}-${tid}`).show();
+                            $(`#appJsonContainer-${wid}-${tid}`).hide();
+                        } else {
+                            $(`#appJsonCheckedContainer-${wid}-${tid}`).hide();
+                            $(`#appJsonContainer-${wid}-${tid}`).show();
+                        }
+                        $(`#req-body-toggle-${wid}-${tid}`).show();
+                        $(`#appUrlEncodedContainer-${wid}-${tid},#textPlainContainer-${wid}-${tid},#textHtmlContainer-${wid}-${tid},#appXmlContainer-${wid}-${tid},#appJavascriptContainer-${wid}-${tid}`).hide();
+                    } else if (selectedValue === "textplain") {
+                        $(`#textPlainContainer-${wid}-${tid}`).show();
+                        $(`#req-body-toggle-${wid}-${tid},#appUrlEncodedContainer-${wid}-${tid},#appJsonContainer-${wid}-${tid},#textHtmlContainer-${wid}-${tid},#appXmlContainer-${wid}-${tid},#appJavascriptContainer-${wid}-${tid},#appJsonCheckedContainer-${wid}-${tid}`).hide();
+
+                    } else if (selectedValue === "texthtml") {
+                        $(`#textHtmlContainer-${wid}-${tid}`).show();
+                        $(`#req-body-toggle-${wid}-${tid},#appUrlEncodedContainer-${wid}-${tid},#appJsonContainer-${wid}-${tid},#textPlainContainer-${wid}-${tid},#appXmlContainer-${wid}-${tid},#appJavascriptContainer-${wid}-${tid},#appJsonCheckedContainer-${wid}-${tid}`).hide();
+                    } else if (selectedValue === "appxml") {
+                        $(`#appXmlContainer-${wid}-${tid}`).show();
+                        $(`#req-body-toggle-${wid}-${tid},#appUrlEncodedContainer-${wid}-${tid},#appJsonContainer-${wid}-${tid},#textPlainContainer-${wid}-${tid},#textHtmlContainer-${wid}-${tid},#appJavascriptContainer-${wid}-${tid},#appJsonCheckedContainer-${wid}-${tid}`).hide();
+                    } else if (selectedValue === "appjavascript") {
+                        $(`#appJavascriptContainer-${wid}-${tid}`).show();
+                        $(`#req-body-toggle-${wid}-${tid},#appUrlEncodedContainer-${wid}-${tid},#appJsonContainer-${wid}-${tid},#textPlainContainer-${wid}-${tid},#textHtmlContainer-${wid}-${tid},#appXmlContainer-${wid}-${tid},#appJsonCheckedContainer-${wid}-${tid}`).hide();
+                    }
+                });
+                $(`#req-body-checkbox-${wid}-${tid}`).on(`change`, function () {
+                    if ($(`#req-body-checkbox-${wid}-${tid}`).prop(`checked`)) {
+                        $(`#appJsonCheckedContainer-${wid}-${tid}`).show();
+                        $(`#appJsonContainer-${wid}-${tid}`).hide();
+                    } else {
+                        $(`#appJsonCheckedContainer-${wid}-${tid}`).hide();
+                        $(`#appJsonContainer-${wid}-${tid}`).show();
+                    }
+                });
+
+            }); //clickme
+    </script>
+
 
 </body>
 
