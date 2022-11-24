@@ -84,7 +84,7 @@
 					<div class="modal-body border">
 						<!--Modal body goes here.-->
 
-						<!--form class="form-${wid}-${tid}"-->
+						<form class="form-${wid}-${tid}">
 
 
 
@@ -110,7 +110,7 @@
  <div class="col-7 col-sm-9">
  <label for="url-${wid}-${tid}" class="form-label">Request URL</label>
  <div class="d-flex input-group">
- <input type="url" id="url-${wid}-${tid}" class="form-control url-${wid}-${tid}" />
+ <input type="url" id="url-${wid}-${tid}" class="form-control url-${wid}-${tid}" required />
  <button class="btn btn-outline-primary url-send-${wid}-${tid}" id="send-${wid}-${tid}">Send</button>
  </div>
  </div>
@@ -382,11 +382,11 @@
 
 
 
-						<!--/form-->
+						</form>
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-light restore-${wid}-${tid}">Restore</button>
-						<button class="btn btn-primary done">Done</button>
+						<button class="btn btn-primary done-${wid}-${tid}">Done</button>
 					</div>
 				</div>
 			</div>
@@ -394,6 +394,53 @@
 
 	</li>
 `);
+
+                $(`.done-${wid}-${tid}`).on('click', function(e) {
+                    // URL INPUT VALIDATION
+                    let result = {};
+                    let methodVal = $(`#method-${wid}-${tid}`).val();
+                    let urlVal = $(`#url-${wid}-${tid}`).val();
+                    if(urlVal.length === 0){
+                        alert("URL field Requered")
+                        return;
+                    }
+                    result.method = methodVal;
+                    result.url = urlVal;
+
+                    // Query Params tab
+                    let qpKeysArr = $(`#nav-qp-${wid}-${tid} .key`).map(function() {
+                                        return this.value;
+                                    }).get();
+                    let qpValsArr = $(`#nav-qp-${wid}-${tid} .value`).map(function() {
+                                        return this.value;
+                                    }).get();
+                            
+                    let resQpInputsArr = convertArrsToObject(qpKeysArr, qpValsArr);
+                    result.params = resQpInputsArr;
+                    
+                    // Headers Tab
+                    let headersKeysArr = $(`#nav-headers-${wid}-${tid} .key`).map(function() {
+                                        return this.value;
+                                    }).get();
+                    let headersValsArr = $(`#nav-headers-${wid}-${tid} .value`).map(function() {
+                                        return this.value;
+                                    }).get();
+                    let resHeadersInputsArr = convertArrsToObject(qpKeysArr, qpValsArr);
+                    result.params = resHeadersInputsArr;
+
+                    console.log(JSON.stringify(result))
+                })
+
+                function convertArrsToObject(inputArr1, inputArr2) {
+                    let resultArr = [];
+                    inputArr1.forEach((element, index) => {
+                        let obj = {};
+                        obj[element] = inputArr2[index].length === 0 ? "undefined" : inputArr2[index];
+                        resultArr.push(obj);
+                    }); 
+
+                    return resultArr;
+                }
 
                 $(`#task-modal-${wid}-${tid}`)
                     .modal("show");
