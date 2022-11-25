@@ -476,6 +476,10 @@
 					// URL key
 					result.url = {} // AN OBJECT HAVING RAW, and QUERY
 					result.url.raw = result.name;
+					let urlValues = new URL(result.name);
+					result.url.protocol = urlValues.protocol;
+					result.url.host = urlValues.hostname.split('.');
+					result.url.path = urlValues.pathname.split('/').filter((val) => val !== "");
 					result.url.query = convertArrsToObject($(`#nav-qp-${wid}-${tid} .key`)
 						.map(function() {
 							return this.value;
