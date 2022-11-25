@@ -518,7 +518,20 @@
 								"type" : "string"
 							}
 						]
-					} //  TODO: oauth2 
+					} else if(result.auth.type === "oauth2"){
+						result.auth.oauth2 = [
+						{
+								"key" : "token",
+								"value" : $(`#oauth-value-${wid}-${tid}`).val(),
+								"type" : "string"
+							},
+							{
+								"key" : "addTokenTo",
+								"value" : "header",
+								"type" : "string"
+							}
+						]
+					} 
 
 
 					// HEADER
