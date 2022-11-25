@@ -439,46 +439,55 @@
 				});
 			$(`#task-modal-${wid}-${tid} .done`)
 				.on('click', function(e) {
+					e.preventDefault();
 					function convertArrsToObject(e, a) {
 						var b = [];
 						e.forEach(function(f, c) {
 							var d = {};
-							d[f] = 0 === a[c].length ? "undefined" : a[c];
+							d.key = 0 === f.length ? "undefined" : f;
+							d.value = a[c].length === 0 ? "undefined" : a[c];
 							b.push(d);
 						});
 						return b;
 					};
-					// URL INPUT VALIDATION
 					let result = {};
-					let urlVal = $(`#url-${wid}-${tid}`)
-						.val();
-					if (urlVal.length === 0) {
+					result.name = $(`#url-${wid}-${tid}`).val();
+					// URL INPUT VALIDATION
+					if (result.name.length === 0) {
 						alert("URL field Requered")
 						return;
 					}
-					// Query Params tab
-					result.params = convertArrsToObject($(`#nav-qp-${wid}-${tid} .key`)
+					result.method = $(`#method-${wid}-${tid}`).val().toUpperCase();
+
+					// URL key
+					result.url = {} // AN OBJECT HAVING RAW, and QUERY
+					result.url.raw = result.name;
+					result.url.query = convertArrsToObject($(`#nav-qp-${wid}-${tid} .key`)
 						.map(function() {
 							return this.value;
 						})
 						.get(), $(`#nav-qp-${wid}-${tid} .value`)
 						.map(function() {
 							return this.value;
-						})
-						.get());
-					result.method = $(`#method-${wid}-${tid}`)
-						.val();
-					result.url = urlVal;
-					result.headers = convertArrsToObject($(`#nav-qp-${wid}-${tid} .key`)
+						}).get());
+
+					// AUTHORIZATION
+
+
+					// HEADER
+					result.header = convertArrsToObject($(`#nav-headers-${wid}-${tid} .key`)
 						.map(function() {
 							return this.value;
 						})
-						.get(), $(`#nav-qp-${wid}-${tid} .value`)
+						.get(), $(`#nav-headers-${wid}-${tid} .value`)
 						.map(function() {
 							return this.value;
 						})
-						.get());
-					// Headers Tab
+						.get())
+					result.header.forEach((res) => {
+						res.type = "text";
+					})
+					
 					console.log(JSON.stringify(result))
 				})
 		}); //clickme
