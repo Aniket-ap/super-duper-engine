@@ -328,7 +328,7 @@
 				});
 			$(`#authtab-${wid}-${tid}, #apikeytab-${wid}-${tid}, #bearertab-${wid}-${tid}, #basictab-${wid}-${tid}, #oauth2tab-${wid}-${tid}, #bodytab-${wid}-${tid}, #urlencodedtab-${wid}-${tid}, #jsontab-${wid}-${tid}, #rawjsontab-${wid}-${tid}, #texttab-${wid}-${tid}, #htmltab-${wid}-${tid}, #xmltab-${wid}-${tid}, #jstab-${wid}-${tid}`)
 				.hide();
-			$(`body`)
+			$(`body #task-modal-${wid}-${tid}`)
 				.on("click", '.addrow,.addnewrow', function() {
 					$(this)
 						.parent()
