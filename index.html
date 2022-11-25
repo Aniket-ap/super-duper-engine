@@ -444,9 +444,11 @@
 						var b = [];
 						e.forEach(function(f, c) {
 							var d = {};
-							d.key = 0 === f.length ? "undefined" : f;
-							d.value = a[c].length === 0 ? "undefined" : a[c];
-							b.push(d);
+							d.key = f;
+							d.value = a[c].length === 0 ? "" : a[c];
+							if(d.key.trim() !== ""){
+								b.push(d);
+							}
 						});
 						return b;
 					};
@@ -458,7 +460,7 @@
 							d.key = values[i];
 							d.value = args[i];
 							d.type = "string";
-							b.push(o);
+							b.push(d);
 						}
 						return b;
 					}
@@ -507,7 +509,7 @@
 						res.type = "text";
 					})
 					
-					console.log(JSON.stringify(result))
+					console.log(JSON.stringify(result,null,4))
 				})
 		}); //clickme
 	</script>
