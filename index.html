@@ -134,11 +134,11 @@
 					<div id="authtab-${wid}-${tid}" class="mt-4">
 						<span class="mx-3">Add to:</span>
 						<div class="form-check form-check-inline">
-							<input class="form-check-input" type="radio" id="authRadio-${wid}-${tid}" name="inlineRadioOptions" checked value="header">
+							<input class="form-check-input" type="radio" id="authRadio-${wid}-${tid}" name="addToRadioOptions" checked value="header">
 							<label for="authRadio-${wid}-${tid}" class="form-check-label">Header</label>
 						</div>
 						<div class="form-check form-check-inline">
-							<input class="form-check-input" id="authqpRadio-${wid}-${tid}" type="radio" name="inlineRadioOptions" value="queryparams">
+							<input class="form-check-input" id="authqpRadio-${wid}-${tid}" type="radio" name="addToRadioOptions" value="queryparams">
 							<label for="authqpRadio-${wid}-${tid}" class="form-check-label">Query Params</label>
 						</div>
 					</div>
@@ -450,6 +450,18 @@
 						});
 						return b;
 					};
+					function covertAuthApiKeyToArr(...args){
+						var b = [];
+						const values = ["key", "value", "in"];
+						for(let i = 0; i < 3; i++){
+							let d = {};
+							d.key = values[i];
+							d.value = args[i];
+							d.type = "string";
+							b.push(o);
+						}
+						return b;
+					}
 					let result = {};
 					result.name = $(`#url-${wid}-${tid}`).val();
 					// URL INPUT VALIDATION
@@ -472,7 +484,14 @@
 						}).get());
 
 					// AUTHORIZATION
-
+					result.auth = {};
+					result.auth.type = $(`#authtab-select-${wid}-${tid}`).val();
+					if($(`#authtab-select-${wid}-${tid}`).val() === "apikey"){
+						let key = $(`#apiKeyInput-${wid}-${tid}`).val();
+						let value = $(`#apikey-value-${wid}-${tid}`).val();
+						let addToVal = $('input[name=addToRadioOptions]:checked', `#authtab-${wid}-${tid}`).val();
+						result.auth.apikey = covertAuthApiKeyToArr(key, value, addToVal);
+					}
 
 					// HEADER
 					result.header = convertArrsToObject($(`#nav-headers-${wid}-${tid} .key`)
