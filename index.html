@@ -182,7 +182,7 @@
 						<div class="col-6">
 							<div>
 								<label for="basic-password-${wid}-${tid}" class="form-label">Password</label>
-								<input type="email" class="form-control" id="basic-password-${wid}-${tid}" />
+								<input type="password" class="form-control" id="basic-password-${wid}-${tid}" />
 							</div>
 						</div>
 					</div>
@@ -474,10 +474,10 @@
 					result.method = $(`#method-${wid}-${tid}`).val().toUpperCase();
 
 					// URL key
-					result.url = {} // AN OBJECT HAVING RAW, and QUERY
+					result.url = {};
 					result.url.raw = result.name;
 					let urlValues = new URL(result.name);
-					result.url.protocol = urlValues.protocol;
+					result.url.protocol = urlValues.protocol.replace(':', '');
 					result.url.host = urlValues.hostname.split('.');
 					result.url.path = urlValues.pathname.split('/').filter((val) => val !== "");
 					result.url.query = convertArrsToObject($(`#nav-qp-${wid}-${tid} .key`)
@@ -492,12 +492,34 @@
 					// AUTHORIZATION
 					result.auth = {};
 					result.auth.type = $(`#authtab-select-${wid}-${tid}`).val();
-					if($(`#authtab-select-${wid}-${tid}`).val() === "apikey"){
+					if(result.auth.type === "apikey"){
 						let key = $(`#apiKeyInput-${wid}-${tid}`).val();
 						let value = $(`#apikey-value-${wid}-${tid}`).val();
 						let addToVal = $('input[name=addToRadioOptions]:checked', `#authtab-${wid}-${tid}`).val();
 						result.auth.apikey = covertAuthApiKeyToArr(key, value, addToVal);
-					}
+					} 
+					else if(result.auth.type === "bearertoken"){
+						result.auth.bearer = [{
+							"key" : "token",
+							"value" : $(`#bearer-value-${wid}-${tid}`).val(),
+							"type" : "string"
+						}]
+					} 
+					else if(result.auth.type === "basicoauth"){
+						result.auth.basic = [
+							{
+								"key" : "password",
+								"value" : $(`#basic-username-${wid}-${tid}`).val(),
+								"type" : "string"
+							},
+							{
+								"key" : "username",
+								"value" : $(`#basic-password-${wid}-${tid}`).val(),
+								"type" : "string"
+							}
+						]
+					} //  TODO: oauth2 
+
 
 					// HEADER
 					result.header = convertArrsToObject($(`#nav-headers-${wid}-${tid} .key`)
@@ -513,6 +535,8 @@
 						res.type = "text";
 					})
 					
+					// Response
+					result.response = []
 					console.log(JSON.stringify(result,null,4))
 				})
 		}); //clickme
