@@ -587,7 +587,25 @@
 					result.header.forEach((res) => {
 						res.type = "text";
 					})
-					// BODY
+					// BODY //TODO Complete params and body key not taking issue
+					let getBodySelectValue = $(`#req-body-tab-select-${wid}-${tid}`).val();
+					if(getBodySelectValue === "appurlencoded"){
+						result.body = {};
+						result.body.mode = "urlencoded";
+						result.body.urlencoded = convertArrsToObject($(`#urlencodedtab-${wid}-${tid} .key`)
+						.map(function() {
+							return this.value;
+						})
+						.get(), $(`#urlencodedtab-${wid}-${tid} .value`)
+						.map(function() {
+							return this.value;
+						})
+						.get())
+						result.body.urlencoded.forEach((res) => {
+							res.type = "text";
+						})
+					}
+
 					// Response
 					result.response = []
 					console.log(JSON.stringify(result, null, 4))
