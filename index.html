@@ -11,14 +11,15 @@
 	}
 
 	input,
-	select,textarea {
+	select,
+	textarea {
 		text-overflow: ellipsis;
 	}
 	</style>
 </head>
 
 <body>
-	<button class="m-3 btn btn-primary" id="clickme">New Webhook</button>
+	<button type="button" class="m-3 btn btn-primary" id="clickme">New Webhook</button>
 	<hr>
 	<ul class="list-group task-point"></ul>
 	<div id="modal"></div>
@@ -63,7 +64,7 @@
 					<div class="modal-body border">
 						<!--Modal body goes here.-->
 
-						<!--form id="form-${wid}-${tid}"-->
+						<form id="form-${wid}-${tid}" class="needs-validation" novalidate>
 
 
 
@@ -88,20 +89,24 @@
 		<div class="col-7 col-sm-9">
 			<label for="url-${wid}-${tid}" class="form-label">Request URL</label>
 			<div class="d-flex input-group">
-				<input type="url" id="url-${wid}-${tid}" class="form-control" />
-				<button class="btn btn-outline-primary" id="send-${wid}-${tid}">Send</button>
+				<input type="url" id="url-${wid}-${tid}" class="form-control" required/>
+				<button type="button" class="btn btn-outline-primary" id="send-${wid}-${tid}">Send</button>
+				      <div class="invalid-feedback">
+					Request URL is missing.
+				      </div>
 			</div>
+
 		</div>
 	</div>
 	<!-- TAB -->
 	<nav class="mt-5">
 		<div class="nav nav-tabs" role="tablist">
-			<button class="nav-link active" data-bs-toggle="tab" data-bs-target="#nav-qp-${wid}-${tid}" type="button" role="tab" aria-selected="true"> Params <span class="ms-1 d-inline-block rounded-circle"></span>
+			<button type="button" class="nav-link active" data-bs-toggle="tab" data-bs-target="#nav-qp-${wid}-${tid}" role="tab" aria-selected="true"> Params <span class="ms-1 d-inline-block rounded-circle"></span>
 			</button>
-			<button class="nav-link" data-bs-toggle="tab" data-bs-target="#nav-auth-${wid}-${tid}" type="button" role="tab" aria-selected="false"> Authorization </button>
-			<button class="nav-link" data-bs-toggle="tab" data-bs-target="#nav-headers-${wid}-${tid}" type="button" role="tab" aria-selected="false"> Headers <span class="ms-1 d-inline-block rounded-circle"></span>
+			<button type="button" class="nav-link" data-bs-toggle="tab" data-bs-target="#nav-auth-${wid}-${tid}" role="tab" aria-selected="false"> Authorization </button>
+			<button type="button" class="nav-link" data-bs-toggle="tab" data-bs-target="#nav-headers-${wid}-${tid}" role="tab" aria-selected="false"> Headers <span class="ms-1 d-inline-block rounded-circle"></span>
 			</button>
-			<button class="nav-link" data-bs-toggle="tab" data-bs-target="#nav-requestbody-${wid}-${tid}" type="button" role="tab" aria-selected="false"> Body <span class="ms-1 d-inline-block rounded-circle"></span>
+			<button type="button" class="nav-link" data-bs-toggle="tab" data-bs-target="#nav-requestbody-${wid}-${tid}" role="tab" aria-selected="false"> Body <span class="ms-1 d-inline-block rounded-circle"></span>
 			</button>
 		</div>
 	</nav>
@@ -110,10 +115,13 @@
 		<!-- Query Params Content -->
 		<div class="tab-pane fade show active" id="nav-qp-${wid}-${tid}" role="tabpanel">
 			<div class="input-group">
-				<button role="button" title="Delete" class="material-symbols-outlined text-secondary input-group-text delrow">delete</button>
-				<input type="text" placeholder="Key" class="form-control key">
+				<button type="button" role="button" title="Delete" class="material-symbols-outlined text-secondary input-group-text delrow">delete</button>
+				<input type="text" placeholder="Key" class="form-control key" required>
 				<input type="text" placeholder="Value" class="form-control value">
-				<button role="button" title="Add new" class="material-symbols-outlined input-group-text addrow">add</button>
+				<button type="button" role="button" title="Add new" class="material-symbols-outlined input-group-text addrow">add</button>
+				      <div class="invalid-feedback">
+					Key is missing.
+				      </div>
 			</div>
 		</div>
 		<!-- Authorization Content -->
@@ -151,6 +159,9 @@
 							<div>
 								<label for="apiKeyInput-${wid}-${tid}" class="form-label">API Key</label>
 								<input type="email" class="form-control" id="apiKeyInput-${wid}-${tid}" />
+				      <div class="invalid-feedback">
+					Key is missing.
+				      </div>								
 							</div>
 						</div>
 						<div class="col-6">
@@ -202,10 +213,13 @@
 		<!-- Headers Content -->
 		<div class="tab-pane fade" id="nav-headers-${wid}-${tid}" role="tabpanel">
 			<div class="input-group">
-				<button role="button" title="Delete" class="material-symbols-outlined text-secondary input-group-text delrow">delete</button>
-				<input type="text" placeholder="Key" class="form-control key">
+				<button type="button" role="button" title="Delete" class="material-symbols-outlined text-secondary input-group-text delrow">delete</button>
+				<input type="text" placeholder="Key" class="form-control key" required>
 				<input type="text" placeholder="Value" class="form-control value">
-				<button role="button" title="Add new" class="material-symbols-outlined input-group-text addrow">add</button>
+				<button type="button" role="button" title="Add new" class="material-symbols-outlined input-group-text addrow">add</button>
+				      <div class="invalid-feedback">
+					Key is missing.
+				      </div>				
 			</div>
 		</div>
 		<!-- Requestbody Content -->
@@ -236,18 +250,24 @@
 			<div class="mt-5">
 				<div id="urlencodedtab-${wid}-${tid}">
 					<div class="input-group">
-						<button role="button" title="Delete" class="material-symbols-outlined text-secondary input-group-text delrow">delete</button>
-						<input type="text" placeholder="Key" class="form-control key">
+						<button type="button" role="button" title="Delete" class="material-symbols-outlined text-secondary input-group-text delrow">delete</button>
+						<input type="text" placeholder="Key" class="form-control key" required>
 						<input type="text" placeholder="Value" class="form-control value">
-						<button role="button" title="Add new" class="material-symbols-outlined input-group-text addrow">add</button>
+						<button type="button" role="button" title="Add new" class="material-symbols-outlined input-group-text addrow">add</button>
+				      <div class="invalid-feedback">
+					Key is missing.
+				      </div>						
 					</div>
 				</div>
 				<div id="jsontab-${wid}-${tid}">
 					<div class="input-group">
-						<button role="button" title="Delete" class="material-symbols-outlined text-secondary input-group-text delrow">delete</button>
-						<input type="text" placeholder="Key" class="form-control key">
+						<button type="button" role="button" title="Delete" class="material-symbols-outlined text-secondary input-group-text delrow">delete</button>
+						<input type="text" placeholder="Key" class="form-control key" required>
 						<input type="text" placeholder="Value" class="form-control value">
-						<button role="button" title="Add new" class="material-symbols-outlined input-group-text addrow">add</button>
+						<button type="button" role="button" title="Add new" class="material-symbols-outlined input-group-text addrow">add</button>
+				      <div class="invalid-feedback">
+					Key is missing.
+				      </div>						
 					</div>
 				</div>
 				<div id="rawjsontab-${wid}-${tid}">
@@ -306,11 +326,11 @@
 
 
 
-						<!--/form-->
+						</form>
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-light restore">Restore</button>
-						<button class="btn btn-primary done">Done</button>
+						<button type="button" class="btn btn-primary done-${wid}-${tid}">Done</button>
 					</div>
 				</div>
 			</div>
@@ -332,11 +352,11 @@
 				.on("click", '.addrow,.addnewrow', function() {
 					$(this)
 						.parent()
-						.after(`    <div class="input-group">
-				<button role="button" title="Delete" class="material-symbols-outlined input-group-text delnewrow">delete</button>
-				<input type="text" placeholder="Key" class="form-control  key">
-				<input type="text" placeholder="Value" class="form-control  value">
-				<button role="button" title="Add new" class="material-symbols-outlined input-group-text addnewrow">add</button>
+						.after(`<div class="input-group">
+				<button type="button" role="button" title="Delete" class="material-symbols-outlined input-group-text delnewrow">delete</button>
+				<input type="text" placeholder="Key" class="form-control key" required>
+				<input type="text" placeholder="Value" class="form-control value">
+				<button type="button" role="button" title="Add new" class="material-symbols-outlined input-group-text addnewrow">add</button>
 			    	</div>`)
 				})
 				.on("click", '.delnewrow', function() {
@@ -437,25 +457,32 @@
 							.show();
 					}
 				});
-			$(`#task-modal-${wid}-${tid} .done`)
+			$(`.done-${wid}-${tid}`)
 				.on('click', function(e) {
-					e.preventDefault();
+					if (!$("form")[0].checkValidity()) {
+						event.preventDefault()
+						event.stopPropagation()
+					}
+					$("form")
+						.addClass('was-validated')
+
 					function convertArrsToObject(e, a) {
 						var b = [];
 						e.forEach(function(f, c) {
 							var d = {};
 							d.key = f;
 							d.value = a[c].length === 0 ? "" : a[c];
-							if(d.key.trim() !== ""){
+							if (d.key.trim() !== "") {
 								b.push(d);
 							}
 						});
 						return b;
 					};
-					function covertAuthApiKeyToArr(...args){
+
+					function covertAuthApiKeyToArr(...args) {
 						var b = [];
 						const values = ["key", "value", "in"];
-						for(let i = 0; i < 3; i++){
+						for (let i = 0; i < 3; i++) {
 							let d = {};
 							d.key = values[i];
 							d.value = args[i];
@@ -464,6 +491,7 @@
 						}
 						return b;
 					}
+
 					function isValidUrl(string) {
 						try {
 							new URL(string);
@@ -473,25 +501,27 @@
 						}
 					}
 					let result = {};
-					result.name = "Webhook: snb1s098-biirwpkn"; // TODO: Will add Dynamically
+					result.name = `Webhook: ${wid}-${tid}`;
 					let urlInputEle = $(`#url-${wid}-${tid}`);
 					let urlVal = urlInputEle.val();
 					// URL INPUT VALIDATION
 					if (urlVal.length === 0 || !isValidUrl(urlVal)) {
-						urlInputEle.addClass("is-invalid");
-						alert("URL field required")
+						//urlInputEle.addClass("is-invalid");
+						//alert("URL field required")
 						return;
 					}
 					urlInputEle.removeClass("is-invalid");
-					result.method = $(`#method-${wid}-${tid}`).val().toUpperCase();
-
+					result.method = $(`#method-${wid}-${tid}`)
+						.val()
+						.toUpperCase();
 					// URL key
 					result.url = {};
 					result.url.raw = urlVal;
 					let urlValues = new URL(urlVal);
 					result.url.protocol = urlValues.protocol.replace(':', '');
 					result.url.host = urlValues.hostname.split('.');
-					result.url.path = urlValues.pathname.split('/').filter((val) => val !== "");
+					result.url.path = urlValues.pathname.split('/')
+						.filter((val) => val !== "");
 					result.url.query = convertArrsToObject($(`#nav-qp-${wid}-${tid} .key`)
 						.map(function() {
 							return this.value;
@@ -499,52 +529,51 @@
 						.get(), $(`#nav-qp-${wid}-${tid} .value`)
 						.map(function() {
 							return this.value;
-						}).get());
-
+						})
+						.get());
 					// AUTHORIZATION
 					result.auth = {};
-					result.auth.type = $(`#authtab-select-${wid}-${tid}`).val();
-					if(result.auth.type === "apikey"){
-						let key = $(`#apiKeyInput-${wid}-${tid}`).val();
-						let value = $(`#apikey-value-${wid}-${tid}`).val();
-						let addToVal = $('input[name=addToRadioOptions]:checked', `#authtab-${wid}-${tid}`).val();
+					result.auth.type = $(`#authtab-select-${wid}-${tid}`)
+						.val();
+					if (result.auth.type === "apikey") {
+						let key = $(`#apiKeyInput-${wid}-${tid}`)
+							.val();
+						let value = $(`#apikey-value-${wid}-${tid}`)
+							.val();
+						let addToVal = $('input[name=addToRadioOptions]:checked', `#authtab-${wid}-${tid}`)
+							.val();
 						result.auth.apikey = covertAuthApiKeyToArr(key, value, addToVal);
-					} 
-					else if(result.auth.type === "bearertoken"){
+					} else if (result.auth.type === "bearertoken") {
 						result.auth.bearer = [{
-							"key" : "token",
-							"value" : $(`#bearer-value-${wid}-${tid}`).val(),
-							"type" : "string"
+							"key": "token",
+							"value": $(`#bearer-value-${wid}-${tid}`)
+								.val(),
+							"type": "string"
 						}]
-					} 
-					else if(result.auth.type === "basicoauth"){
-						result.auth.basic = [
-							{
-								"key" : "password",
-								"value" : $(`#basic-username-${wid}-${tid}`).val(),
-								"type" : "string"
-							},
-							{
-								"key" : "username",
-								"value" : $(`#basic-password-${wid}-${tid}`).val(),
-								"type" : "string"
-							}
-						]
-					} else if(result.auth.type === "oauth2"){
-						result.auth.oauth2 = [
-						{
-								"key" : "token",
-								"value" : $(`#oauth-value-${wid}-${tid}`).val(),
-								"type" : "string"
-							},
-							{
-								"key" : "addTokenTo",
-								"value" : "header",
-								"type" : "string"
-							}
-						]
-					} 
-
+					} else if (result.auth.type === "basicoauth") {
+						result.auth.basic = [{
+							"key": "password",
+							"value": $(`#basic-username-${wid}-${tid}`)
+								.val(),
+							"type": "string"
+						}, {
+							"key": "username",
+							"value": $(`#basic-password-${wid}-${tid}`)
+								.val(),
+							"type": "string"
+						}]
+					} else if (result.auth.type === "oauth2") {
+						result.auth.oauth2 = [{
+							"key": "token",
+							"value": $(`#oauth-value-${wid}-${tid}`)
+								.val(),
+							"type": "string"
+						}, {
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}]
+					}
 					// HEADER 
 					result.header = convertArrsToObject($(`#nav-headers-${wid}-${tid} .key`)
 						.map(function() {
@@ -558,12 +587,10 @@
 					result.header.forEach((res) => {
 						res.type = "text";
 					})
-					
 					// BODY
-
 					// Response
 					result.response = []
-					console.log(JSON.stringify(result,null,4))
+					console.log(JSON.stringify(result, null, 4))
 				})
 		}); //clickme
 	</script>
