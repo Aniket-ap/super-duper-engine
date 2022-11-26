@@ -464,12 +464,20 @@
 						}
 						return b;
 					}
+					function isValidUrl(string) {
+						try {
+							new URL(string);
+							return true;
+						} catch (err) {
+							return false;
+						}
+					}
 					let result = {};
 					result.name = "Webhook: snb1s098-biirwpkn"; // TODO: Will add Dynamically
 					let urlInputEle = $(`#url-${wid}-${tid}`);
 					let urlVal = urlInputEle.val();
 					// URL INPUT VALIDATION
-					if (urlVal.length === 0) {
+					if (urlVal.length === 0 || !isValidUrl(urlVal)) {
 						urlInputEle.addClass("is-invalid");
 						alert("URL field Requered")
 						return;
