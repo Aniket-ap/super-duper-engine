@@ -465,18 +465,22 @@
 						return b;
 					}
 					let result = {};
-					result.name = $(`#url-${wid}-${tid}`).val();
+					result.name = "Webhook: snb1s098-biirwpkn"; // TODO: Will add Dynamically
+					let urlInputEle = $(`#url-${wid}-${tid}`);
+					let urlVal = urlInputEle.val();
 					// URL INPUT VALIDATION
-					if (result.name.length === 0) {
+					if (urlVal.length === 0) {
+						urlInputEle.addClass("is-invalid");
 						alert("URL field Requered")
 						return;
 					}
+					urlInputEle.removeClass("is-invalid");
 					result.method = $(`#method-${wid}-${tid}`).val().toUpperCase();
 
 					// URL key
 					result.url = {};
-					result.url.raw = result.name;
-					let urlValues = new URL(result.name);
+					result.url.raw = urlVal;
+					let urlValues = new URL(urlVal);
 					result.url.protocol = urlValues.protocol.replace(':', '');
 					result.url.host = urlValues.hostname.split('.');
 					result.url.path = urlValues.pathname.split('/').filter((val) => val !== "");
@@ -533,8 +537,7 @@
 						]
 					} 
 
-
-					// HEADER
+					// HEADER 
 					result.header = convertArrsToObject($(`#nav-headers-${wid}-${tid} .key`)
 						.map(function() {
 							return this.value;
@@ -548,6 +551,8 @@
 						res.type = "text";
 					})
 					
+					// BODY
+
 					// Response
 					result.response = []
 					console.log(JSON.stringify(result,null,4))
