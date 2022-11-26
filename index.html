@@ -158,7 +158,7 @@
 						<div class="col-6">
 							<div>
 								<label for="apiKeyInput-${wid}-${tid}" class="form-label">API Key</label>
-								<input type="email" class="form-control" id="apiKeyInput-${wid}-${tid}" />
+								<input type="text" class="form-control" id="apiKeyInput-${wid}-${tid}" />
 				      <div class="invalid-feedback">
 					Key is missing.
 				      </div>								
@@ -167,7 +167,7 @@
 						<div class="col-6">
 							<div>
 								<label for="apikey-value-${wid}-${tid}" class="form-label">API Value</label>
-								<input type="email" class="form-control" id="apikey-value-${wid}-${tid}" />
+								<input type="text" class="form-control" id="apikey-value-${wid}-${tid}" />
 							</div>
 						</div>
 					</div>
@@ -177,7 +177,7 @@
 						<div class="col-6">
 							<div>
 								<label for="bearer-value-${wid}-${tid}" class="form-label">Bearer Token</label>
-								<input type="email" class="form-control" id="bearer-value-${wid}-${tid}" />
+								<input type="text" class="form-control" id="bearer-value-${wid}-${tid}" />
 							</div>
 						</div>
 					</div>
@@ -187,7 +187,7 @@
 						<div class="col-6">
 							<div>
 								<label for="basic-username-${wid}-${tid}" class="form-label">Username</label>
-								<input type="email" class="form-control" id="basic-username-${wid}-${tid}" />
+								<input type="text" class="form-control" id="basic-username-${wid}-${tid}" />
 							</div>
 						</div>
 						<div class="col-6">
@@ -203,7 +203,7 @@
 						<div class="col-6">
 							<div>
 								<label for="oauth-value-${wid}-${tid}" class="form-label">Access Token</label>
-								<input type="email" class="form-control" id="oauth-value-${wid}-${tid}" />
+								<input type="text" class="form-control" id="oauth-value-${wid}-${tid}" />
 							</div>
 						</div>
 					</div>
@@ -218,7 +218,7 @@
 				<input type="text" placeholder="Value" class="form-control value">
 				<button type="button" role="button" title="Add new" class="material-symbols-outlined input-group-text addrow">add</button>
 				      <div class="invalid-feedback">
-					Key is missing.
+						Key is missing.
 				      </div>				
 			</div>
 		</div>
@@ -357,6 +357,7 @@
 				<input type="text" placeholder="Key" class="form-control key" required>
 				<input type="text" placeholder="Value" class="form-control value">
 				<button type="button" role="button" title="Add new" class="material-symbols-outlined input-group-text addnewrow">add</button>
+				<div class="invalid-feedback">Key is missing.</div>
 			    	</div>`)
 				})
 				.on("click", '.delnewrow', function() {
