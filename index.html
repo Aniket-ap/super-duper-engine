@@ -506,11 +506,8 @@
 					let urlVal = urlInputEle.val();
 					// URL INPUT VALIDATION
 					if (urlVal.length === 0 || !isValidUrl(urlVal)) {
-						//urlInputEle.addClass("is-invalid");
-						//alert("URL field required")
 						return;
 					}
-					urlInputEle.removeClass("is-invalid");
 					result.method = $(`#method-${wid}-${tid}`)
 						.val()
 						.toUpperCase();
@@ -587,7 +584,7 @@
 					result.header.forEach((res) => {
 						res.type = "text";
 					})
-					// BODY //TODO Complete params and body key not taking issue
+					// BODY
 					let getBodySelectValue = $(`#req-body-tab-select-${wid}-${tid}`).val();
 					if(getBodySelectValue === "appurlencoded"){
 						result.body = {};
@@ -604,6 +601,68 @@
 						result.body.urlencoded.forEach((res) => {
 							res.type = "text";
 						})
+					} else if(getBodySelectValue === "appjson"){
+						if($(`#use-raw-${wid}-${tid}`).prop('checked')){
+							result.body = {};
+							result.body.mode = "raw";
+							result.body.raw = JSON.stringify($(`#json-value-${wid}-${tid}`).val());
+							result.body.options = {
+								"raw" : {
+									"language" : "json"
+								}
+							}
+						} else{
+							result.body = {};
+							result.body.mode = "formdata";
+							result.body.formdata = convertArrsToObject($(`#jsontab-${wid}-${tid} .key`)
+							.map(function() {
+								return this.value;
+							})
+							.get(), $(`#jsontab-${wid}-${tid} .value`)
+							.map(function() {
+								return this.value;
+							})
+							.get())
+							result.body.formdata.forEach((res) => {
+								res.type = "text";
+							})
+						}
+					} else if(getBodySelectValue === "textplain"){
+						result.body = {};
+						result.body.mode = "raw";
+						result.body.raw = JSON.stringify($(`#text-value-${wid}-${tid}`).val());
+						result.body.options = {
+							"raw" : {
+								"language" : "text"
+							}
+						}
+					} else if(getBodySelectValue === "texthtml"){
+						result.body = {};
+						result.body.mode = "raw";
+						result.body.raw = JSON.stringify($(`#html-value-${wid}-${tid}`).val());
+						result.body.options = {
+							"raw" : {
+								"language" : "html"
+							}
+						}
+					} else if(getBodySelectValue === "appxml"){
+						result.body = {};
+						result.body.mode = "raw";
+						result.body.raw = JSON.stringify($(`#xml-value-${wid}-${tid}`).val());
+						result.body.options = {
+							"raw" : {
+								"language" : "xml"
+							}
+						}
+					} else if(getBodySelectValue === "appjavascript"){
+						result.body = {};
+						result.body.mode = "raw";
+						result.body.raw = JSON.stringify($(`#js-value-${wid}-${tid}`).val());
+						result.body.options = {
+							"raw" : {
+								"language" : "javascript"
+							}
+						}
 					}
 
 					// Response
