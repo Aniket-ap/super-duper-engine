@@ -441,8 +441,8 @@
 					});
 				$(`.done-${wid}-${tid}`)
 					.on('click', function(e) {
-							event.preventDefault()
-							event.stopPropagation()
+							e.preventDefault()
+							e.stopPropagation()
 	
 						function convertArrsToObject(e, a) {
 							var b = [];
@@ -484,6 +484,7 @@
 						let urlVal = urlInputEle.val();
 						// URL INPUT VALIDATION
 						if (urlVal.length === 0 || !isValidUrl(urlVal)) {
+							alert("URL is Required")
 							return;
 						}
 						result.method = $(`#method-${wid}-${tid}`)
@@ -515,6 +516,10 @@
 								.val();
 							let value = $(`#apikey-value-${wid}-${tid}`)
 								.val();
+							if((key.trim() === "" && value !== "") || (key.trim() === "" && value.trim() === "")){
+								alert("API Key is missing");
+								return;
+							}
 							let addToVal = $('input[name=addToRadioOptions]:checked', `#authtab-${wid}-${tid}`)
 								.val();
 							result.auth.apikey = covertAuthApiKeyToArr(key, value, addToVal);
