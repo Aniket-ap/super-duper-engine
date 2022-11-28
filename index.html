@@ -1,417 +1,431 @@
+
 <html>
 
-<head>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/somethinggoodone/cdn/AniketPradhan_bootstrap.css" />
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-	<style>
-	.input-group-text {
-		background-color: #fff;
-	}
-
-	input,
-	select,
-	textarea {
-		text-overflow: ellipsis;
-	}
-	.needs-validation .form-control:valid{
-  		background-image: none;
-	}
-	.form-select.is-valid:not([multiple]):not([size]), .form-select.is-valid:not([multiple])[size="1"], .was-validated .form-select:valid:not([multiple]):not([size]), .was-validated .form-select:valid:not([multiple])[size="1"] {
-        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e") !important;
-    }
-
-	</style>
-</head>
-
-<body>
-	<button type="button" class="m-3 btn btn-primary" id="clickme">New Webhook</button>
-	<hr>
-	<ul class="list-group task-point"></ul>
-	<div id="modal"></div>
-	<script>
-	$("#clickme")
-		.click(function(event) {
-			task = {};
-			var wid = task?.id ? task.id : Math.random()
-				.toString(36)
-				.substr(2, 8);
-			var tid = task?.id ? task.id : Math.random()
-				.toString(36)
-				.substr(2, 8);
-			$(".task-point")
-				.append(`
-	<li class="border-top-0 border-end-0 border-start-0 list-group-item list-group-item-${wid}-${tid}">
-		<img src="https://img.icons8.com/color/48/null/webhook.png" class="float-start">
-
-		<div class="btn-group float-end">
-			<button type="button" class="btn dropdown-toggle btn-light" data-bs-toggle="dropdown" aria-expanded="false"> Actions </button>
-			<ul class="dropdown-menu dropdown-menu-lg-end" style="">
-				<li><a data-bs-toggle="modal" href="#task-modal-${wid}-${tid}" role="button" class="dropdown-item">Edit</a></li>
-				<li><a class="dropdown-item" href="#">Duplicate</a></li>
-				<li><a class="dropdown-item tdelete" href="#">Delete</a></li>
-			</ul>
-		</div>
-
-
-		<div class="ms-5 ps-3">
-			<span class="task-title">Webhook: ${wid}-${tid} </span><br>
-			<span class="text-secondary small">Last updated </span><span class="time text-secondary small" data-time="1667889127596">15 days ago</span>
-		</div>
-
-		<div class="modal fade" id="task-modal-${wid}-${tid}" aria-hidden="true" aria-labelledby="task-modal-label-${wid}-${tid}" tabindex="-1">
-			<div class="modal-dialog modal-fullscreen">
-				<div class="modal-content">
-					<div class="modal-header border border-bottom-0 bg-theme">
-						<img style="width:25px;" src="https://img.icons8.com/color/48/null/webhook.png" class="float-start">&nbsp;
-						<span class="modal-title fw-bolder ms-1 ps-0" id="task-modal-label-${wid}-${tid}">Create Webhook Instance</span>
-						<button type="button" class="me-1 btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-					</div>
-					<div class="modal-body border">
-						<!--Modal body goes here.-->
-
-						<form id="form-${wid}-${tid}" class="needs-validation" novalidate>
-
-
-
-
-
-
-
-
-<div class="container mt-5">
-	<!-- Top Dropdown -->
-	<div class="row d-flex flex-row justify-content-between mb-3">
-		<div class="col-5 col-sm-3">
-			<label for="method-${wid}-${tid}" class="form-label">Method</label>
-			<select class="form-select" id="method-${wid}-${tid}">
-				<option selected value="get">GET</option>
-				<option value="post">POST</option>
-				<option value="put">PUT</option>
-				<option value="patch">PATCH</option>
-				<option value="delete">DELETE</option>
-			</select>
-		</div>
-		<div class="col-7 col-sm-9">
-			<label for="url-${wid}-${tid}" class="form-label">Request URL</label>
-			<div class="d-flex input-group">
-				<input type="url" id="url-${wid}-${tid}" class="form-control" required/>
-				<button type="button" class="btn btn-outline-primary" id="send-${wid}-${tid}">Send</button>
-				      <div class="invalid-feedback">
-					Request URL is missing.
-				      </div>
+	<head>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/somethinggoodone/cdn/AniketPradhan_bootstrap.css" />
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+		<style>
+		.input-group-text {
+			background-color: #fff;
+		}
+		input,
+		select,
+		textarea {
+			text-overflow: ellipsis;
+		}
+		</style>
+	</head>
+	
+	<body>
+		<button type="button" class="m-3 btn btn-primary" id="clickme">New Webhook</button>
+		<hr>
+		<ul class="list-group task-point"></ul>
+		<div id="modal"></div>
+		<script>
+		$("#clickme")
+			.click(function(event) {
+				task = {};
+				var wid = task?.id ? task.id : Math.random()
+					.toString(36)
+					.substr(2, 8);
+				var tid = task?.id ? task.id : Math.random()
+					.toString(36)
+					.substr(2, 8);
+				$(".task-point")
+					.append(`
+		<li class="border-top-0 border-end-0 border-start-0 list-group-item list-group-item-${wid}-${tid}">
+			<img src="https://img.icons8.com/color/48/null/webhook.png" class="float-start">
+	
+			<div class="btn-group float-end">
+				<button type="button" class="btn dropdown-toggle btn-light" data-bs-toggle="dropdown" aria-expanded="false"> Actions </button>
+				<ul class="dropdown-menu dropdown-menu-lg-end" style="">
+					<li><a data-bs-toggle="modal" href="#task-modal-${wid}-${tid}" role="button" class="dropdown-item">Edit</a></li>
+					<li><a class="dropdown-item" href="#">Duplicate</a></li>
+					<li><a class="dropdown-item tdelete" href="#">Delete</a></li>
+				</ul>
 			</div>
-
-		</div>
-	</div>
-	<!-- TAB -->
-	<nav class="mt-5">
-		<div class="nav nav-tabs" role="tablist">
-			<button type="button" class="nav-link active" data-bs-toggle="tab" data-bs-target="#nav-qp-${wid}-${tid}" role="tab" aria-selected="true"> Params <span class="ms-1 d-inline-block rounded-circle"></span>
-			</button>
-			<button type="button" class="nav-link" data-bs-toggle="tab" data-bs-target="#nav-auth-${wid}-${tid}" role="tab" aria-selected="false"> Authorization </button>
-			<button type="button" class="nav-link" data-bs-toggle="tab" data-bs-target="#nav-headers-${wid}-${tid}" role="tab" aria-selected="false"> Headers <span class="ms-1 d-inline-block rounded-circle"></span>
-			</button>
-			<button type="button" class="nav-link" data-bs-toggle="tab" data-bs-target="#nav-requestbody-${wid}-${tid}" role="tab" aria-selected="false"> Body <span class="ms-1 d-inline-block rounded-circle"></span>
-			</button>
-		</div>
-	</nav>
-	<!-- TAB CONTENT -->
-	<div class="tab-content mt-5">
-		<!-- Query Params Content -->
-		<div class="tab-pane fade show active" id="nav-qp-${wid}-${tid}" role="tabpanel">
-			<div class="input-group">
-				<button type="button" role="button" title="Delete" class="material-symbols-outlined text-secondary input-group-text delrow">delete</button>
-				<input type="text" placeholder="Key" class="form-control key" required>
-				<input type="text" placeholder="Value" class="form-control value">
-				<button type="button" role="button" title="Add new" class="material-symbols-outlined input-group-text addrow">add</button>
-				      <div class="invalid-feedback">
-					Key is missing.
-				      </div>
+	
+	
+			<div class="ms-5 ps-3">
+				<span class="task-title">Webhook: ${wid}-${tid} </span><br>
+				<span class="text-secondary small">Last updated </span><span class="time text-secondary small" data-time="1667889127596">15 days ago</span>
+			</div>
+	
+			<div class="modal fade" id="task-modal-${wid}-${tid}" aria-hidden="true" aria-labelledby="task-modal-label-${wid}-${tid}" tabindex="-1">
+				<div class="modal-dialog modal-fullscreen">
+					<div class="modal-content">
+						<div class="modal-header border border-bottom-0 bg-theme">
+							<img style="width:25px;" src="https://img.icons8.com/color/48/null/webhook.png" class="float-start">&nbsp;
+							<span class="modal-title fw-bolder ms-1 ps-0" id="task-modal-label-${wid}-${tid}">Create Webhook Instance</span>
+							<button type="button" class="me-1 btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+						</div>
+						<div class="modal-body border">
+							<!--Modal body goes here.-->
+	
+							<form id="form-${wid}-${tid}" class="needs-validation" novalidate>
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="container mt-5">
+		<!-- Top Dropdown -->
+		<div class="row d-flex flex-row justify-content-between mb-3">
+			<div class="col-5 col-sm-3">
+				<label for="method-${wid}-${tid}" class="form-label">Method</label>
+				<select class="form-select" id="method-${wid}-${tid}">
+					<option selected value="get">GET</option>
+					<option value="post">POST</option>
+					<option value="put">PUT</option>
+					<option value="patch">PATCH</option>
+					<option value="delete">DELETE</option>
+				</select>
+			</div>
+			<div class="col-7 col-sm-9">
+				<label for="url-${wid}-${tid}" class="form-label">Request URL</label>
+				<div class="d-flex input-group">
+					<input type="url" id="url-${wid}-${tid}" class="form-control" required/>
+					<button type="button" class="btn btn-outline-primary" id="send-${wid}-${tid}">Send</button>
+				</div>
+	
 			</div>
 		</div>
-		<!-- Authorization Content -->
-		<div class="tab-pane fade" id="nav-auth-${wid}-${tid}" role="tabpanel">
-			<!-- Authorization tab -->
-			<div class="row">
-				<div class="col-6">
-					<label for="authtab-select-${wid}-${tid}" class="form-label">Type</label>
-					<select class="form-select" id="authtab-select-${wid}-${tid}">
-						<option selected value="noauth">No Auth</option>
-						<option value="apikey">API Key</option>
-						<option value="bearertoken">Bearer Token</option>
-						<option value="basicoauth">Basic OAuth</option>
-						<option value="oauth2">OAuth 2.0</option>
-					</select>
-				</div>
-				<div class="col-6 d-flex justify-content-center align-items-center align-end">
-					<div id="authtab-${wid}-${tid}" class="mt-4">
-						<span class="mx-3">Add to:</span>
-						<div class="form-check form-check-inline">
-							<input class="form-check-input" type="radio" id="authRadio-${wid}-${tid}" name="addToRadioOptions" checked value="header">
-							<label for="authRadio-${wid}-${tid}" class="form-check-label">Header</label>
-						</div>
-						<div class="form-check form-check-inline">
-							<input class="form-check-input" id="authqpRadio-${wid}-${tid}" type="radio" name="addToRadioOptions" value="queryparams">
-							<label for="authqpRadio-${wid}-${tid}" class="form-check-label">Query Params</label>
-						</div>
-					</div>
+		<!-- TAB -->
+		<nav class="mt-5">
+			<div class="nav nav-tabs" role="tablist">
+				<button type="button" class="nav-link active" data-bs-toggle="tab" data-bs-target="#nav-qp-${wid}-${tid}" role="tab" aria-selected="true"> Params <span class="ms-1 d-inline-block rounded-circle"></span>
+				</button>
+				<button type="button" class="nav-link" data-bs-toggle="tab" data-bs-target="#nav-auth-${wid}-${tid}" role="tab" aria-selected="false"> Authorization </button>
+				<button type="button" class="nav-link" data-bs-toggle="tab" data-bs-target="#nav-headers-${wid}-${tid}" role="tab" aria-selected="false"> Headers <span class="ms-1 d-inline-block rounded-circle"></span>
+				</button>
+				<button type="button" class="nav-link" data-bs-toggle="tab" data-bs-target="#nav-requestbody-${wid}-${tid}" role="tab" aria-selected="false"> Body <span class="ms-1 d-inline-block rounded-circle"></span>
+				</button>
+			</div>
+		</nav>
+		<!-- TAB CONTENT -->
+		<div class="tab-content mt-5">
+			<!-- Query Params Content -->
+			<div class="tab-pane fade show active" id="nav-qp-${wid}-${tid}" role="tabpanel">
+				<div class="input-group">
+					<button type="button" role="button" title="Delete" class="material-symbols-outlined text-secondary input-group-text delrow">delete</button>
+					<input type="text" placeholder="Key" class="form-control key">
+					<input type="text" placeholder="Value" class="form-control value">
+					<button type="button" role="button" title="Add new" class="material-symbols-outlined input-group-text addrow">add</button>
 				</div>
 			</div>
-			<div>
-				<div id="apikeytab-${wid}-${tid}">
-					<div class="row mt-3">
-						<div class="col-6">
-							<div>
-								<label for="apiKeyInput-${wid}-${tid}" class="form-label">API Key</label>
-								<input type="text" class="form-control" id="apiKeyInput-${wid}-${tid}" />
-				      <div class="invalid-feedback">
-					Key is missing.
-				      </div>								
+			<!-- Authorization Content -->
+			<div class="tab-pane fade" id="nav-auth-${wid}-${tid}" role="tabpanel">
+				<!-- Authorization tab -->
+				<div class="row">
+					<div class="col-6">
+						<label for="authtab-select-${wid}-${tid}" class="form-label">Type</label>
+						<select class="form-select" id="authtab-select-${wid}-${tid}">
+							<option selected value="noauth">No Auth</option>
+							<option value="apikey">API Key</option>
+							<option value="bearertoken">Bearer Token</option>
+							<option value="basicoauth">Basic OAuth</option>
+							<option value="oauth2">OAuth 2.0</option>
+						</select>
+					</div>
+					<div class="col-6 d-flex justify-content-center align-items-center align-end">
+						<div id="authtab-${wid}-${tid}" class="mt-4">
+							<span class="mx-3">Add to:</span>
+							<div class="form-check form-check-inline">
+								<input class="form-check-input" type="radio" id="authRadio-${wid}-${tid}" name="addToRadioOptions" checked value="header">
+								<label for="authRadio-${wid}-${tid}" class="form-check-label">Header</label>
 							</div>
-						</div>
-						<div class="col-6">
-							<div>
-								<label for="apikey-value-${wid}-${tid}" class="form-label">API Value</label>
-								<input type="text" class="form-control" id="apikey-value-${wid}-${tid}" />
+							<div class="form-check form-check-inline">
+								<input class="form-check-input" id="authqpRadio-${wid}-${tid}" type="radio" name="addToRadioOptions" value="queryparams">
+								<label for="authqpRadio-${wid}-${tid}" class="form-check-label">Query Params</label>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div id="bearertab-${wid}-${tid}">
-					<div class="row mt-3">
-						<div class="col-6">
-							<div>
-								<label for="bearer-value-${wid}-${tid}" class="form-label">Bearer Token</label>
-								<input type="text" class="form-control" id="bearer-value-${wid}-${tid}" />
+				<div>
+					<div id="apikeytab-${wid}-${tid}">
+						<div class="row mt-3">
+							<div class="col-6">
+								<div>
+									<label for="apiKeyInput-${wid}-${tid}" class="form-label">API Key</label>
+									<input type="text" class="form-control" id="apiKeyInput-${wid}-${tid}"/>							
+								</div>
+							</div>
+							<div class="col-6">
+								<div>
+									<label for="apikey-value-${wid}-${tid}" class="form-label">API Value</label>
+									<input type="text" class="form-control" id="apikey-value-${wid}-${tid}"/>
+								</div>
 							</div>
 						</div>
 					</div>
-				</div>
-				<div id="basictab-${wid}-${tid}">
-					<div class="row mt-3">
-						<div class="col-6">
-							<div>
-								<label for="basic-username-${wid}-${tid}" class="form-label">Username</label>
-								<input type="text" class="form-control" id="basic-username-${wid}-${tid}" />
-							</div>
-						</div>
-						<div class="col-6">
-							<div>
-								<label for="basic-password-${wid}-${tid}" class="form-label">Password</label>
-								<input type="password" class="form-control" id="basic-password-${wid}-${tid}" />
+					<div id="bearertab-${wid}-${tid}">
+						<div class="row mt-3">
+							<div class="col-6">
+								<div>
+									<label for="bearer-value-${wid}-${tid}" class="form-label">Bearer Token</label>
+									<input type="text" class="form-control" id="bearer-value-${wid}-${tid}"/>
+								</div>
 							</div>
 						</div>
 					</div>
-				</div>
-				<div id="oauth2tab-${wid}-${tid}">
-					<div class="row mt-3">
-						<div class="col-6">
-							<div>
-								<label for="oauth-value-${wid}-${tid}" class="form-label">Access Token</label>
-								<input type="text" class="form-control" id="oauth-value-${wid}-${tid}" />
+					<div id="basictab-${wid}-${tid}">
+						<div class="row mt-3">
+							<div class="col-6">
+								<div>
+									<label for="basic-username-${wid}-${tid}" class="form-label">Username</label>
+									<input type="text" class="form-control" id="basic-username-${wid}-${tid}"/>
+								</div>
+							</div>
+							<div class="col-6">
+								<div>
+									<label for="basic-password-${wid}-${tid}" class="form-label">Password</label>
+									<input type="password" class="form-control" id="basic-password-${wid}-${tid}"/>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div id="oauth2tab-${wid}-${tid}">
+						<div class="row mt-3">
+							<div class="col-6">
+								<div>
+									<label for="oauth-value-${wid}-${tid}" class="form-label">Access Token</label>
+									<input type="text" class="form-control" id="oauth-value-${wid}-${tid}"/>
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-		<!-- Headers Content -->
-		<div class="tab-pane fade" id="nav-headers-${wid}-${tid}" role="tabpanel">
-			<div class="input-group">
-				<button type="button" role="button" title="Delete" class="material-symbols-outlined text-secondary input-group-text delrow">delete</button>
-				<input type="text" placeholder="Key" class="form-control key" required>
-				<input type="text" placeholder="Value" class="form-control value">
-				<button type="button" role="button" title="Add new" class="material-symbols-outlined input-group-text addrow">add</button>
-				      <div class="invalid-feedback">
-						Key is missing.
-				      </div>				
-			</div>
-		</div>
-		<!-- Requestbody Content -->
-		<div class="tab-pane fade" id="nav-requestbody-${wid}-${tid}" role="tabpanel">
-			<!-- Request Body tab -->
-			<div class="row">
-				<div class="col-6">
-					<label for="req-body-tab-select-${wid}-${tid}" class="form-label">Content Type</label>
-					<select class="form-select" id="req-body-tab-select-${wid}-${tid}">
-						<option selected value="none">None</option>
-						<option value="appurlencoded">application/x-www-form-urlencoded</option>
-						<option value="appjson">application/json</option>
-						<option value="textplain">text/plain</option>
-						<option value="texthtml">text/html</option>
-						<option value="appxml">application/xml</option>
-						<option value="appjavascript">application/javascript</option>
-					</select>
-				</div>
-				<div class="col-6 d-flex justify-content-center align-items-center align-end">
-					<div id="bodytab-${wid}-${tid}" class="mt-4">
-						<div class="form-check form-switch">
-							<input class="form-check-input" type="checkbox" role="switch" id="use-raw-${wid}-${tid}">
-							<label for="use-raw-${wid}-${tid}" class="form-check-label">Use Raw Input</label>
-						</div>
-					</div>
+			<!-- Headers Content -->
+			<div class="tab-pane fade" id="nav-headers-${wid}-${tid}" role="tabpanel">
+				<div class="input-group">
+					<button type="button" role="button" title="Delete" class="material-symbols-outlined text-secondary input-group-text delrow">delete</button>
+					<input type="text" placeholder="Key" class="form-control key">
+					<input type="text" placeholder="Value" class="form-control value">
+					<button type="button" role="button" title="Add new" class="material-symbols-outlined input-group-text addrow">add</button>			
 				</div>
 			</div>
-			<div class="mt-5">
-				<div id="urlencodedtab-${wid}-${tid}">
-					<div class="input-group">
-						<button type="button" role="button" title="Delete" class="material-symbols-outlined text-secondary input-group-text delrow">delete</button>
-						<input type="text" placeholder="Key" class="form-control key" required>
-						<input type="text" placeholder="Value" class="form-control value">
-						<button type="button" role="button" title="Add new" class="material-symbols-outlined input-group-text addrow">add</button>
-				      <div class="invalid-feedback">
-					Key is missing.
-				      </div>						
+			<!-- Requestbody Content -->
+			<div class="tab-pane fade" id="nav-requestbody-${wid}-${tid}" role="tabpanel">
+				<!-- Request Body tab -->
+				<div class="row">
+					<div class="col-6">
+						<label for="req-body-tab-select-${wid}-${tid}" class="form-label">Content Type</label>
+						<select class="form-select" id="req-body-tab-select-${wid}-${tid}">
+							<option selected value="none">None</option>
+							<option value="appurlencoded">application/x-www-form-urlencoded</option>
+							<option value="appjson">application/json</option>
+							<option value="textplain">text/plain</option>
+							<option value="texthtml">text/html</option>
+							<option value="appxml">application/xml</option>
+							<option value="appjavascript">application/javascript</option>
+						</select>
 					</div>
-				</div>
-				<div id="jsontab-${wid}-${tid}">
-					<div class="input-group">
-						<button type="button" role="button" title="Delete" class="material-symbols-outlined text-secondary input-group-text delrow">delete</button>
-						<input type="text" placeholder="Key" class="form-control key" required>
-						<input type="text" placeholder="Value" class="form-control value">
-						<button type="button" role="button" title="Add new" class="material-symbols-outlined input-group-text addrow">add</button>
-				      <div class="invalid-feedback">
-					Key is missing.
-				      </div>						
-					</div>
-				</div>
-				<div id="rawjsontab-${wid}-${tid}">
-					<div class="col-sm-6 mt-5">
-						<div class="mb-3">
-							<label for="json-value-${wid}-${tid}" class="form-label">Request Body</label>
-							<textarea class="form-control" placeholder="Write the raw request body" id="json-value-${wid}-${tid}" rows="5"></textarea>
+					<div class="col-6 d-flex justify-content-center align-items-center align-end">
+						<div id="bodytab-${wid}-${tid}" class="mt-4">
+							<div class="form-check form-switch">
+								<input class="form-check-input" type="checkbox" role="switch" id="use-raw-${wid}-${tid}">
+								<label for="use-raw-${wid}-${tid}" class="form-check-label">Use Raw Input</label>
+							</div>
 						</div>
 					</div>
 				</div>
-				<div id="texttab-${wid}-${tid}">
-					<div class="col-sm-6 mt-5">
-						<div class="mb-3">
-							<label for="text-value-${wid}-${tid}" class="form-label">Request Body</label>
-							<textarea class="form-control" placeholder="Write the raw request body" id="text-value-${wid}-${tid}" rows="5"></textarea>
+				<div class="mt-5">
+					<div id="urlencodedtab-${wid}-${tid}">
+						<div class="input-group">
+							<button type="button" role="button" title="Delete" class="material-symbols-outlined text-secondary input-group-text delrow">delete</button>
+							<input type="text" placeholder="Key" class="form-control key">
+							<input type="text" placeholder="Value" class="form-control value">
+							<button type="button" role="button" title="Add new" class="material-symbols-outlined input-group-text addrow">add</button>					
 						</div>
 					</div>
-				</div>
-				<div id="htmltab-${wid}-${tid}">
-					<div class="col-sm-6 mt-5">
-						<div class="mb-3">
-							<label for="html-value-${wid}-${tid}" class="form-label">Request Body</label>
-							<textarea class="form-control" placeholder="Write the raw request body" id="html-value-${wid}-${tid}" rows="5"></textarea>
+					<div id="jsontab-${wid}-${tid}">
+						<div class="input-group">
+							<button type="button" role="button" title="Delete" class="material-symbols-outlined text-secondary input-group-text delrow">delete</button>
+							<input type="text" placeholder="Key" class="form-control key">
+							<input type="text" placeholder="Value" class="form-control value">
+							<button type="button" role="button" title="Add new" class="material-symbols-outlined input-group-text addrow">add</button>					
 						</div>
 					</div>
-				</div>
-				<div id="xmltab-${wid}-${tid}">
-					<div class="col-sm-6 mt-5">
-						<div class="mb-3">
-							<label for="xml-value-${wid}-${tid}" class="form-label">Request Body</label>
-							<textarea class="form-control" placeholder="Write the raw request body" id="xml-value-${wid}-${tid}" rows="5"></textarea>
+					<div id="rawjsontab-${wid}-${tid}">
+						<div class="col-sm-6 mt-5">
+							<div class="mb-3">
+								<label for="json-value-${wid}-${tid}" class="form-label">Request Body</label>
+								<textarea class="form-control" placeholder="Write the raw request body" id="json-value-${wid}-${tid}" rows="5"></textarea>
+							</div>
 						</div>
 					</div>
-				</div>
-				<div id="jstab-${wid}-${tid}">
-					<div class="col-sm-6 mt-5">
-						<div class="mb-3">
-							<label for="js-value-${wid}-${tid}" class="form-label">Request Body</label>
-							<textarea class="form-control" placeholder="Write the raw request body" id="js-value-${wid}-${tid}" rows="5"></textarea>
+					<div id="texttab-${wid}-${tid}">
+						<div class="col-sm-6 mt-5">
+							<div class="mb-3">
+								<label for="text-value-${wid}-${tid}" class="form-label">Request Body</label>
+								<textarea class="form-control" placeholder="Write the raw request body" id="text-value-${wid}-${tid}" rows="5"></textarea>
+							</div>
+						</div>
+					</div>
+					<div id="htmltab-${wid}-${tid}">
+						<div class="col-sm-6 mt-5">
+							<div class="mb-3">
+								<label for="html-value-${wid}-${tid}" class="form-label">Request Body</label>
+								<textarea class="form-control" placeholder="Write the raw request body" id="html-value-${wid}-${tid}" rows="5"></textarea>
+							</div>
+						</div>
+					</div>
+					<div id="xmltab-${wid}-${tid}">
+						<div class="col-sm-6 mt-5">
+							<div class="mb-3">
+								<label for="xml-value-${wid}-${tid}" class="form-label">Request Body</label>
+								<textarea class="form-control" placeholder="Write the raw request body" id="xml-value-${wid}-${tid}" rows="5"></textarea>
+							</div>
+						</div>
+					</div>
+					<div id="jstab-${wid}-${tid}">
+						<div class="col-sm-6 mt-5">
+							<div class="mb-3">
+								<label for="js-value-${wid}-${tid}" class="form-label">Request Body</label>
+								<textarea class="form-control" placeholder="Write the raw request body" id="js-value-${wid}-${tid}" rows="5"></textarea>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-						</form>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-light restore">Restore</button>
-						<button type="button" class="btn btn-primary done-${wid}-${tid}">Done</button>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+							</form>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-light restore">Restore</button>
+							<button type="submit" class="btn btn-primary done-${wid}-${tid}">Done</button>
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-
-	</li>
-`);
-			$(`#task-modal-${wid}-${tid}`)
-				.modal("show");
-			$(`#form-${wid}-${tid}.restore`)
-				.on('click', function(e) {
-					$(`.form-${wid}-${tid}`)
-						.trigger("reset");
-					//custom clean up
-				});
-			$(`#authtab-${wid}-${tid}, #apikeytab-${wid}-${tid}, #bearertab-${wid}-${tid}, #basictab-${wid}-${tid}, #oauth2tab-${wid}-${tid}, #bodytab-${wid}-${tid}, #urlencodedtab-${wid}-${tid}, #jsontab-${wid}-${tid}, #rawjsontab-${wid}-${tid}, #texttab-${wid}-${tid}, #htmltab-${wid}-${tid}, #xmltab-${wid}-${tid}, #jstab-${wid}-${tid}`)
-				.hide();
-			$(`body #task-modal-${wid}-${tid}`)
-				.on("click", '.addrow,.addnewrow', function() {
-					$(this)
-						.parent()
-						.after(`<div class="input-group">
-				<button type="button" role="button" title="Delete" class="material-symbols-outlined input-group-text delnewrow">delete</button>
-				<input type="text" placeholder="Key" class="form-control key" required>
-				<input type="text" placeholder="Value" class="form-control value">
-				<button type="button" role="button" title="Add new" class="material-symbols-outlined input-group-text addnewrow">add</button>
-				<div class="invalid-feedback">Key is missing.</div>
-			    	</div>`)
-				})
-				.on("click", '.delnewrow', function() {
-					$(this)
-						.parent()
-						.remove();
-				});
-			$(`#authtab-select-${wid}-${tid}`)
-				.change(function(e) {
-					let selectedValue = e.target.value;
-					if (selectedValue === "noauth") {
-						$(`#authtab-${wid}-${tid},#apikeytab-${wid}-${tid},#bearertab-${wid}-${tid},#basictab-${wid}-${tid},#oauth2tab-${wid}-${tid}`)
-							.hide();
-					} else if (selectedValue === "apikey") {
-						$(`#authtab-${wid}-${tid}, #apikeytab-${wid}-${tid}`)
-							.show();
-						$(`#bearertab-${wid}-${tid},#basictab-${wid}-${tid},#oauth2tab-${wid}-${tid}`)
-							.hide();
-					} else if (selectedValue === "bearertoken") {
-						$(`#bearertab-${wid}-${tid}`)
-							.show();
-						$(`#authtab-${wid}-${tid},#apikeytab-${wid}-${tid},#basictab-${wid}-${tid},#oauth2tab-${wid}-${tid}`)
-							.hide();
-					} else if (selectedValue === "basicoauth") {
-						$(`#basictab-${wid}-${tid}`)
-							.show();
-						$(`#authtab-${wid}-${tid},#apikeytab-${wid}-${tid},#bearertab-${wid}-${tid},#oauth2tab-${wid}-${tid}`)
-							.hide();
-					} else if (selectedValue === "oauth2") {
-						$(`#oauth2tab-${wid}-${tid}`)
-							.show();
-						$(`#authtab-${wid}-${tid},#apikeytab-${wid}-${tid},#bearertab-${wid}-${tid},#basictab-${wid}-${tid}`)
-							.hide();
-					}
-				});
-			$(`#req-body-tab-select-${wid}-${tid}`)
-				.change(function(e) {
-					let selectedValue = e.target.value;
-					if (selectedValue === "none") {
-						$(`#bodytab-${wid}-${tid}, #urlencodedtab-${wid}-${tid},#jsontab-${wid}-${tid},#texttab-${wid}-${tid},#htmltab-${wid}-${tid},#xmltab-${wid}-${tid},#jstab-${wid}-${tid},#rawjsontab-${wid}-${tid}`)
-							.hide();
-					} else if (selectedValue === "appurlencoded") {
-						$(`#urlencodedtab-${wid}-${tid}`)
-							.show();
-						$(`#bodytab-${wid}-${tid},#jsontab-${wid}-${tid},#texttab-${wid}-${tid},#htmltab-${wid}-${tid},#xmltab-${wid}-${tid},#jstab-${wid}-${tid},#rawjsontab-${wid}-${tid}`)
-							.hide();
-					} else if (selectedValue === "appjson") {
+	
+		</li>
+	`);
+				$(`#task-modal-${wid}-${tid}`)
+					.modal("show");
+				$(`#form-${wid}-${tid}.restore`)
+					.on('click', function(e) {
+						$(`.form-${wid}-${tid}`)
+							.trigger("reset");
+						//custom clean up
+					});
+				$(`#authtab-${wid}-${tid}, #apikeytab-${wid}-${tid}, #bearertab-${wid}-${tid}, #basictab-${wid}-${tid}, #oauth2tab-${wid}-${tid}, #bodytab-${wid}-${tid}, #urlencodedtab-${wid}-${tid}, #jsontab-${wid}-${tid}, #rawjsontab-${wid}-${tid}, #texttab-${wid}-${tid}, #htmltab-${wid}-${tid}, #xmltab-${wid}-${tid}, #jstab-${wid}-${tid}`)
+					.hide();
+				$(`body #task-modal-${wid}-${tid}`)
+					.on("click", '.addrow,.addnewrow', function() {
+						$(this)
+							.parent()
+							.after(`<div class="input-group">
+					<button type="button" role="button" title="Delete" class="material-symbols-outlined input-group-text delnewrow">delete</button>
+					<input type="text" placeholder="Key" class="form-control key">
+					<input type="text" placeholder="Value" class="form-control value">
+					<button type="button" role="button" title="Add new" class="material-symbols-outlined input-group-text addnewrow">add</button>
+						</div>`)
+					})
+					.on("click", '.delnewrow', function() {
+						$(this)
+							.parent()
+							.remove();
+					});
+				$(`#authtab-select-${wid}-${tid}`)
+					.change(function(e) {
+						let selectedValue = e.target.value;
+						if (selectedValue === "noauth") {
+							$(`#authtab-${wid}-${tid},#apikeytab-${wid}-${tid},#bearertab-${wid}-${tid},#basictab-${wid}-${tid},#oauth2tab-${wid}-${tid}`)
+								.hide();
+						} else if (selectedValue === "apikey") {
+							$(`#authtab-${wid}-${tid}, #apikeytab-${wid}-${tid}`)
+								.show();
+							$(`#bearertab-${wid}-${tid},#basictab-${wid}-${tid},#oauth2tab-${wid}-${tid}`)
+								.hide();
+						} else if (selectedValue === "bearertoken") {
+							$(`#bearertab-${wid}-${tid}`)
+								.show();
+							$(`#authtab-${wid}-${tid},#apikeytab-${wid}-${tid},#basictab-${wid}-${tid},#oauth2tab-${wid}-${tid}`)
+								.hide();
+						} else if (selectedValue === "basicoauth") {
+							$(`#basictab-${wid}-${tid}`)
+								.show();
+							$(`#authtab-${wid}-${tid},#apikeytab-${wid}-${tid},#bearertab-${wid}-${tid},#oauth2tab-${wid}-${tid}`)
+								.hide();
+						} else if (selectedValue === "oauth2") {
+							$(`#oauth2tab-${wid}-${tid}`)
+								.show();
+							$(`#authtab-${wid}-${tid},#apikeytab-${wid}-${tid},#bearertab-${wid}-${tid},#basictab-${wid}-${tid}`)
+								.hide();
+						}
+					});
+				$(`#req-body-tab-select-${wid}-${tid}`)
+					.change(function(e) {
+						let selectedValue = e.target.value;
+						if (selectedValue === "none") {
+							$(`#bodytab-${wid}-${tid}, #urlencodedtab-${wid}-${tid},#jsontab-${wid}-${tid},#texttab-${wid}-${tid},#htmltab-${wid}-${tid},#xmltab-${wid}-${tid},#jstab-${wid}-${tid},#rawjsontab-${wid}-${tid}`)
+								.hide();
+						} else if (selectedValue === "appurlencoded") {
+							$(`#urlencodedtab-${wid}-${tid}`)
+								.show();
+							$(`#bodytab-${wid}-${tid},#jsontab-${wid}-${tid},#texttab-${wid}-${tid},#htmltab-${wid}-${tid},#xmltab-${wid}-${tid},#jstab-${wid}-${tid},#rawjsontab-${wid}-${tid}`)
+								.hide();
+						} else if (selectedValue === "appjson") {
+							if ($(`#use-raw-${wid}-${tid}`)
+								.prop(`checked`)) {
+								$(`#rawjsontab-${wid}-${tid}`)
+									.show();
+								$(`#jsontab-${wid}-${tid}`)
+									.hide();
+							} else {
+								$(`#rawjsontab-${wid}-${tid}`)
+									.hide();
+								$(`#jsontab-${wid}-${tid}`)
+									.show();
+							}
+							$(`#bodytab-${wid}-${tid}`)
+								.show();
+							$(`#urlencodedtab-${wid}-${tid},#texttab-${wid}-${tid},#htmltab-${wid}-${tid},#xmltab-${wid}-${tid},#jstab-${wid}-${tid}`)
+								.hide();
+						} else if (selectedValue === "textplain") {
+							$(`#texttab-${wid}-${tid}`)
+								.show();
+							$(`#bodytab-${wid}-${tid},#urlencodedtab-${wid}-${tid},#jsontab-${wid}-${tid},#htmltab-${wid}-${tid},#xmltab-${wid}-${tid},#jstab-${wid}-${tid},#rawjsontab-${wid}-${tid}`)
+								.hide();
+						} else if (selectedValue === "texthtml") {
+							$(`#htmltab-${wid}-${tid}`)
+								.show();
+							$(`#bodytab-${wid}-${tid},#urlencodedtab-${wid}-${tid},#jsontab-${wid}-${tid},#texttab-${wid}-${tid},#xmltab-${wid}-${tid},#jstab-${wid}-${tid},#rawjsontab-${wid}-${tid}`)
+								.hide();
+						} else if (selectedValue === "appxml") {
+							$(`#xmltab-${wid}-${tid}`)
+								.show();
+							$(`#bodytab-${wid}-${tid},#urlencodedtab-${wid}-${tid},#jsontab-${wid}-${tid},#texttab-${wid}-${tid},#htmltab-${wid}-${tid},#jstab-${wid}-${tid},#rawjsontab-${wid}-${tid}`)
+								.hide();
+						} else if (selectedValue === "appjavascript") {
+							$(`#jstab-${wid}-${tid}`)
+								.show();
+							$(`#bodytab-${wid}-${tid},#urlencodedtab-${wid}-${tid},#jsontab-${wid}-${tid},#texttab-${wid}-${tid},#htmltab-${wid}-${tid},#xmltab-${wid}-${tid},#rawjsontab-${wid}-${tid}`)
+								.hide();
+						}
+					});
+				$(`#use-raw-${wid}-${tid}`)
+					.on(`change`, function() {
 						if ($(`#use-raw-${wid}-${tid}`)
 							.prop(`checked`)) {
 							$(`#rawjsontab-${wid}-${tid}`)
@@ -424,261 +438,219 @@
 							$(`#jsontab-${wid}-${tid}`)
 								.show();
 						}
-						$(`#bodytab-${wid}-${tid}`)
-							.show();
-						$(`#urlencodedtab-${wid}-${tid},#texttab-${wid}-${tid},#htmltab-${wid}-${tid},#xmltab-${wid}-${tid},#jstab-${wid}-${tid}`)
-							.hide();
-					} else if (selectedValue === "textplain") {
-						$(`#texttab-${wid}-${tid}`)
-							.show();
-						$(`#bodytab-${wid}-${tid},#urlencodedtab-${wid}-${tid},#jsontab-${wid}-${tid},#htmltab-${wid}-${tid},#xmltab-${wid}-${tid},#jstab-${wid}-${tid},#rawjsontab-${wid}-${tid}`)
-							.hide();
-					} else if (selectedValue === "texthtml") {
-						$(`#htmltab-${wid}-${tid}`)
-							.show();
-						$(`#bodytab-${wid}-${tid},#urlencodedtab-${wid}-${tid},#jsontab-${wid}-${tid},#texttab-${wid}-${tid},#xmltab-${wid}-${tid},#jstab-${wid}-${tid},#rawjsontab-${wid}-${tid}`)
-							.hide();
-					} else if (selectedValue === "appxml") {
-						$(`#xmltab-${wid}-${tid}`)
-							.show();
-						$(`#bodytab-${wid}-${tid},#urlencodedtab-${wid}-${tid},#jsontab-${wid}-${tid},#texttab-${wid}-${tid},#htmltab-${wid}-${tid},#jstab-${wid}-${tid},#rawjsontab-${wid}-${tid}`)
-							.hide();
-					} else if (selectedValue === "appjavascript") {
-						$(`#jstab-${wid}-${tid}`)
-							.show();
-						$(`#bodytab-${wid}-${tid},#urlencodedtab-${wid}-${tid},#jsontab-${wid}-${tid},#texttab-${wid}-${tid},#htmltab-${wid}-${tid},#xmltab-${wid}-${tid},#rawjsontab-${wid}-${tid}`)
-							.hide();
-					}
-				});
-			$(`#use-raw-${wid}-${tid}`)
-				.on(`change`, function() {
-					if ($(`#use-raw-${wid}-${tid}`)
-						.prop(`checked`)) {
-						$(`#rawjsontab-${wid}-${tid}`)
-							.show();
-						$(`#jsontab-${wid}-${tid}`)
-							.hide();
-					} else {
-						$(`#rawjsontab-${wid}-${tid}`)
-							.hide();
-						$(`#jsontab-${wid}-${tid}`)
-							.show();
-					}
-				});
-			$(`.done-${wid}-${tid}`)
-				.on('click', function(e) {
-					if (!$("form")[0].checkValidity()) {
-						event.preventDefault()
-						event.stopPropagation()
-					}
-					$("form")
-						.addClass('was-validated')
-
-					function convertArrsToObject(e, a) {
-						var b = [];
-						e.forEach(function(f, c) {
-							var d = {};
-							d.key = f;
-							d.value = a[c].length === 0 ? "" : a[c];
-							if (d.key.trim() !== "") {
+					});
+				$(`.done-${wid}-${tid}`)
+					.on('click', function(e) {
+							event.preventDefault()
+							event.stopPropagation()
+	
+						function convertArrsToObject(e, a) {
+							var b = [];
+							e.forEach(function(f, c) {
+								var d = {};
+								d.key = f;
+								d.value = a[c].length === 0 ? "" : a[c];
+								if (d.key.trim() !== "") {
+									b.push(d);
+								}
+							});
+							return b;
+						};
+	
+						function covertAuthApiKeyToArr(...args) {
+							var b = [];
+							const values = ["key", "value", "in"];
+							for (let i = 0; i < 3; i++) {
+								let d = {};
+								d.key = values[i];
+								d.value = args[i];
+								d.type = "string";
 								b.push(d);
 							}
-						});
-						return b;
-					};
-
-					function covertAuthApiKeyToArr(...args) {
-						var b = [];
-						const values = ["key", "value", "in"];
-						for (let i = 0; i < 3; i++) {
-							let d = {};
-							d.key = values[i];
-							d.value = args[i];
-							d.type = "string";
-							b.push(d);
+							return b;
 						}
-						return b;
-					}
-
-					function isValidUrl(string) {
-						try {
-							new URL(string);
-							return true;
-						} catch (err) {
-							return false;
-						}
-					}
-					let result = {};
-					result.name = `Webhook: ${wid}-${tid}`;
-					let urlInputEle = $(`#url-${wid}-${tid}`);
-					let urlVal = urlInputEle.val();
-					// URL INPUT VALIDATION
-					if (urlVal.length === 0 || !isValidUrl(urlVal)) {
-						return;
-					}
-					result.method = $(`#method-${wid}-${tid}`)
-						.val()
-						.toUpperCase();
-					// URL key
-					result.url = {};
-					result.url.raw = urlVal;
-					let urlValues = new URL(urlVal);
-					result.url.protocol = urlValues.protocol.replace(':', '');
-					result.url.host = urlValues.hostname.split('.');
-					result.url.path = urlValues.pathname.split('/')
-						.filter((val) => val !== "");
-					result.url.query = convertArrsToObject($(`#nav-qp-${wid}-${tid} .key`)
-						.map(function() {
-							return this.value;
-						})
-						.get(), $(`#nav-qp-${wid}-${tid} .value`)
-						.map(function() {
-							return this.value;
-						})
-						.get());
-					// AUTHORIZATION
-					result.auth = {};
-					result.auth.type = $(`#authtab-select-${wid}-${tid}`)
-						.val();
-					if (result.auth.type === "apikey") {
-						let key = $(`#apiKeyInput-${wid}-${tid}`)
-							.val();
-						let value = $(`#apikey-value-${wid}-${tid}`)
-							.val();
-						let addToVal = $('input[name=addToRadioOptions]:checked', `#authtab-${wid}-${tid}`)
-							.val();
-						result.auth.apikey = covertAuthApiKeyToArr(key, value, addToVal);
-					} else if (result.auth.type === "bearertoken") {
-						result.auth.bearer = [{
-							"key": "token",
-							"value": $(`#bearer-value-${wid}-${tid}`)
-								.val(),
-							"type": "string"
-						}]
-					} else if (result.auth.type === "basicoauth") {
-						result.auth.basic = [{
-							"key": "password",
-							"value": $(`#basic-username-${wid}-${tid}`)
-								.val(),
-							"type": "string"
-						}, {
-							"key": "username",
-							"value": $(`#basic-password-${wid}-${tid}`)
-								.val(),
-							"type": "string"
-						}]
-					} else if (result.auth.type === "oauth2") {
-						result.auth.oauth2 = [{
-							"key": "token",
-							"value": $(`#oauth-value-${wid}-${tid}`)
-								.val(),
-							"type": "string"
-						}, {
-							"key": "addTokenTo",
-							"value": "header",
-							"type": "string"
-						}]
-					}
-					// HEADER 
-					result.header = convertArrsToObject($(`#nav-headers-${wid}-${tid} .key`)
-						.map(function() {
-							return this.value;
-						})
-						.get(), $(`#nav-headers-${wid}-${tid} .value`)
-						.map(function() {
-							return this.value;
-						})
-						.get())
-					result.header.forEach((res) => {
-						res.type = "text";
-					})
-					// BODY
-					let getBodySelectValue = $(`#req-body-tab-select-${wid}-${tid}`).val();
-					if(getBodySelectValue === "appurlencoded"){
-						result.body = {};
-						result.body.mode = "urlencoded";
-						result.body.urlencoded = convertArrsToObject($(`#urlencodedtab-${wid}-${tid} .key`)
-						.map(function() {
-							return this.value;
-						})
-						.get(), $(`#urlencodedtab-${wid}-${tid} .value`)
-						.map(function() {
-							return this.value;
-						})
-						.get())
-						result.body.urlencoded.forEach((res) => {
-							res.type = "text";
-						})
-					} else if(getBodySelectValue === "appjson"){
-						if($(`#use-raw-${wid}-${tid}`).prop('checked')){
-							result.body = {};
-							result.body.mode = "raw";
-							result.body.raw = JSON.stringify($(`#json-value-${wid}-${tid}`).val());
-							result.body.options = {
-								"raw" : {
-									"language" : "json"
-								}
+	
+						function isValidUrl(string) {
+							try {
+								new URL(string);
+								return true;
+							} catch (err) {
+								return false;
 							}
-						} else{
-							result.body = {};
-							result.body.mode = "formdata";
-							result.body.formdata = convertArrsToObject($(`#jsontab-${wid}-${tid} .key`)
+						}
+						let result = {};
+						result.name = `Webhook: ${wid}-${tid}`;
+						let urlInputEle = $(`#url-${wid}-${tid}`);
+						let urlVal = urlInputEle.val();
+						// URL INPUT VALIDATION
+						if (urlVal.length === 0 || !isValidUrl(urlVal)) {
+							return;
+						}
+						result.method = $(`#method-${wid}-${tid}`)
+							.val()
+							.toUpperCase();
+						// URL key
+						result.url = {};
+						result.url.raw = urlVal;
+						let urlValues = new URL(urlVal);
+						result.url.protocol = urlValues.protocol.replace(':', '');
+						result.url.host = urlValues.hostname.split('.');
+						result.url.path = urlValues.pathname.split('/')
+							.filter((val) => val !== "");
+						result.url.query = convertArrsToObject($(`#nav-qp-${wid}-${tid} .key`)
 							.map(function() {
 								return this.value;
 							})
-							.get(), $(`#jsontab-${wid}-${tid} .value`)
+							.get(), $(`#nav-qp-${wid}-${tid} .value`)
+							.map(function() {
+								return this.value;
+							})
+							.get());
+						// AUTHORIZATION
+						result.auth = {};
+						result.auth.type = $(`#authtab-select-${wid}-${tid}`)
+							.val();
+						if (result.auth.type === "apikey") {
+							let key = $(`#apiKeyInput-${wid}-${tid}`)
+								.val();
+							let value = $(`#apikey-value-${wid}-${tid}`)
+								.val();
+							let addToVal = $('input[name=addToRadioOptions]:checked', `#authtab-${wid}-${tid}`)
+								.val();
+							result.auth.apikey = covertAuthApiKeyToArr(key, value, addToVal);
+						} else if (result.auth.type === "bearertoken") {
+							result.auth.bearer = [{
+								"key": "token",
+								"value": $(`#bearer-value-${wid}-${tid}`)
+									.val(),
+								"type": "string"
+							}]
+						} else if (result.auth.type === "basicoauth") {
+							result.auth.basic = [{
+								"key": "password",
+								"value": $(`#basic-username-${wid}-${tid}`)
+									.val(),
+								"type": "string"
+							}, {
+								"key": "username",
+								"value": $(`#basic-password-${wid}-${tid}`)
+									.val(),
+								"type": "string"
+							}]
+						} else if (result.auth.type === "oauth2") {
+							result.auth.oauth2 = [{
+								"key": "token",
+								"value": $(`#oauth-value-${wid}-${tid}`)
+									.val(),
+								"type": "string"
+							}, {
+								"key": "addTokenTo",
+								"value": "header",
+								"type": "string"
+							}]
+						}
+						// HEADER 
+						result.header = convertArrsToObject($(`#nav-headers-${wid}-${tid} .key`)
+							.map(function() {
+								return this.value;
+							})
+							.get(), $(`#nav-headers-${wid}-${tid} .value`)
 							.map(function() {
 								return this.value;
 							})
 							.get())
-							result.body.formdata.forEach((res) => {
+						result.header.forEach((res) => {
+							res.type = "text";
+						})
+						// BODY
+						let getBodySelectValue = $(`#req-body-tab-select-${wid}-${tid}`).val();
+						if(getBodySelectValue === "appurlencoded"){
+							result.body = {};
+							result.body.mode = "urlencoded";
+							result.body.urlencoded = convertArrsToObject($(`#urlencodedtab-${wid}-${tid} .key`)
+							.map(function() {
+								return this.value;
+							})
+							.get(), $(`#urlencodedtab-${wid}-${tid} .value`)
+							.map(function() {
+								return this.value;
+							})
+							.get())
+							result.body.urlencoded.forEach((res) => {
 								res.type = "text";
 							})
-						}
-					} else if(getBodySelectValue === "textplain"){
-						result.body = {};
-						result.body.mode = "raw";
-						result.body.raw = JSON.stringify($(`#text-value-${wid}-${tid}`).val());
-						result.body.options = {
-							"raw" : {
-								"language" : "text"
+						} else if(getBodySelectValue === "appjson"){
+							if($(`#use-raw-${wid}-${tid}`).prop('checked')){
+								result.body = {};
+								result.body.mode = "raw";
+								result.body.raw = JSON.stringify($(`#json-value-${wid}-${tid}`).val());
+								result.body.options = {
+									"raw" : {
+										"language" : "json"
+									}
+								}
+							} else{
+								result.body = {};
+								result.body.mode = "formdata";
+								result.body.formdata = convertArrsToObject($(`#jsontab-${wid}-${tid} .key`)
+								.map(function() {
+									return this.value;
+								})
+								.get(), $(`#jsontab-${wid}-${tid} .value`)
+								.map(function() {
+									return this.value;
+								})
+								.get())
+								result.body.formdata.forEach((res) => {
+									res.type = "text";
+								})
+							}
+						} else if(getBodySelectValue === "textplain"){
+							result.body = {};
+							result.body.mode = "raw";
+							result.body.raw = JSON.stringify($(`#text-value-${wid}-${tid}`).val());
+							result.body.options = {
+								"raw" : {
+									"language" : "text"
+								}
+							}
+						} else if(getBodySelectValue === "texthtml"){
+							result.body = {};
+							result.body.mode = "raw";
+							result.body.raw = JSON.stringify($(`#html-value-${wid}-${tid}`).val());
+							result.body.options = {
+								"raw" : {
+									"language" : "html"
+								}
+							}
+						} else if(getBodySelectValue === "appxml"){
+							result.body = {};
+							result.body.mode = "raw";
+							result.body.raw = JSON.stringify($(`#xml-value-${wid}-${tid}`).val());
+							result.body.options = {
+								"raw" : {
+									"language" : "xml"
+								}
+							}
+						} else if(getBodySelectValue === "appjavascript"){
+							result.body = {};
+							result.body.mode = "raw";
+							result.body.raw = JSON.stringify($(`#js-value-${wid}-${tid}`).val());
+							result.body.options = {
+								"raw" : {
+									"language" : "javascript"
+								}
 							}
 						}
-					} else if(getBodySelectValue === "texthtml"){
-						result.body = {};
-						result.body.mode = "raw";
-						result.body.raw = JSON.stringify($(`#html-value-${wid}-${tid}`).val());
-						result.body.options = {
-							"raw" : {
-								"language" : "html"
-							}
-						}
-					} else if(getBodySelectValue === "appxml"){
-						result.body = {};
-						result.body.mode = "raw";
-						result.body.raw = JSON.stringify($(`#xml-value-${wid}-${tid}`).val());
-						result.body.options = {
-							"raw" : {
-								"language" : "xml"
-							}
-						}
-					} else if(getBodySelectValue === "appjavascript"){
-						result.body = {};
-						result.body.mode = "raw";
-						result.body.raw = JSON.stringify($(`#js-value-${wid}-${tid}`).val());
-						result.body.options = {
-							"raw" : {
-								"language" : "javascript"
-							}
-						}
-					}
-
-					// Response
-					result.response = []
-					console.log(JSON.stringify(result, null, 4))
-				})
-		}); //clickme
-	</script>
-</body>
-
-</html>
+	
+						// Response
+						result.response = []
+						console.log(JSON.stringify(result, null, 4))
+					})
+			}); //clickme
+		</script>
+	</body>
+	
+	</html>
+	
+	
