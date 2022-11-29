@@ -445,18 +445,22 @@
 	
 						function convertArrsToObject(e, a) {
 							var b = [];
+							var flag = false;
 							e.forEach(function(f, c) {
 								var d = {};
 								d.key = f;
 								d.value = a[c].length === 0 ? "" : a[c];
 								if (d.key.trim() === "" && d.value !== "") {
-									alert("Key is Missing");
-									return;
+									flag = true;
 								} else if (d.key.trim() !== "") {
 									b.push(d);
 								}
 							});
-							return b;
+							if(flag){
+								return false;
+							} else{
+								return b;
+							}
 						};
 	
 						function covertAuthApiKeyToArr(...args) {
@@ -509,8 +513,13 @@
 								return this.value;
 							})
 							.get());
-						if(dataArr.length > 0){
-							result.url.query = dataArr;
+						if(dataArr !== false){
+							if(dataArr.length > 0){
+								result.url.query = dataArr;
+							}
+						} else{
+							alert("Key is missing in Params Tab");
+							return;
 						}
 						// AUTHORIZATION
 						result.auth = {};
@@ -560,7 +569,7 @@
 							}]
 						}
 						// HEADER 
-						result.header = convertArrsToObject($(`#nav-headers-${wid}-${tid} .key`)
+						let headerData = convertArrsToObject($(`#nav-headers-${wid}-${tid} .key`)
 							.map(function() {
 								return this.value;
 							})
@@ -569,15 +578,22 @@
 								return this.value;
 							})
 							.get())
-						result.header.forEach((res) => {
-							res.type = "text";
-						})
+						if(headerData !== false){
+								result.header = headerData;
+								result.header.forEach((res) => {
+							 		res.type = "text";
+								})	
+						} else{
+							alert("Key is missing in Headers Tab");
+							return;
+						}
+						
 						// BODY
 						let getBodySelectValue = $(`#req-body-tab-select-${wid}-${tid}`).val();
 						if(getBodySelectValue === "appurlencoded"){
 							result.body = {};
 							result.body.mode = "urlencoded";
-							result.body.urlencoded = convertArrsToObject($(`#urlencodedtab-${wid}-${tid} .key`)
+							let bodyTabUrlArr = convertArrsToObject($(`#urlencodedtab-${wid}-${tid} .key`)
 							.map(function() {
 								return this.value;
 							})
@@ -586,9 +602,23 @@
 								return this.value;
 							})
 							.get())
-							result.body.urlencoded.forEach((res) => {
-								res.type = "text";
-							})
+							
+							if(bodyTabUrlArr !== false){
+								if(bodyTabUrlArr.length === 0){
+									alert("Key and Value is Missing");
+									return;
+								}
+								result.body.urlencoded = bodyTabUrlArr;
+								result.body.urlencoded.forEach((res) => {
+									res.type = "text";
+								})
+							} else{
+								alert("Key is missing in Body Tab");
+								return;
+							}
+							
+
+							
 						} else if(getBodySelectValue === "appjson"){
 							if($(`#use-raw-${wid}-${tid}`).prop('checked')){
 								result.body = {};
@@ -602,7 +632,7 @@
 							} else{
 								result.body = {};
 								result.body.mode = "formdata";
-								result.body.formdata = convertArrsToObject($(`#jsontab-${wid}-${tid} .key`)
+								var bodyTabFormDataArr = convertArrsToObject($(`#jsontab-${wid}-${tid} .key`)
 								.map(function() {
 									return this.value;
 								})
@@ -611,14 +641,30 @@
 									return this.value;
 								})
 								.get())
-								result.body.formdata.forEach((res) => {
-									res.type = "text";
-								})
+
+								if(bodyTabFormDataArr !== false){
+									if(bodyTabFormDataArr.length === 0){
+										alert("Key and Value is Missing");
+										return;
+									}
+									result.body.formdata = bodyTabFormDataArr;
+									result.body.formdata.forEach((res) => {
+										res.type = "text";
+									})
+									} else{
+										alert("Key is missing in Body Tab");
+										return;
+								}
+
 							}
 						} else if(getBodySelectValue === "textplain"){
 							result.body = {};
 							result.body.mode = "raw";
 							result.body.raw = JSON.stringify($(`#text-value-${wid}-${tid}`).val());
+							if(result.body.raw.length <= 2){
+								alert("Result body should not be empty");
+								return;
+							}
 							result.body.options = {
 								"raw" : {
 									"language" : "text"
@@ -628,6 +674,10 @@
 							result.body = {};
 							result.body.mode = "raw";
 							result.body.raw = JSON.stringify($(`#html-value-${wid}-${tid}`).val());
+							if(result.body.raw.length <= 2){
+								alert("Result body should not be empty");
+								return;
+							}
 							result.body.options = {
 								"raw" : {
 									"language" : "html"
@@ -637,6 +687,10 @@
 							result.body = {};
 							result.body.mode = "raw";
 							result.body.raw = JSON.stringify($(`#xml-value-${wid}-${tid}`).val());
+							if(result.body.raw.length <= 2){
+								alert("Result body should not be empty");
+								return;
+							}
 							result.body.options = {
 								"raw" : {
 									"language" : "xml"
@@ -646,6 +700,10 @@
 							result.body = {};
 							result.body.mode = "raw";
 							result.body.raw = JSON.stringify($(`#js-value-${wid}-${tid}`).val());
+							if(result.body.raw.length <= 2){
+								alert("Result body should not be empty");
+								return;
+							}
 							result.body.options = {
 								"raw" : {
 									"language" : "javascript"
