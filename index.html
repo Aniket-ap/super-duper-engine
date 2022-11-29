@@ -1,4 +1,3 @@
-
 <html>
 
 	<head>
@@ -450,7 +449,10 @@
 								var d = {};
 								d.key = f;
 								d.value = a[c].length === 0 ? "" : a[c];
-								if (d.key.trim() !== "") {
+								if (d.key.trim() === "" && d.value !== "") {
+									alert("Key is Missing");
+									return;
+								} else if (d.key.trim() !== "") {
 									b.push(d);
 								}
 							});
@@ -498,7 +500,7 @@
 						result.url.host = urlValues.hostname.split('.');
 						result.url.path = urlValues.pathname.split('/')
 							.filter((val) => val !== "");
-						result.url.query = convertArrsToObject($(`#nav-qp-${wid}-${tid} .key`)
+						let dataArr = convertArrsToObject($(`#nav-qp-${wid}-${tid} .key`)
 							.map(function() {
 								return this.value;
 							})
@@ -507,6 +509,9 @@
 								return this.value;
 							})
 							.get());
+						if(dataArr.length > 0){
+							result.url.query = dataArr;
+						}
 						// AUTHORIZATION
 						result.auth = {};
 						result.auth.type = $(`#authtab-select-${wid}-${tid}`)
