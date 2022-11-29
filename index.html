@@ -531,36 +531,50 @@
 							let value = $(`#apikey-value-${wid}-${tid}`)
 								.val();
 							if((key.trim() === "" && value !== "") || (key.trim() === "" && value.trim() === "")){
-								alert("API Key is missing");
+								alert("API Key is missing in Authorization tab");
 								return;
 							}
 							let addToVal = $('input[name=addToRadioOptions]:checked', `#authtab-${wid}-${tid}`)
 								.val();
 							result.auth.apikey = covertAuthApiKeyToArr(key, value, addToVal);
 						} else if (result.auth.type === "bearertoken") {
+							let bearerTokenValue = $(`#bearer-value-${wid}-${tid}`).val();
+							if(bearerTokenValue.trim() === ""){
+								alert("Bearer token is missing in Authorization tab");
+								return;
+							}
 							result.auth.bearer = [{
 								"key": "token",
-								"value": $(`#bearer-value-${wid}-${tid}`)
-									.val(),
+								"value": `${bearerTokenValue}`,
 								"type": "string"
 							}]
 						} else if (result.auth.type === "basicoauth") {
+							let uNameValue = $(`#basic-username-${wid}-${tid}`).val(); 
+							let passwordValue = $(`#basic-password-${wid}-${tid}`).val();
+							
+							if(uNameValue.trim() === '' || passwordValue.trim() === ''){
+								alert("Username and Password must not be empty in the Authorization Tab");
+								return;
+							}
+							
 							result.auth.basic = [{
-								"key": "password",
-								"value": $(`#basic-username-${wid}-${tid}`)
-									.val(),
+								"key": "username",
+								"value": `${uNameValue}`,
 								"type": "string"
 							}, {
-								"key": "username",
-								"value": $(`#basic-password-${wid}-${tid}`)
-									.val(),
+								"key": "password",
+								"value": `${passwordValue}`,
 								"type": "string"
 							}]
 						} else if (result.auth.type === "oauth2") {
+							let oauthTokenValue = $(`#oauth-value-${wid}-${tid}`).val();
+							if(oauthTokenValue.trim() === ""){
+								alert("OAuth token is missing in Authorization tab");
+								return;
+							}
 							result.auth.oauth2 = [{
 								"key": "token",
-								"value": $(`#oauth-value-${wid}-${tid}`)
-									.val(),
+								"value": `${oauthTokenValue}`,
 								"type": "string"
 							}, {
 								"key": "addTokenTo",
@@ -624,6 +638,10 @@
 								result.body = {};
 								result.body.mode = "raw";
 								result.body.raw = JSON.stringify($(`#json-value-${wid}-${tid}`).val());
+								if(result.body.raw.length <= 2){
+								alert("Result body should not be empty in Body tab");
+								return;
+							}
 								result.body.options = {
 									"raw" : {
 										"language" : "json"
@@ -662,7 +680,7 @@
 							result.body.mode = "raw";
 							result.body.raw = JSON.stringify($(`#text-value-${wid}-${tid}`).val());
 							if(result.body.raw.length <= 2){
-								alert("Result body should not be empty");
+								alert("Result body should not be empty in Body tab");
 								return;
 							}
 							result.body.options = {
@@ -675,7 +693,7 @@
 							result.body.mode = "raw";
 							result.body.raw = JSON.stringify($(`#html-value-${wid}-${tid}`).val());
 							if(result.body.raw.length <= 2){
-								alert("Result body should not be empty");
+								alert("Result body should not be empty in Body tab");
 								return;
 							}
 							result.body.options = {
@@ -688,7 +706,7 @@
 							result.body.mode = "raw";
 							result.body.raw = JSON.stringify($(`#xml-value-${wid}-${tid}`).val());
 							if(result.body.raw.length <= 2){
-								alert("Result body should not be empty");
+								alert("Result body should not be empty in Body tab");
 								return;
 							}
 							result.body.options = {
@@ -701,7 +719,7 @@
 							result.body.mode = "raw";
 							result.body.raw = JSON.stringify($(`#js-value-${wid}-${tid}`).val());
 							if(result.body.raw.length <= 2){
-								alert("Result body should not be empty");
+								alert("Result body should not be empty in Body tab");
 								return;
 							}
 							result.body.options = {
