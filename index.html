@@ -691,12 +691,61 @@
 			result.response = []
 			console.log(JSON.stringify(result, null, 4))
 		})
+		$(`.restore-${wid}-${tid}`).on('click', function(e) {
+			let xj = { "name": "Webhook: 4gogo0n9-ey1lue4g", "method": "POST", "url": { "raw": "https://beautifier.io/", "protocol": "https", "host": [ "beautifier", "io" ], "path": [], "query": [ { "key": "param1", "value": "value1" }, { "key": "param2", "value": "value2" } ] }, "auth": { "type": "apikey", "apikey": [ { "key": "key", "value": "x-apikey", "type": "string" }, { "key": "value", "value": "x-value", "type": "string" }, { "key": "in", "value": "queryparams", "type": "string" } ] }, "header": [ { "key": "hkey1", "value": "hvalue1", "type": "text" }, { "key": "hkey2", "value": "", "type": "text" }, { "key": "hkey3", "value": "hvalue3", "type": "text" } ], "body": { "mode": "raw", "raw": "\"{\\n\\\"bodykey\\\":\\\"bodyvalue\\\"\\n}\"", "options": { "raw": { "language": "json" } } }, "response": [] }
+			//start working here
+			// Restore HTTP Method
+			$(`#method-${wid}-${tid} option`).removeAttr('selected').filter(`[value=${xj.method.toLowerCase()}]`).attr('selected', true)
+			// Restore URL
+			$(`#url-${wid}-${tid}`).val(`${xj.url.raw}`)
+			// TODO: PARAMS TAB
+			// Auth Tab
+			if(xj.auth.type === "noauth"){
+				$(`#auth-type-${wid}-${tid} option`).removeAttr('selected').filter(`[value=${xj.auth.type}]`).attr('selected', true).change()
+			} else if(xj.auth.type === "apikey"){
+				$(`#auth-type-${wid}-${tid} option`).removeAttr('selected').filter(`[value=${xj.auth.type}]`).attr('selected', true).change()
+				$(`#apiKeyInput-${wid}-${tid}`).val(`${xj.auth.apikey[0].value}`)
+				$(`#apikey-value-${wid}-${tid}`).val(`${xj.auth.apikey[1].value}`)
+				$(`input:radio[value=${xj.auth.apikey[2].value}]`).prop('checked',true);
+			} else if(xj.auth.type === "bearertoken"){
+				$(`#auth-type-${wid}-${tid} option`).removeAttr('selected').filter(`[value=${xj.auth.type}]`).attr('selected', true).change()
+				$(`#bearer-value-${wid}-{tid}`).val(`${xj.auth.bearer[0].value}`);
+			} else if(xj.auth.type === "basic"){
+				// Basic auth
+				$(`#auth-type-${wid}-${tid} option`).removeAttr('selected').filter(`[value=${xj.auth.type}]`).attr('selected', true).change()
+				$(`#basic-username-${wid}-${tid}`).val(`${xj.auth.basic[0].value}`)
+				$(`#basic-password-${wid}-${tid}`).val(`${xj.auth.basic[1].value}`)
+			} else if(xj.auth.type === "oauth2"){
+				$(`#auth-type-${wid}-${tid} option`).removeAttr('selected').filter(`[value=${xj.auth.type}]`).attr('selected', true).change()
+				$(`#oauth-value-${wid}-${tid}`).val(xj.auth.oauth2[0].value);
+			}
+			
+			// TODO HEADERS TAB
+			// Body TAB
+			// Pending(how to generate input row boxes accoriding to length of the key value pairs)
+			if(xj.body.options.raw.language === "json"){
+				$(`#body-content-type-${wid}-${tid} option`).removeAttr('selected').filter(`[value=appjson]`).attr('selected', true).change()
+				if(xj.body.mode === "raw"){
+					$(`#use-raw-${wid}-${tid}`).prop('checked', true).change();
+					$(`#json-value-${wid}-${tid}`).val(JSON.parse(xj.body.raw));	
+				}
+			} else if(xj.body.options.raw.language === "text"){
+				$(`#body-content-type-${wid}-${tid} option`).removeAttr('selected').filter(`[value=textplain]`).attr('selected', true).change()
+				$(`#text-value-${wid}-${tid}`).val(JSON.parse(xj.body.raw));
+			} else if(xj.body.options.raw.language === "html"){
+				$(`#body-content-type-${wid}-${tid} option`).removeAttr('selected').filter(`[value=texthtml]`).attr('selected', true).change()
+				$(`#html-value-${wid}-${tid}`).val(JSON.parse(xj.body.raw));	
+			} else if(xj.body.options.raw.language === "xml"){
+				$(`#body-content-type-${wid}-${tid} option`).removeAttr('selected').filter(`[value=appxml]`).attr('selected', true).change()
+				$(`#xml-value-${wid}-${tid}`).val(JSON.parse(xj.body.raw));	
+			} else if(xj.body.options.raw.language === "javascript"){
+				$(`#body-content-type-${wid}-${tid} option`).removeAttr('selected').filter(`[value=appjavascript]`).attr('selected', true).change()
+				$(`#js-value-${wid}-${tid}`).val(JSON.parse(xj.body.raw));	
+			}
+
+		})
 	});
 
-	$(`.restore-${wid}-${tid}`).on('click', function(e) {
-		xj = { "name": "Webhook: 4gogo0n9-ey1lue4g", "method": "POST", "url": { "raw": "https://beautifier.io/", "protocol": "https", "host": [ "beautifier", "io" ], "path": [], "query": [ { "key": "param1", "value": "value1" }, { "key": "param2", "value": "value2" } ] }, "auth": { "type": "apikey", "apikey": [ { "key": "key", "value": "x-apikey", "type": "string" }, { "key": "value", "value": "x-value", "type": "string" }, { "key": "in", "value": "queryparams", "type": "string" } ] }, "header": [ { "key": "hkey1", "value": "hvalue1", "type": "text" }, { "key": "hkey2", "value": "", "type": "text" }, { "key": "hkey3", "value": "hvalue3", "type": "text" } ], "body": { "mode": "raw", "raw": "\"{\\n\\\"bodykey\\\":\\\"bodyvalue\\\"\\n}\"", "options": { "raw": { "language": "json" } } }, "response": [] }
-		//start working here
-	})
 	</script>
 </body>
 
