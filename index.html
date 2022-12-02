@@ -698,7 +698,25 @@
 			$(`#method-${wid}-${tid} option`).removeAttr('selected').filter(`[value=${xj.method.toLowerCase()}]`).attr('selected', true)
 			// Restore URL
 			$(`#url-${wid}-${tid}`).val(`${xj.url.raw}`)
-			// TODO: PARAMS TAB
+			// PARAMS TAB
+			if(xj.url.query.length > 0){
+				xj.url.query.forEach((val, index) => {
+					if(index === 0){
+						$(`#nav-qp-${wid}-${tid} .key`).val(xj.url.query[0].key);
+						$(`#nav-qp-${wid}-${tid} .value`).val(xj.url.query[0].value);
+					} else{
+					$(`#nav-qp-${wid}-${tid}`).append(`
+						<div class="input-group">
+							<button type="button" role="button" title="Delete" class="material-symbols-outlined text-secondary input-group-text delrow">delete</button>
+							<input type="text" placeholder="Key" value="${xj.url.query[index].key}" class="form-control key">
+							<input type="text" placeholder="Value" value="${xj.url.query[index].value}" class="form-control value">
+							<button type="button" role="button" title="Add new" class="material-symbols-outlined input-group-text addrow">add</button>
+							</div>
+							`)	
+						}
+					})		
+			}
+				
 			// Auth Tab
 			if(xj.auth.type === "noauth"){
 				$(`#auth-type-${wid}-${tid} option`).removeAttr('selected').filter(`[value=${xj.auth.type}]`).attr('selected', true).change()
@@ -720,15 +738,72 @@
 				$(`#oauth-value-${wid}-${tid}`).val(xj.auth.oauth2[0].value);
 			}
 			
-			// TODO HEADERS TAB
+			// HEADERS TAB
+			if(xj.header.length > 0){
+				xj.header.forEach((val, index) => {
+					if(index === 0){
+						$(`#nav-headers-${wid}-${tid} .key`).val(xj.header[0].key);
+						$(`#nav-headers-${wid}-${tid} .value`).val(xj.header[0].value);
+					} else{
+					$(`#nav-headers-${wid}-${tid}`).append(`
+						<div class="input-group">
+							<button type="button" role="button" title="Delete" class="material-symbols-outlined text-secondary input-group-text delrow">delete</button>
+							<input type="text" placeholder="Key" value="${xj.header[index].key}" class="form-control key">
+							<input type="text" placeholder="Value" value="${xj.header[index].value}" class="form-control value">
+							<button type="button" role="button" title="Add new" class="material-symbols-outlined input-group-text addrow">add</button>
+							</div>
+							`)	
+						}
+					})		
+			}
 			// Body TAB
-			// Pending(how to generate input row boxes accoriding to length of the key value pairs)
+			// For Table generation
+			if(xj.body.mode === "urlencoded"){
+				$(`#body-content-type-${wid}-${tid} option`).removeAttr('selected').filter(`[value=appurlencoded]`).attr('selected', true).change()
+				if(xj.body.urlencoded.length > 0){
+					xj.body.urlencoded.forEach((val, index) => {
+						if(index === 0){
+							$(`#urlencodedtab-${wid}-${tid} .key`).val(xj.body.urlencoded[0].key);
+							$(`#urlencodedtab-${wid}-${tid} .value`).val(xj.body.urlencoded[0].value);
+						} else{
+						$(`#urlencodedtab-${wid}-${tid}`).append(`
+							<div class="input-group">
+								<button type="button" role="button" title="Delete" class="material-symbols-outlined text-secondary input-group-text delrow">delete</button>
+								<input type="text" placeholder="Key" value="${xj.body.urlencoded[index].key}" class="form-control key">
+								<input type="text" placeholder="Value" value="${xj.body.urlencoded[index].value}" class="form-control value">
+								<button type="button" role="button" title="Add new" class="material-symbols-outlined input-group-text addrow">add</button>
+								</div>
+							`)	
+						}
+					})		
+				}
+			} else if(xj.body.mode === "formdata"){
+				$(`#body-content-type-${wid}-${tid} option`).removeAttr('selected').filter(`[value=appjson]`).attr('selected', true).change()
+					if(xj.body.formdata.length > 0){
+						xj.body.formdata.forEach((val, index) => {
+							if(index === 0){
+								$(`#jsontab-${wid}-${tid} .key`).val(xj.body.formdata[0].key);
+								$(`#jsontab-${wid}-${tid} .value`).val(xj.body.formdata[0].value);
+							} else{
+							$(`#jsontab-${wid}-${tid}`).append(`
+								<div class="input-group">
+									<button type="button" role="button" title="Delete" class="material-symbols-outlined text-secondary input-group-text delrow">delete</button>
+									<input type="text" placeholder="Key" value="${xj.body.formdata[index].key}" class="form-control key">
+									<input type="text" placeholder="Value" value="${xj.body.formdata[index].value}" class="form-control value">
+									<button type="button" role="button" title="Add new" class="material-symbols-outlined input-group-text addrow">add</button>
+									</div>
+								`)	
+							}
+						})		
+					}
+				}
+			// For textboxes value
 			if(xj.body.options.raw.language === "json"){
 				$(`#body-content-type-${wid}-${tid} option`).removeAttr('selected').filter(`[value=appjson]`).attr('selected', true).change()
 				if(xj.body.mode === "raw"){
 					$(`#use-raw-${wid}-${tid}`).prop('checked', true).change();
 					$(`#json-value-${wid}-${tid}`).val(JSON.parse(xj.body.raw));	
-				}
+				} 
 			} else if(xj.body.options.raw.language === "text"){
 				$(`#body-content-type-${wid}-${tid} option`).removeAttr('selected').filter(`[value=textplain]`).attr('selected', true).change()
 				$(`#text-value-${wid}-${tid}`).val(JSON.parse(xj.body.raw));
