@@ -23,7 +23,7 @@
 	<button type="button" class="m-3 btn btn-outline-secondary" id="restoreall">Restore All</button>
 	<button type="button" class="m-3 btn btn-outline-secondary" id="send">Send</button>
 	<hr>
-	<ul class="list-group task-point"></ul>
+	<ul class="list-group" id="tasks-point-l9zgqjql"></ul>
 	<div id="modal"></div>
 	<script>
 	function atoo(f, b) {
@@ -46,25 +46,300 @@
 		}
 	}
 
-	$("#webhook").click(function(event) {
-		task = {};
-		var wid = task?.id ? task.id : Math.random().toString(36).substr(2, 8);
+	function getAddTaskEnvelope(wid, tid, tasktype, task_body) {
+		return `<li class="border-top-0 border-end-0 border-start-0 list-group-item tsk-${wid}-${tid} ${tasktype}" data-id="${wid}-${tid}" data-type="${tasktype}">
+                <img src="https://img.icons8.com/color/48/null/webhook.png" class="float-start" />
+
+                <div class="btn-group float-end">
+                    <button type="button" class="btn dropdown-toggle btn-light" data-bs-toggle="dropdown" aria-expanded="false"> Actions </button>
+                    <ul class="dropdown-menu dropdown-menu-lg-end">
+                        <li><a data-bs-toggle="modal" href="#task-modal-${wid}-${tid}" role="button" class="dropdown-item" href="#">Edit</a></li>
+                        <li><a class="dropdown-item" href="#">Duplicate</a></li>
+                        <li><a class="dropdown-item tdelete" href="#">Delete</a></li>
+                    </ul>
+                </div>
+		${task_body}
+            </li>`
+	}
+
+	function getWebhookValues(wid, tid) {
+		let result = {};
+		result.taskType = "webhook";
+		result.id = tid;
+		result.name = `${wid}-${tid}`;
+		let urlInputEle = $(`#url-${wid}-${tid}`);
+		let urlVal = urlInputEle.val();
+		// URL INPUT VALIDATION
+		if (urlVal.length === 0 || !isValidUrl(urlVal)) {
+			alert("URL is Required")
+			return;
+		}
+		result.method = $(`#method-${wid}-${tid}`)
+			.val()
+			.toUpperCase();
+		// URL key
+		result.url = {};
+		result.url.raw = urlVal;
+		let urlValues = new URL(urlVal);
+		result.url.protocol = urlValues.protocol.replace(':', '');
+		result.url.host = urlValues.hostname.split('.');
+		result.url.path = urlValues.pathname.split('/')
+			.filter((val) => val !== "");
+		let dataArr = atoo($(`#nav-qp-${wid}-${tid} .key`)
+			.map(function() {
+				return this.value;
+			})
+			.get(), $(`#nav-qp-${wid}-${tid} .value`)
+			.map(function() {
+				return this.value;
+			})
+			.get());
+		if (dataArr !== false) {
+			if (dataArr.length > 0) {
+				result.url.query = dataArr;
+			}
+		} else {
+			alert("Key is missing in Params Tab");
+			return;
+		}
+		// AUTHORIZATION
+		result.auth = {};
+		result.auth.type = $(`#auth-type-${wid}-${tid}`)
+			.val();
+		if (result.auth.type === "apikey") {
+			let key = $(`#apiKeyInput-${wid}-${tid}`)
+				.val();
+			let value = $(`#apikey-value-${wid}-${tid}`)
+				.val();
+			if ((key.trim() === "" && value !== "") || (key.trim() === "" && value.trim() === "")) {
+				alert("API Key is missing in Authorization tab");
+				return;
+			}
+			result.auth.apikey = [{
+					"key": "key",
+					"value": key,
+					"type": "string"
+				},
+				{
+					"key": "value",
+					"value": value,
+					"type": "string"
+				},
+				{
+					"key": "in",
+					"value": $('input[name=addToRadioOptions]:checked', `.authtab-${wid}-${tid}`)
+						.val(),
+					"type": "string"
+				}
+			];
+		} else if (result.auth.type === "bearertoken") {
+			let bearerTokenValue = $(`#bearer-value-${wid}-${tid}`)
+				.val();
+			if (bearerTokenValue.trim() === "") {
+				alert("Bearer token is missing in Authorization tab");
+				return;
+			}
+			result.auth.bearer = [{
+				"key": "token",
+				"value": `${bearerTokenValue}`,
+				"type": "string"
+			}]
+		} else if (result.auth.type === "basic") {
+			let uNameValue = $(`#basic-username-${wid}-${tid}`)
+				.val();
+			let passwordValue = $(`#basic-password-${wid}-${tid}`)
+				.val();
+
+			if (uNameValue.trim() === '' || passwordValue.trim() === '') {
+				alert("Username and Password must not be empty in the Authorization Tab");
+				return;
+			}
+
+			result.auth.basic = [{
+				"key": "username",
+				"value": `${uNameValue}`,
+				"type": "string"
+			}, {
+				"key": "password",
+				"value": `${passwordValue}`,
+				"type": "string"
+			}]
+		} else if (result.auth.type === "oauth2") {
+			let oauthTokenValue = $(`#oauth-value-${wid}-${tid}`)
+				.val();
+			if (oauthTokenValue.trim() === "") {
+				alert("OAuth token is missing in Authorization tab");
+				return;
+			}
+			result.auth.oauth2 = [{
+				"key": "token",
+				"value": `${oauthTokenValue}`,
+				"type": "string"
+			}, {
+				"key": "addTokenTo",
+				"value": "header",
+				"type": "string"
+			}]
+		}
+		// HEADER 
+		let headerData = atoo($(`#nav-headers-${wid}-${tid} .key`)
+			.map(function() {
+				return this.value;
+			})
+			.get(), $(`#nav-headers-${wid}-${tid} .value`)
+			.map(function() {
+				return this.value;
+			})
+			.get())
+		if (headerData !== false) {
+			result.header = headerData;
+			result.header.forEach((res) => {
+				res.type = "text";
+			})
+		} else {
+			alert("Key is missing in Headers Tab");
+			return;
+		}
+
+		// BODY
+		let bodyContentType = $(`#body-content-type-${wid}-${tid}`).val();
+		if (bodyContentType === "appurlencoded") {
+			result.body = {};
+			result.body.mode = "urlencoded";
+			let bodyTabUrlArr = atoo($(`.urlencodedtab-${wid}-${tid} .key`)
+				.map(function() {
+					return this.value;
+				})
+				.get(), $(`.urlencodedtab-${wid}-${tid} .value`)
+				.map(function() {
+					return this.value;
+				})
+				.get())
+
+			if (bodyTabUrlArr !== false) {
+				if (bodyTabUrlArr.length === 0) {
+					alert("Key and Value is Missing");
+					return;
+				}
+				result.body.urlencoded = bodyTabUrlArr;
+				result.body.urlencoded.forEach((res) => {
+					res.type = "text";
+				})
+			} else {
+				alert("Key is missing in Body Tab");
+				return;
+			}
+
+		} else if (bodyContentType === "appjson") {
+			if ($(`#use-raw-${wid}-${tid}`)
+				.prop('checked')) {
+				result.body = {};
+				result.body.mode = "raw";
+				result.body.raw = JSON.stringify($(`#json-value-${wid}-${tid}`)
+					.val());
+				if (result.body.raw.length <= 2) {
+					alert("Result body should not be empty in Body tab");
+					return;
+				}
+				result.body.options = {
+					"raw": {
+						"language": "json"
+					}
+				}
+			} else {
+				result.body = {};
+				result.body.mode = "formdata";
+				var bodyTabFormDataArr = atoo($(`.jsontab-${wid}-${tid} .key`)
+					.map(function() {
+						return this.value;
+					})
+					.get(), $(`.jsontab-${wid}-${tid} .value`)
+					.map(function() {
+						return this.value;
+					})
+					.get())
+
+				if (bodyTabFormDataArr !== false) {
+					if (bodyTabFormDataArr.length === 0) {
+						alert("Key and Value is Missing");
+						return;
+					}
+					result.body.formdata = bodyTabFormDataArr;
+					result.body.formdata.forEach((res) => {
+						res.type = "text";
+					})
+				} else {
+					alert("Key is missing in Body Tab");
+					return;
+				}
+
+			}
+		} else if (bodyContentType === "textplain") {
+			result.body = {};
+			result.body.mode = "raw";
+			result.body.raw = JSON.stringify($(`#text-value-${wid}-${tid}`)
+				.val());
+			if (result.body.raw.length <= 2) {
+				alert("Result body should not be empty in Body tab");
+				return;
+			}
+			result.body.options = {
+				"raw": {
+					"language": "text"
+				}
+			}
+		} else if (bodyContentType === "texthtml") {
+			result.body = {};
+			result.body.mode = "raw";
+			result.body.raw = JSON.stringify($(`#html-value-${wid}-${tid}`)
+				.val());
+			if (result.body.raw.length <= 2) {
+				alert("Result body should not be empty in Body tab");
+				return;
+			}
+			result.body.options = {
+				"raw": {
+					"language": "html"
+				}
+			}
+		} else if (bodyContentType === "appxml") {
+			result.body = {};
+			result.body.mode = "raw";
+			result.body.raw = JSON.stringify($(`#xml-value-${wid}-${tid}`)
+				.val());
+			if (result.body.raw.length <= 2) {
+				alert("Result body should not be empty in Body tab");
+				return;
+			}
+			result.body.options = {
+				"raw": {
+					"language": "xml"
+				}
+			}
+		} else if (bodyContentType === "appjavascript") {
+			result.body = {};
+			result.body.mode = "raw";
+			result.body.raw = JSON.stringify($(`#js-value-${wid}-${tid}`)
+				.val());
+			if (result.body.raw.length <= 2) {
+				alert("Result body should not be empty in Body tab");
+				return;
+			}
+			result.body.options = {
+				"raw": {
+					"language": "javascript"
+				}
+			}
+		}
+		// Response
+		result.response = []
+		return result;
+
+	}
+
+	function createTask_Webhook(wid, task) {
 		var tid = task?.id ? task.id : Math.random().toString(36).substr(2, 8);
-		$(".task-point")
-			.append(`<li class="border-top-0 border-end-0 border-start-0 list-group-item list-group-item-${wid}-${tid}">
-	<img src="https://img.icons8.com/color/48/null/webhook.png" class="float-start">
-
-	<div class="btn-group float-end">
-		<button type="button" class="btn dropdown-toggle btn-light" data-bs-toggle="dropdown" aria-expanded="false"> Actions </button>
-		<ul class="dropdown-menu dropdown-menu-lg-end" style="">
-			<li><a data-bs-toggle="modal" href="#task-modal-${wid}-${tid}" role="button" class="dropdown-item">Edit</a></li>
-			<li><a class="dropdown-item" href="#">Duplicate</a></li>
-			<li><a class="dropdown-item tdelete" href="#">Delete</a></li>
-		</ul>
-	</div>
-
-
-	<div class="ms-5 ps-3">
+		var html_task = getAddTaskEnvelope(wid, tid, "webhook", `<div class="ms-5 ps-3">
 		<span class="task-title">Webhook: ${wid}-${tid} </span><br>
 		<span class="text-secondary small">Last updated </span><span class="time text-secondary small" data-time="1667889127596">15 days ago</span>
 	</div>
@@ -140,7 +415,7 @@
 											</select>
 										</div>
 										<div class="col-6 d-flex justify-content-center align-items-center align-end">
-											<div id="authtab-${wid}-${tid}" class="mt-4">
+											<div class="authtab-${wid}-${tid} mt-4">
 												<span class="mx-3">Add to:</span>
 												<div class="form-check form-check-inline">
 													<input class="form-check-input" type="radio" id="authRadio-${wid}-${tid}" name="addToRadioOptions" checked value="header">
@@ -154,7 +429,7 @@
 										</div>
 									</div>
 									<div>
-										<div id="apikeytab-${wid}-${tid}">
+										<div class="apikeytab-${wid}-${tid}">
 											<div class="row mt-3">
 												<div class="col-6">
 													<div>
@@ -170,7 +445,7 @@
 												</div>
 											</div>
 										</div>
-										<div id="bearertab-${wid}-${tid}">
+										<div class="bearertab-${wid}-${tid}">
 											<div class="row mt-3">
 												<div class="col-6">
 													<div>
@@ -180,7 +455,7 @@
 												</div>
 											</div>
 										</div>
-										<div id="basictab-${wid}-${tid}">
+										<div class="basictab-${wid}-${tid}">
 											<div class="row mt-3">
 												<div class="col-6">
 													<div>
@@ -196,7 +471,7 @@
 												</div>
 											</div>
 										</div>
-										<div id="oauth2tab-${wid}-${tid}">
+										<div class="oauth2tab-${wid}-${tid}">
 											<div class="row mt-3">
 												<div class="col-6">
 													<div>
@@ -234,7 +509,7 @@
 											</select>
 										</div>
 										<div class="col-6 d-flex justify-content-center align-items-center align-end">
-											<div id="bodytab-${wid}-${tid}" class="mt-4">
+											<div class="bodytab-${wid}-${tid}" class="mt-4">
 												<div class="form-check form-switch">
 													<input class="form-check-input" type="checkbox" role="switch" id="use-raw-${wid}-${tid}">
 													<label for="use-raw-${wid}-${tid}" class="form-check-label">Use Raw Input</label>
@@ -243,7 +518,7 @@
 										</div>
 									</div>
 									<div class="mt-5">
-										<div id="urlencodedtab-${wid}-${tid}">
+										<div class="urlencodedtab-${wid}-${tid}">
 											<div class="input-group">
 												<button type="button" role="button" title="Delete" class="material-symbols-outlined text-secondary input-group-text delrow">delete</button>
 												<input type="text" placeholder="Key" class="form-control key">
@@ -251,7 +526,7 @@
 												<button type="button" role="button" title="Add new" class="material-symbols-outlined input-group-text addrow">add</button>
 											</div>
 										</div>
-										<div id="jsontab-${wid}-${tid}">
+										<div class="jsontab-${wid}-${tid}">
 											<div class="input-group">
 												<button type="button" role="button" title="Delete" class="material-symbols-outlined text-secondary input-group-text delrow">delete</button>
 												<input type="text" placeholder="Key" class="form-control key">
@@ -259,7 +534,7 @@
 												<button type="button" role="button" title="Add new" class="material-symbols-outlined input-group-text addrow">add</button>
 											</div>
 										</div>
-										<div id="rawjsontab-${wid}-${tid}">
+										<div class="rawjsontab-${wid}-${tid}">
 											<div class="col-sm-6 mt-5">
 												<div class="mb-3">
 													<label for="json-value-${wid}-${tid}" class="form-label">Request Body</label>
@@ -267,7 +542,7 @@
 												</div>
 											</div>
 										</div>
-										<div id="texttab-${wid}-${tid}">
+										<div class="texttab-${wid}-${tid}">
 											<div class="col-sm-6 mt-5">
 												<div class="mb-3">
 													<label for="text-value-${wid}-${tid}" class="form-label">Request Body</label>
@@ -275,7 +550,7 @@
 												</div>
 											</div>
 										</div>
-										<div id="htmltab-${wid}-${tid}">
+										<div class="htmltab-${wid}-${tid}">
 											<div class="col-sm-6 mt-5">
 												<div class="mb-3">
 													<label for="html-value-${wid}-${tid}" class="form-label">Request Body</label>
@@ -283,7 +558,7 @@
 												</div>
 											</div>
 										</div>
-										<div id="xmltab-${wid}-${tid}">
+										<div class="xmltab-${wid}-${tid}">
 											<div class="col-sm-6 mt-5">
 												<div class="mb-3">
 													<label for="xml-value-${wid}-${tid}" class="form-label">Request Body</label>
@@ -291,7 +566,7 @@
 												</div>
 											</div>
 										</div>
-										<div id="jstab-${wid}-${tid}">
+										<div class="jstab-${wid}-${tid}">
 											<div class="col-sm-6 mt-5">
 												<div class="mb-3">
 													<label for="js-value-${wid}-${tid}" class="form-label">Request Body</label>
@@ -311,11 +586,11 @@
 				</div>
 			</div>
 		</div>
-	</div>
+	</div>`);
 
-</li>`);
+		$(`#tasks-point-${wid}`).append(html_task);
 		$(`#task-modal-${wid}-${tid}`).modal("show");
-		$(`#authtab-${wid}-${tid}, #apikeytab-${wid}-${tid}, #bearertab-${wid}-${tid}, #basictab-${wid}-${tid}, #oauth2tab-${wid}-${tid}, #bodytab-${wid}-${tid}, #urlencodedtab-${wid}-${tid}, #jsontab-${wid}-${tid}, #rawjsontab-${wid}-${tid}, #texttab-${wid}-${tid}, #htmltab-${wid}-${tid}, #xmltab-${wid}-${tid}, #jstab-${wid}-${tid}`)
+		$(`.authtab-${wid}-${tid}, .apikeytab-${wid}-${tid}, .bearertab-${wid}-${tid}, .basictab-${wid}-${tid}, .oauth2tab-${wid}-${tid}, .bodytab-${wid}-${tid}, .urlencodedtab-${wid}-${tid}, .jsontab-${wid}-${tid}, .rawjsontab-${wid}-${tid}, .texttab-${wid}-${tid}, .htmltab-${wid}-${tid}, .xmltab-${wid}-${tid}, .jstab-${wid}-${tid}`)
 			.hide();
 		$(`body #task-modal-${wid}-${tid}`)
 			.on("click", '.addrow,.addnewrow', function() {
@@ -337,488 +612,340 @@
 		$(`#auth-type-${wid}-${tid}`).change(function(e) {
 			let selectedValue = e.target.value;
 			if (selectedValue === "noauth") {
-				$(`#authtab-${wid}-${tid},#apikeytab-${wid}-${tid},#bearertab-${wid}-${tid},#basictab-${wid}-${tid},#oauth2tab-${wid}-${tid}`).hide();
+				$(`.authtab-${wid}-${tid},.apikeytab-${wid}-${tid},.bearertab-${wid}-${tid},.basictab-${wid}-${tid},.oauth2tab-${wid}-${tid}`).hide();
 			} else if (selectedValue === "apikey") {
-				$(`#authtab-${wid}-${tid}, #apikeytab-${wid}-${tid}`).show();
-				$(`#bearertab-${wid}-${tid},#basictab-${wid}-${tid},#oauth2tab-${wid}-${tid}`).hide();
+				$(`.authtab-${wid}-${tid}, .apikeytab-${wid}-${tid}`).show();
+				$(`.bearertab-${wid}-${tid},.basictab-${wid}-${tid},.oauth2tab-${wid}-${tid}`).hide();
 			} else if (selectedValue === "bearertoken") {
-				$(`#bearertab-${wid}-${tid}`).show();
-				$(`#authtab-${wid}-${tid},#apikeytab-${wid}-${tid},#basictab-${wid}-${tid},#oauth2tab-${wid}-${tid}`).hide();
+				$(`.bearertab-${wid}-${tid}`).show();
+				$(`.authtab-${wid}-${tid},.apikeytab-${wid}-${tid},.basictab-${wid}-${tid},.oauth2tab-${wid}-${tid}`).hide();
 			} else if (selectedValue === "basic") {
-				$(`#basictab-${wid}-${tid}`).show();
-				$(`#authtab-${wid}-${tid},#apikeytab-${wid}-${tid},#bearertab-${wid}-${tid},#oauth2tab-${wid}-${tid}`).hide();
+				$(`.basictab-${wid}-${tid}`).show();
+				$(`.authtab-${wid}-${tid},.apikeytab-${wid}-${tid},.bearertab-${wid}-${tid},.oauth2tab-${wid}-${tid}`).hide();
 			} else if (selectedValue === "oauth2") {
-				$(`#oauth2tab-${wid}-${tid}`).show();
-				$(`#authtab-${wid}-${tid},#apikeytab-${wid}-${tid},#bearertab-${wid}-${tid},#basictab-${wid}-${tid}`).hide();
+				$(`.oauth2tab-${wid}-${tid}`).show();
+				$(`.authtab-${wid}-${tid},.apikeytab-${wid}-${tid},.bearertab-${wid}-${tid},.basictab-${wid}-${tid}`).hide();
 			}
 		});
-		$(`#body-content-type-${wid}-${tid}`)
-			.change(function(e) {
-				let selectedValue = e.target.value;
-				if (selectedValue === "none") {
-					$(`#bodytab-${wid}-${tid}, #urlencodedtab-${wid}-${tid},#jsontab-${wid}-${tid},#texttab-${wid}-${tid},#htmltab-${wid}-${tid},#xmltab-${wid}-${tid},#jstab-${wid}-${tid},#rawjsontab-${wid}-${tid}`)
-						.hide();
-				} else if (selectedValue === "appurlencoded") {
-					$(`#urlencodedtab-${wid}-${tid}`)
-						.show();
-					$(`#bodytab-${wid}-${tid},#jsontab-${wid}-${tid},#texttab-${wid}-${tid},#htmltab-${wid}-${tid},#xmltab-${wid}-${tid},#jstab-${wid}-${tid},#rawjsontab-${wid}-${tid}`)
-						.hide();
-				} else if (selectedValue === "appjson") {
-					if ($(`#use-raw-${wid}-${tid}`)
-						.prop(`checked`)) {
-						$(`#rawjsontab-${wid}-${tid}`)
-							.show();
-						$(`#jsontab-${wid}-${tid}`)
-							.hide();
-					} else {
-						$(`#rawjsontab-${wid}-${tid}`)
-							.hide();
-						$(`#jsontab-${wid}-${tid}`)
-							.show();
-					}
-					$(`#bodytab-${wid}-${tid}`)
-						.show();
-					$(`#urlencodedtab-${wid}-${tid},#texttab-${wid}-${tid},#htmltab-${wid}-${tid},#xmltab-${wid}-${tid},#jstab-${wid}-${tid}`)
-						.hide();
-				} else if (selectedValue === "textplain") {
-					$(`#texttab-${wid}-${tid}`)
-						.show();
-					$(`#bodytab-${wid}-${tid},#urlencodedtab-${wid}-${tid},#jsontab-${wid}-${tid},#htmltab-${wid}-${tid},#xmltab-${wid}-${tid},#jstab-${wid}-${tid},#rawjsontab-${wid}-${tid}`)
-						.hide();
-				} else if (selectedValue === "texthtml") {
-					$(`#htmltab-${wid}-${tid}`)
-						.show();
-					$(`#bodytab-${wid}-${tid},#urlencodedtab-${wid}-${tid},#jsontab-${wid}-${tid},#texttab-${wid}-${tid},#xmltab-${wid}-${tid},#jstab-${wid}-${tid},#rawjsontab-${wid}-${tid}`)
-						.hide();
-				} else if (selectedValue === "appxml") {
-					$(`#xmltab-${wid}-${tid}`)
-						.show();
-					$(`#bodytab-${wid}-${tid},#urlencodedtab-${wid}-${tid},#jsontab-${wid}-${tid},#texttab-${wid}-${tid},#htmltab-${wid}-${tid},#jstab-${wid}-${tid},#rawjsontab-${wid}-${tid}`)
-						.hide();
-				} else if (selectedValue === "appjavascript") {
-					$(`#jstab-${wid}-${tid}`)
-						.show();
-					$(`#bodytab-${wid}-${tid},#urlencodedtab-${wid}-${tid},#jsontab-${wid}-${tid},#texttab-${wid}-${tid},#htmltab-${wid}-${tid},#xmltab-${wid}-${tid},#rawjsontab-${wid}-${tid}`)
-						.hide();
+		$(`#body-content-type-${wid}-${tid}`).change(function(e) {
+			let selectedValue = e.target.value;
+			if (selectedValue === "none") {
+				$(`.bodytab-${wid}-${tid}, .urlencodedtab-${wid}-${tid},.jsontab-${wid}-${tid},.texttab-${wid}-${tid},.htmltab-${wid}-${tid},.xmltab-${wid}-${tid},.jstab-${wid}-${tid},.rawjsontab-${wid}-${tid}`).hide();
+			} else if (selectedValue === "appurlencoded") {
+				$(`.urlencodedtab-${wid}-${tid}`).show();
+				$(`.bodytab-${wid}-${tid},.jsontab-${wid}-${tid},.texttab-${wid}-${tid},.htmltab-${wid}-${tid},.xmltab-${wid}-${tid},.jstab-${wid}-${tid},.rawjsontab-${wid}-${tid}`).hide();
+			} else if (selectedValue === "appjson") {
+				if ($(`#use-raw-${wid}-${tid}`).prop(`checked`)) {
+					$(`.rawjsontab-${wid}-${tid}`).show();
+					$(`.jsontab-${wid}-${tid}`).hide();
+				} else {
+					$(`.rawjsontab-${wid}-${tid}`).hide();
+					$(`.jsontab-${wid}-${tid}`).show();
 				}
-			});
-		$(`#use-raw-${wid}-${tid}`).on(`change`, function() {
-			if ($(`#use-raw-${wid}-${tid}`)
-				.prop(`checked`)) {
-				$(`#rawjsontab-${wid}-${tid}`)
-					.show();
-				$(`#jsontab-${wid}-${tid}`)
-					.hide();
-			} else {
-				$(`#rawjsontab-${wid}-${tid}`)
-					.hide();
-				$(`#jsontab-${wid}-${tid}`)
-					.show();
+				$(`.bodytab-${wid}-${tid}`).show();
+				$(`.urlencodedtab-${wid}-${tid},.texttab-${wid}-${tid},.htmltab-${wid}-${tid},.xmltab-${wid}-${tid},.jstab-${wid}-${tid}`).hide();
+			} else if (selectedValue === "textplain") {
+				$(`.texttab-${wid}-${tid}`).show();
+				$(`.bodytab-${wid}-${tid},.urlencodedtab-${wid}-${tid},.jsontab-${wid}-${tid},.htmltab-${wid}-${tid},.xmltab-${wid}-${tid},.jstab-${wid}-${tid},.rawjsontab-${wid}-${tid}`).hide();
+			} else if (selectedValue === "texthtml") {
+				$(`.htmltab-${wid}-${tid}`).show();
+				$(`.bodytab-${wid}-${tid},.urlencodedtab-${wid}-${tid},.jsontab-${wid}-${tid},.texttab-${wid}-${tid},.xmltab-${wid}-${tid},.jstab-${wid}-${tid},.rawjsontab-${wid}-${tid}`).hide();
+			} else if (selectedValue === "appxml") {
+				$(`.xmltab-${wid}-${tid}`).show();
+				$(`.bodytab-${wid}-${tid},.urlencodedtab-${wid}-${tid},.jsontab-${wid}-${tid},.texttab-${wid}-${tid},.htmltab-${wid}-${tid},.jstab-${wid}-${tid},.rawjsontab-${wid}-${tid}`).hide();
+			} else if (selectedValue === "appjavascript") {
+				$(`.jstab-${wid}-${tid}`).show();
+				$(`.bodytab-${wid}-${tid},.urlencodedtab-${wid}-${tid},.jsontab-${wid}-${tid},.texttab-${wid}-${tid},.htmltab-${wid}-${tid},.xmltab-${wid}-${tid},.rawjsontab-${wid}-${tid}`).hide();
 			}
 		});
+		$(`#use-raw-${wid}-${tid}`).on(`change`, function() {
+			if ($(`#use-raw-${wid}-${tid}`).prop(`checked`)) {
+				$(`.rawjsontab-${wid}-${tid}`).show();
+				$(`.jsontab-${wid}-${tid}`).hide();
+			} else {
+				$(`.rawjsontab-${wid}-${tid}`).hide();
+				$(`.jsontab-${wid}-${tid}`).show();
+			}
+		});
+
 		$(`.done-${wid}-${tid}`).on('click', function(e) {
 			e.preventDefault()
 			e.stopPropagation()
-			let result = {};
-			result.name = `${wid}-${tid}`;
-			let urlInputEle = $(`#url-${wid}-${tid}`);
-			let urlVal = urlInputEle.val();
-			// URL INPUT VALIDATION
-			if (urlVal.length === 0 || !isValidUrl(urlVal)) {
-				alert("URL is Required")
-				return;
-			}
-			result.method = $(`#method-${wid}-${tid}`)
-				.val()
-				.toUpperCase();
-			// URL key
-			result.url = {};
-			result.url.raw = urlVal;
-			let urlValues = new URL(urlVal);
-			result.url.protocol = urlValues.protocol.replace(':', '');
-			result.url.host = urlValues.hostname.split('.');
-			result.url.path = urlValues.pathname.split('/')
-				.filter((val) => val !== "");
-			let dataArr = atoo($(`#nav-qp-${wid}-${tid} .key`)
-				.map(function() {
-					return this.value;
-				})
-				.get(), $(`#nav-qp-${wid}-${tid} .value`)
-				.map(function() {
-					return this.value;
-				})
-				.get());
-			if (dataArr !== false) {
-				if (dataArr.length > 0) {
-					result.url.query = dataArr;
-				}
-			} else {
-				alert("Key is missing in Params Tab");
-				return;
-			}
-			// AUTHORIZATION
-			result.auth = {};
-			result.auth.type = $(`#auth-type-${wid}-${tid}`)
-				.val();
-			if (result.auth.type === "apikey") {
-				let key = $(`#apiKeyInput-${wid}-${tid}`)
-					.val();
-				let value = $(`#apikey-value-${wid}-${tid}`)
-					.val();
-				if ((key.trim() === "" && value !== "") || (key.trim() === "" && value.trim() === "")) {
-					alert("API Key is missing in Authorization tab");
-					return;
-				}
-				result.auth.apikey = [{
-						"key": "key",
-						"value": key,
-						"type": "string"
-					},
-					{
-						"key": "value",
-						"value": value,
-						"type": "string"
-					},
-					{
-						"key": "in",
-						"value": $('input[name=addToRadioOptions]:checked', `#authtab-${wid}-${tid}`)
-							.val(),
-						"type": "string"
-					}
-				];
-			} else if (result.auth.type === "bearertoken") {
-				let bearerTokenValue = $(`#bearer-value-${wid}-${tid}`)
-					.val();
-				if (bearerTokenValue.trim() === "") {
-					alert("Bearer token is missing in Authorization tab");
-					return;
-				}
-				result.auth.bearer = [{
-					"key": "token",
-					"value": `${bearerTokenValue}`,
-					"type": "string"
-				}]
-			} else if (result.auth.type === "basic") {
-				let uNameValue = $(`#basic-username-${wid}-${tid}`)
-					.val();
-				let passwordValue = $(`#basic-password-${wid}-${tid}`)
-					.val();
-
-				if (uNameValue.trim() === '' || passwordValue.trim() === '') {
-					alert("Username and Password must not be empty in the Authorization Tab");
-					return;
-				}
-
-				result.auth.basic = [{
-					"key": "username",
-					"value": `${uNameValue}`,
-					"type": "string"
-				}, {
-					"key": "password",
-					"value": `${passwordValue}`,
-					"type": "string"
-				}]
-			} else if (result.auth.type === "oauth2") {
-				let oauthTokenValue = $(`#oauth-value-${wid}-${tid}`)
-					.val();
-				if (oauthTokenValue.trim() === "") {
-					alert("OAuth token is missing in Authorization tab");
-					return;
-				}
-				result.auth.oauth2 = [{
-					"key": "token",
-					"value": `${oauthTokenValue}`,
-					"type": "string"
-				}, {
-					"key": "addTokenTo",
-					"value": "header",
-					"type": "string"
-				}]
-			}
-			// HEADER 
-			let headerData = atoo($(`#nav-headers-${wid}-${tid} .key`)
-				.map(function() {
-					return this.value;
-				})
-				.get(), $(`#nav-headers-${wid}-${tid} .value`)
-				.map(function() {
-					return this.value;
-				})
-				.get())
-			if (headerData !== false) {
-				result.header = headerData;
-				result.header.forEach((res) => {
-					res.type = "text";
-				})
-			} else {
-				alert("Key is missing in Headers Tab");
-				return;
-			}
-
-			// BODY
-			let bodyContentType = $(`#body-content-type-${wid}-${tid}`)
-				.val();
-			if (bodyContentType === "appurlencoded") {
-				result.body = {};
-				result.body.mode = "urlencoded";
-				let bodyTabUrlArr = atoo($(`#urlencodedtab-${wid}-${tid} .key`)
-					.map(function() {
-						return this.value;
-					})
-					.get(), $(`#urlencodedtab-${wid}-${tid} .value`)
-					.map(function() {
-						return this.value;
-					})
-					.get())
-
-				if (bodyTabUrlArr !== false) {
-					if (bodyTabUrlArr.length === 0) {
-						alert("Key and Value is Missing");
-						return;
-					}
-					result.body.urlencoded = bodyTabUrlArr;
-					result.body.urlencoded.forEach((res) => {
-						res.type = "text";
-					})
-				} else {
-					alert("Key is missing in Body Tab");
-					return;
-				}
-
-			} else if (bodyContentType === "appjson") {
-				if ($(`#use-raw-${wid}-${tid}`)
-					.prop('checked')) {
-					result.body = {};
-					result.body.mode = "raw";
-					result.body.raw = JSON.stringify($(`#json-value-${wid}-${tid}`)
-						.val());
-					if (result.body.raw.length <= 2) {
-						alert("Result body should not be empty in Body tab");
-						return;
-					}
-					result.body.options = {
-						"raw": {
-							"language": "json"
-						}
-					}
-				} else {
-					result.body = {};
-					result.body.mode = "formdata";
-					var bodyTabFormDataArr = atoo($(`#jsontab-${wid}-${tid} .key`)
-						.map(function() {
-							return this.value;
-						})
-						.get(), $(`#jsontab-${wid}-${tid} .value`)
-						.map(function() {
-							return this.value;
-						})
-						.get())
-
-					if (bodyTabFormDataArr !== false) {
-						if (bodyTabFormDataArr.length === 0) {
-							alert("Key and Value is Missing");
-							return;
-						}
-						result.body.formdata = bodyTabFormDataArr;
-						result.body.formdata.forEach((res) => {
-							res.type = "text";
-						})
-					} else {
-						alert("Key is missing in Body Tab");
-						return;
-					}
-
-				}
-			} else if (bodyContentType === "textplain") {
-				result.body = {};
-				result.body.mode = "raw";
-				result.body.raw = JSON.stringify($(`#text-value-${wid}-${tid}`)
-					.val());
-				if (result.body.raw.length <= 2) {
-					alert("Result body should not be empty in Body tab");
-					return;
-				}
-				result.body.options = {
-					"raw": {
-						"language": "text"
-					}
-				}
-			} else if (bodyContentType === "texthtml") {
-				result.body = {};
-				result.body.mode = "raw";
-				result.body.raw = JSON.stringify($(`#html-value-${wid}-${tid}`)
-					.val());
-				if (result.body.raw.length <= 2) {
-					alert("Result body should not be empty in Body tab");
-					return;
-				}
-				result.body.options = {
-					"raw": {
-						"language": "html"
-					}
-				}
-			} else if (bodyContentType === "appxml") {
-				result.body = {};
-				result.body.mode = "raw";
-				result.body.raw = JSON.stringify($(`#xml-value-${wid}-${tid}`)
-					.val());
-				if (result.body.raw.length <= 2) {
-					alert("Result body should not be empty in Body tab");
-					return;
-				}
-				result.body.options = {
-					"raw": {
-						"language": "xml"
-					}
-				}
-			} else if (bodyContentType === "appjavascript") {
-				result.body = {};
-				result.body.mode = "raw";
-				result.body.raw = JSON.stringify($(`#js-value-${wid}-${tid}`)
-					.val());
-				if (result.body.raw.length <= 2) {
-					alert("Result body should not be empty in Body tab");
-					return;
-				}
-				result.body.options = {
-					"raw": {
-						"language": "javascript"
-					}
-				}
-			}
-
-			// Response
-			result.response = []
-			console.log(JSON.stringify(result, null, 4))
+			console.log(getWebhookValues(wid, tid));
 		})
+
 		$(`.restore-${wid}-${tid}`).on('click', function(e) {
-			
-			let xj = { "name": "4gogo0n9-ey1lue4g", "method": "POST", "url": { "raw": "https://beautifier.io/", "protocol": "https", "host": [ "beautifier", "io" ], "path": [], "query": [ { "key": "param1", "value": "value1" }, { "key": "param2", "value": "value2" } ] }, "auth": { "type": "apikey", "apikey": [ { "key": "key", "value": "x-apikey", "type": "string" }, { "key": "value", "value": "x-value", "type": "string" }, { "key": "in", "value": "queryparams", "type": "string" } ] }, "header": [ { "key": "hkey1", "value": "hvalue1", "type": "text" }, { "key": "hkey2", "value": "", "type": "text" }, { "key": "hkey3", "value": "hvalue3", "type": "text" } ], "body": { "mode": "raw", "raw": "\"{\\n\\\"bodykey\\\":\\\"bodyvalue\\\"\\n}\"", "options": { "raw": { "language": "json" } } }, "response": [] }
-			xj = JSON.parse(prompt("Please override xj if you need", JSON.stringify(xj)));
+			if (!task) return;
+
 			// Restore HTTP Method
-			$(`#method-${wid}-${tid} option`).removeAttr('selected').filter(`[value=${xj.method.toLowerCase()}]`).attr('selected', true)
+			$(`#method-${wid}-${tid} option`).removeAttr('selected').filter(`[value=${task.method.toLowerCase()}]`).attr('selected', true)
 			// Restore URL
-			$(`#url-${wid}-${tid}`).val(`${xj.url.raw}`)
+			$(`#url-${wid}-${tid}`).val(`${task.url.raw}`)
 			// PARAMS TAB
-			if(xj.url.query.length > 0){
-				for(let i = 1; i < xj.url.query.length; i++ ){
+			if (task.url.query.length > 0) {
+				for (let i = 1; i < task.url.query.length; i++) {
 					$(`#nav-qp-${wid}-${tid} .delnewrow`).click();
 				}
-				for(let i = 0; i < xj.url.query.length - 1; i++ ){
+				for (let i = 0; i < task.url.query.length - 1; i++) {
 					$(`#nav-qp-${wid}-${tid} .addrow`).click();
 				}
 				let index = 0;
 				$(`#nav-qp-${wid}-${tid} .input-group`).each(function() {
-					$(this).children(`.key`).val(xj.url.query[index].key);
-					$(this).children(`.value`).val(xj.url.query[index].value);
+					$(this).children(`.key`).val(task.url.query[index].key);
+					$(this).children(`.value`).val(task.url.query[index].value);
 					index++;
-				});	
+				});
 			}
 
 			// Auth Tab
-			if(xj.auth.type === "noauth"){
-				$(`#auth-type-${wid}-${tid} option`).removeAttr('selected').filter(`[value=${xj.auth.type}]`).attr('selected', true).change()
-			} else if(xj.auth.type === "apikey"){
-				$(`#auth-type-${wid}-${tid} option`).removeAttr('selected').filter(`[value=${xj.auth.type}]`).attr('selected', true).change()
-				$(`#apiKeyInput-${wid}-${tid}`).val(`${xj.auth.apikey[0].value}`)
-				$(`#apikey-value-${wid}-${tid}`).val(`${xj.auth.apikey[1].value}`)
-				$(`input:radio[value=${xj.auth.apikey[2].value}]`).prop('checked',true);
-			} else if(xj.auth.type === "bearertoken"){
-				$(`#auth-type-${wid}-${tid} option`).removeAttr('selected').filter(`[value=${xj.auth.type}]`).attr('selected', true).change()
-				$(`#bearer-value-${wid}-{tid}`).val(`${xj.auth.bearer[0].value}`);
-			} else if(xj.auth.type === "basic"){
+			if (task.auth.type === "noauth") {
+				$(`#auth-type-${wid}-${tid} option`).removeAttr('selected').filter(`[value=${task.auth.type}]`).attr('selected', true).change()
+			} else if (task.auth.type === "apikey") {
+				$(`#auth-type-${wid}-${tid} option`).removeAttr('selected').filter(`[value=${task.auth.type}]`).attr('selected', true).change()
+				$(`#apiKeyInput-${wid}-${tid}`).val(`${task.auth.apikey[0].value}`)
+				$(`#apikey-value-${wid}-${tid}`).val(`${task.auth.apikey[1].value}`)
+				$(`input:radio[value=${task.auth.apikey[2].value}]`).prop('checked', true);
+			} else if (task.auth.type === "bearertoken") {
+				$(`#auth-type-${wid}-${tid} option`).removeAttr('selected').filter(`[value=${task.auth.type}]`).attr('selected', true).change()
+				$(`#bearer-value-${wid}-${tid}`).val(`${task.auth.bearer[0].value}`);
+			} else if (task.auth.type === "basic") {
 				// Basic auth
-				$(`#auth-type-${wid}-${tid} option`).removeAttr('selected').filter(`[value=${xj.auth.type}]`).attr('selected', true).change()
-				$(`#basic-username-${wid}-${tid}`).val(`${xj.auth.basic[0].value}`)
-				$(`#basic-password-${wid}-${tid}`).val(`${xj.auth.basic[1].value}`)
-			} else if(xj.auth.type === "oauth2"){
-				$(`#auth-type-${wid}-${tid} option`).removeAttr('selected').filter(`[value=${xj.auth.type}]`).attr('selected', true).change()
-				$(`#oauth-value-${wid}-${tid}`).val(xj.auth.oauth2[0].value);
+				$(`#auth-type-${wid}-${tid} option`).removeAttr('selected').filter(`[value=${task.auth.type}]`).attr('selected', true).change()
+				$(`#basic-username-${wid}-${tid}`).val(`${task.auth.basic[0].value}`)
+				$(`#basic-password-${wid}-${tid}`).val(`${task.auth.basic[1].value}`)
+			} else if (task.auth.type === "oauth2") {
+				$(`#auth-type-${wid}-${tid} option`).removeAttr('selected').filter(`[value=${task.auth.type}]`).attr('selected', true).change()
+				$(`#oauth-value-${wid}-${tid}`).val(task.auth.oauth2[0].value);
 			}
-			
+
 			// HEADERS TAB
-			if(xj.header.length > 0){
-				for(let i = 1; i < xj.header.length; i++ ){
+			if (task.header.length > 0) {
+				for (let i = 1; i < task.header.length; i++) {
 					$(`#nav-headers-${wid}-${tid} .delnewrow`).click();
 				}
-				for(let i = 0; i < xj.header.length - 1; i++ ){
+				for (let i = 0; i < task.header.length - 1; i++) {
 					$(`#nav-headers-${wid}-${tid} .addrow`).click();
 				}
 				let index = 0;
 				$(`#nav-headers-${wid}-${tid} .input-group`).each(function() {
-					$(this).children(`.key`).val(xj.header[index].key);
-					$(this).children(`.value`).val(xj.header[index].value);
+					$(this).children(`.key`).val(task.header[index].key);
+					$(this).children(`.value`).val(task.header[index].value);
 					index++;
-				});	
+				});
 			}
 			// Body TAB
 			// For Table generation
-			if(xj.body.mode === "urlencoded"){
+			if (task.body.mode === "urlencoded") {
 				$(`#body-content-type-${wid}-${tid} option`).removeAttr('selected').filter(`[value=appurlencoded]`).attr('selected', true).change();
-				if(xj.body.urlencoded.length > 0){
-					for(let i = 1; i < xj.body.urlencoded.length; i++ ){
-						$(`#urlencodedtab-${wid}-${tid} .delnewrow`).click();
+				if (task.body.urlencoded.length > 0) {
+					for (let i = 1; i < task.body.urlencoded.length; i++) {
+						$(`.urlencodedtab-${wid}-${tid} .delnewrow`).click();
 					}
-					for(let i = 0; i < xj.body.urlencoded.length - 1; i++ ){
-						$(`#urlencodedtab-${wid}-${tid} .addrow`).click();
+					for (let i = 0; i < task.body.urlencoded.length - 1; i++) {
+						$(`.urlencodedtab-${wid}-${tid} .addrow`).click();
 					}
 					let index = 0;
-					$(`#urlencodedtab-${wid}-${tid} .input-group`).each(function() {
-						$(this).children(`.key`).val(xj.body.urlencoded[index].key);
-						$(this).children(`.value`).val(xj.body.urlencoded[index].value);
+					$(`.urlencodedtab-${wid}-${tid} .input-group`).each(function() {
+						$(this).children(`.key`).val(task.body.urlencoded[index].key);
+						$(this).children(`.value`).val(task.body.urlencoded[index].value);
 						index++;
-					});	
+					});
 				}
-			} else if(xj.body.mode === "formdata"){
+			} else if (task.body.mode === "formdata") {
 				$(`#body-content-type-${wid}-${tid} option`).removeAttr('selected').filter(`[value=appjson]`).attr('selected', true).change();
-				if(xj.body.formdata.length > 0){
-					for(let i = 1; i < xj.body.formdata.length; i++ ){
-						$(`#jsontab-${wid}-${tid} .delnewrow`).click();
+				if (task.body.formdata.length > 0) {
+					for (let i = 1; i < task.body.formdata.length; i++) {
+						$(`.jsontab-${wid}-${tid} .delnewrow`).click();
 					}
-					for(let i = 0; i < xj.body.formdata.length - 1; i++ ){
-						$(`#jsontab-${wid}-${tid} .addrow`).click();
+					for (let i = 0; i < task.body.formdata.length - 1; i++) {
+						$(`.jsontab-${wid}-${tid} .addrow`).click();
 					}
 					let index = 0;
-					$(`#jsontab-${wid}-${tid} .input-group`).each(function() {
-						$(this).children(`.key`).val(xj.body.formdata[index].key);
-						$(this).children(`.value`).val(xj.body.formdata[index].value);
+					$(`.jsontab-${wid}-${tid} .input-group`).each(function() {
+						$(this).children(`.key`).val(task.body.formdata[index].key);
+						$(this).children(`.value`).val(task.body.formdata[index].value);
 						index++;
-					});	
+					});
 				}
-				}
+			}
 			// For textboxes value
-			if(xj.body.options.raw.language === "json"){
+			if (task.body.options.raw.language === "json") {
 				$(`#body-content-type-${wid}-${tid} option`).removeAttr('selected').filter(`[value=appjson]`).attr('selected', true).change()
-				if(xj.body.mode === "raw"){
+				if (task.body.mode === "raw") {
 					$(`#use-raw-${wid}-${tid}`).prop('checked', true).change();
-					$(`#json-value-${wid}-${tid}`).val(JSON.parse(xj.body.raw));	
-				} 
-			} else if(xj.body.options.raw.language === "text"){
+					$(`#json-value-${wid}-${tid}`).val(JSON.parse(task.body.raw));
+				}
+			} else if (task.body.options.raw.language === "text") {
 				$(`#body-content-type-${wid}-${tid} option`).removeAttr('selected').filter(`[value=textplain]`).attr('selected', true).change()
-				$(`#text-value-${wid}-${tid}`).val(JSON.parse(xj.body.raw));
-			} else if(xj.body.options.raw.language === "html"){
+				$(`#text-value-${wid}-${tid}`).val(JSON.parse(task.body.raw));
+			} else if (task.body.options.raw.language === "html") {
 				$(`#body-content-type-${wid}-${tid} option`).removeAttr('selected').filter(`[value=texthtml]`).attr('selected', true).change()
-				$(`#html-value-${wid}-${tid}`).val(JSON.parse(xj.body.raw));	
-			} else if(xj.body.options.raw.language === "xml"){
+				$(`#html-value-${wid}-${tid}`).val(JSON.parse(task.body.raw));
+			} else if (task.body.options.raw.language === "xml") {
 				$(`#body-content-type-${wid}-${tid} option`).removeAttr('selected').filter(`[value=appxml]`).attr('selected', true).change()
-				$(`#xml-value-${wid}-${tid}`).val(JSON.parse(xj.body.raw));	
-			} else if(xj.body.options.raw.language === "javascript"){
+				$(`#xml-value-${wid}-${tid}`).val(JSON.parse(task.body.raw));
+			} else if (task.body.options.raw.language === "javascript") {
 				$(`#body-content-type-${wid}-${tid} option`).removeAttr('selected').filter(`[value=appjavascript]`).attr('selected', true).change()
-				$(`#js-value-${wid}-${tid}`).val(JSON.parse(xj.body.raw));	
+				$(`#js-value-${wid}-${tid}`).val(JSON.parse(task.body.raw));
 			}
 
-		})
+		}).click();
 
-		// Delete Global Instance
-		$(`.tdelete`).on('click', function(e) {
-			$(this).parent().parent().parent().parent().remove();
-		})
+	}
 
+	// Delete Instance
+	$(`.tdelete`).on('click', function(e) {
+		$(this).parent().parent().parent().parent().remove();
+	})
+
+	$("#webhook").click(function(event) {
+		createTask_Webhook("l9zgqjql")
 	});
-	$(`#send`).click(function (e) { 
-		console.log($(`.list-group.task-point`).children());
+
+	$("#restoreall").click(function(event) {
+		$("#tasks-point-l9zgqjql").html('')
+		var wflw = {
+			id: "l9zgqjql",
+
+			tasks: [{
+					"taskType": "webhook",
+					"id": "ey1lue4g",
+
+					"name": "ey1lue4g",
+					"method": "POST",
+					"url": {
+						"raw": "https://beautifier.io/",
+						"protocol": "https",
+						"host": ["beautifier", "io"],
+						"path": [],
+						"query": [{
+							"key": "param1",
+							"value": "value1"
+						}, {
+							"key": "param2",
+							"value": "value2"
+						}]
+					},
+					"auth": {
+						"type": "apikey",
+						"apikey": [{
+							"key": "key",
+							"value": "x-apikey",
+							"type": "string"
+						}, {
+							"key": "value",
+							"value": "x-value",
+							"type": "string"
+						}, {
+							"key": "in",
+							"value": "queryparams",
+							"type": "string"
+						}]
+					},
+					"header": [{
+						"key": "hkey1",
+						"value": "hvalue1",
+						"type": "text"
+					}, {
+						"key": "hkey2",
+						"value": "",
+						"type": "text"
+					}, {
+						"key": "hkey3",
+						"value": "hvalue3",
+						"type": "text"
+					}],
+					"body": {
+						"mode": "raw",
+						"raw": "\"{\\n\\\"bodykey\\\":\\\"bodyvalue\\\"\\n}\"",
+						"options": {
+							"raw": {
+								"language": "json"
+							}
+						}
+					},
+					"response": []
+				},
+				{
+					"taskType": "webhook",
+					"id": "fx1hwe8q",
+
+					"name": "fx1hwe8q",
+					"method": "PATCH",
+					"url": {
+						"raw": "https://www.upwork.com/",
+						"protocol": "https",
+						"host": [
+							"beautifier",
+							"io"
+						],
+						"path": [],
+						"query": [{
+								"key": "iparam1",
+								"value": "ivalue1"
+							},
+							{
+								"key": "iparam2",
+								"value": "ivalue2"
+							}
+						]
+					},
+					"auth": {
+						"type": "bearertoken",
+						"bearer": [{
+							"key": "token",
+							"value": "xxxxx.yyyyy.zzzzz",
+							"type": "string"
+						}]
+					},
+					"header": [{
+							"key": "ikey1",
+							"value": "ivalue1",
+							"type": "text"
+						},
+						{
+							"key": "ikey2",
+							"value": "",
+							"type": "text"
+						},
+						{
+							"key": "ikey3",
+							"value": "ivalue3",
+							"type": "text"
+						}
+					],
+					"body": {
+						"mode": "raw",
+						"raw": "\"This is a plain text\"",
+						"options": {
+							"raw": {
+								"language": "text"
+							}
+						}
+					},
+					"response": []
+				}
+			]
+
+		}
+		wflw.tasks.forEach(t => {
+			if (t.taskType == "webhook") {
+				t = JSON.parse(prompt("Please override instance if you need", JSON.stringify(t)));
+				createTask_Webhook(wflw.id, t, "webhook")
+			}
+		})
 	});
 
+	$(`#send`).click(function(e) {
+		r = [];
+		$(`#tasks-point-l9zgqjql`).children().each(function() {
+			if ($(this).data("type") == "webhook") {
+				var ids = $(this).data("id").split("-")
+			}
+			r.push(getWebhookValues(ids[0], ids[1]))
+		});
+		console.log(JSON.stringify(r, null, 4))
+	});
 	</script>
 </body>
 
