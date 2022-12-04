@@ -808,6 +808,15 @@
 			}
 
 		})
+
+		// Delete Global Instance
+		$(`.tdelete`).on('click', function(e) {
+			$(this).parent().parent().parent().parent().remove();
+		})
+
+	});
+	$(`#send`).click(function (e) { 
+		console.log($(`.list-group.task-point`).children());
 	});
 
 	</script>
