@@ -694,7 +694,7 @@
 		$(`.restore-${wid}-${tid}`).on('click', function(e) {
 			
 			let xj = { "name": "4gogo0n9-ey1lue4g", "method": "POST", "url": { "raw": "https://beautifier.io/", "protocol": "https", "host": [ "beautifier", "io" ], "path": [], "query": [ { "key": "param1", "value": "value1" }, { "key": "param2", "value": "value2" } ] }, "auth": { "type": "apikey", "apikey": [ { "key": "key", "value": "x-apikey", "type": "string" }, { "key": "value", "value": "x-value", "type": "string" }, { "key": "in", "value": "queryparams", "type": "string" } ] }, "header": [ { "key": "hkey1", "value": "hvalue1", "type": "text" }, { "key": "hkey2", "value": "", "type": "text" }, { "key": "hkey3", "value": "hvalue3", "type": "text" } ], "body": { "mode": "raw", "raw": "\"{\\n\\\"bodykey\\\":\\\"bodyvalue\\\"\\n}\"", "options": { "raw": { "language": "json" } } }, "response": [] }
-			// xj = JSON.parse(prompt("Please override xj if you need", xj))
+			xj = JSON.parse(prompt("Please override xj if you need", JSON.stringify(xj)));
 			// Restore HTTP Method
 			$(`#method-${wid}-${tid} option`).removeAttr('selected').filter(`[value=${xj.method.toLowerCase()}]`).attr('selected', true)
 			// Restore URL
