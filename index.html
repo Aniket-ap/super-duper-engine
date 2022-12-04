@@ -701,6 +701,9 @@
 			$(`#url-${wid}-${tid}`).val(`${xj.url.raw}`)
 			// PARAMS TAB
 			if(xj.url.query.length > 0){
+				for(let i = 1; i < xj.url.query.length; i++ ){
+					$(`#nav-qp-${wid}-${tid} .delnewrow`).click();
+				}
 				for(let i = 0; i < xj.url.query.length - 1; i++ ){
 					$(`#nav-qp-${wid}-${tid} .addrow`).click();
 				}
@@ -735,6 +738,9 @@
 			
 			// HEADERS TAB
 			if(xj.header.length > 0){
+				for(let i = 1; i < xj.header.length; i++ ){
+					$(`#nav-headers-${wid}-${tid} .delnewrow`).click();
+				}
 				for(let i = 0; i < xj.header.length - 1; i++ ){
 					$(`#nav-headers-${wid}-${tid} .addrow`).click();
 				}
@@ -750,6 +756,9 @@
 			if(xj.body.mode === "urlencoded"){
 				$(`#body-content-type-${wid}-${tid} option`).removeAttr('selected').filter(`[value=appurlencoded]`).attr('selected', true).change();
 				if(xj.body.urlencoded.length > 0){
+					for(let i = 1; i < xj.body.urlencoded.length; i++ ){
+						$(`#urlencodedtab-${wid}-${tid} .delnewrow`).click();
+					}
 					for(let i = 0; i < xj.body.urlencoded.length - 1; i++ ){
 						$(`#urlencodedtab-${wid}-${tid} .addrow`).click();
 					}
@@ -760,26 +769,12 @@
 						index++;
 					});	
 				}
-				// if(xj.body.urlencoded.length > 0){
-				// 	xj.body.urlencoded.forEach((val, index) => {
-				// 		if(index === 0){
-				// 			$(`#urlencodedtab-${wid}-${tid} .key`).val(xj.body.urlencoded[0].key);
-				// 			$(`#urlencodedtab-${wid}-${tid} .value`).val(xj.body.urlencoded[0].value);
-				// 		} else{
-				// 		$(`#urlencodedtab-${wid}-${tid}`).append(`
-				// 			<div class="input-group">
-				// 				<button type="button" role="button" title="Delete" class="material-symbols-outlined text-secondary input-group-text delrow">delete</button>
-				// 				<input type="text" placeholder="Key" value="${xj.body.urlencoded[index].key}" class="form-control key">
-				// 				<input type="text" placeholder="Value" value="${xj.body.urlencoded[index].value}" class="form-control value">
-				// 				<button type="button" role="button" title="Add new" class="material-symbols-outlined input-group-text addrow">add</button>
-				// 				</div>
-				// 			`)	
-				// 		}
-				// 	})		
-				// }
 			} else if(xj.body.mode === "formdata"){
 				$(`#body-content-type-${wid}-${tid} option`).removeAttr('selected').filter(`[value=appjson]`).attr('selected', true).change();
 				if(xj.body.formdata.length > 0){
+					for(let i = 1; i < xj.body.formdata.length; i++ ){
+						$(`#jsontab-${wid}-${tid} .delnewrow`).click();
+					}
 					for(let i = 0; i < xj.body.formdata.length - 1; i++ ){
 						$(`#jsontab-${wid}-${tid} .addrow`).click();
 					}
@@ -790,23 +785,6 @@
 						index++;
 					});	
 				}
-					// if(xj.body.formdata.length > 0){
-					// 	xj.body.formdata.forEach((val, index) => {
-					// 		if(index === 0){
-					// 			$(`#jsontab-${wid}-${tid} .key`).val(xj.body.formdata[0].key);
-					// 			$(`#jsontab-${wid}-${tid} .value`).val(xj.body.formdata[0].value);
-					// 		} else{
-					// 		$(`#jsontab-${wid}-${tid}`).append(`
-					// 			<div class="input-group">
-					// 				<button type="button" role="button" title="Delete" class="material-symbols-outlined text-secondary input-group-text delrow">delete</button>
-					// 				<input type="text" placeholder="Key" value="${xj.body.formdata[index].key}" class="form-control key">
-					// 				<input type="text" placeholder="Value" value="${xj.body.formdata[index].value}" class="form-control value">
-					// 				<button type="button" role="button" title="Add new" class="material-symbols-outlined input-group-text addrow">add</button>
-					// 				</div>
-					// 			`)	
-					// 		}
-					// 	})		
-					// }
 				}
 			// For textboxes value
 			if(xj.body.options.raw.language === "json"){
